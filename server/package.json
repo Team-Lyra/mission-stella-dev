@@ -1,0 +1,20 @@
+{
+  "name": "missao-taquari-server",
+  "version": "1.0.0",
+  "description": "Backend para o jogo educacional Missão Taquari - NASA Space Apps Challenge",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:create": "psql -f schema.sql",
+    "db:seed": "psql -f seed.sql"
+  },
+  "keywords": ["nasa", "taquari", "educacional", "satelites"],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0"
+  }
+}

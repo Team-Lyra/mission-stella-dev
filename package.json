@@ -1,0 +1,13 @@
+{
+  "name": "missao-taquari",
+  "version": "1.0.0",
+  "description": "Jogo Educativo Espacial no Vale do Taquari - NASA Space Apps",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^6.5.438"
+  }
+}
