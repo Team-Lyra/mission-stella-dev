@@ -13,24 +13,53 @@ const MissionManager = {
 
   async init() {
     this.missions = await API.getMissions();
-    const saved = localStorage.getItem('missaoTaquari_save');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        this.currentMissionIndex = Math.min((parsed.current_mission || 1) - 1, this.missions.length - 1);
-        this.totalScore = parsed.score || 0;
-      } catch (e) {
-        this.currentMissionIndex = 0;
-      }
-    } else {
-      this.currentMissionIndex = 0;
-    }
-    this.currentMission = this.missions[this.currentMissionIndex] || this.missions[0];
+    // Começa sem nenhuma missão ativa: o jogador precisa falar com o morador
+    this.currentMission = null;
+    this.currentMissionIndex = -1;
     this.phase = 'EXPLORE';
   },
 
+  hasActiveMission() {
+    return this.currentMission !== null;
+  },
+
   getCurrent() {
-    return this.currentMission || this.missions[0];
+    return this.currentMission;
+  },
+
+  setActiveMission(missionOrId) {
+    let mission = null;
+    if (typeof missionOrId === 'number' || typeof missionOrId === 'string') {
+      mission = this.missions.find(m => m.id === parseInt(missionOrId));
+    } else {
+      mission = missionOrId;
+    }
+    if (mission) {
+      this.currentMission = mission;
+      this.currentMissionIndex = this.missions.findIndex(m => m.id === mission.id);
+      return true;
+    }
+    return false;
+  },
+
+  clearActiveMission() {
+    this.currentMission = null;
+    this.currentMissionIndex = -1;
+    this.phase = 'EXPLORE';
+    this.satelliteConfig = null;
+  },
+
+  setMissionById(id) {
+    return this.setActiveMission(id);
+  },
+
+  setMissionByIndex(idx) {
+    if (idx >= 0 && idx < this.missions.length) {
+      this.currentMissionIndex = idx;
+      this.currentMission = this.missions[idx];
+      return true;
+    }
+    return false;
   },
 
   setPhase(newPhase) {
@@ -55,8 +84,8 @@ const MissionManager = {
     }
     this.missionScore = bonus;
 
-    // Inicia Minigame de Testes e Lançamento
-    LaunchMinigame.start((launchPoints) => {
+    // Inicia Minigame de Calibração Científica NASA e Lançamento
+    LaunchMinigame.start(this.getCurrent(), (launchPoints) => {
       this.completeLaunch(launchPoints);
     });
   },
@@ -88,13 +117,14 @@ const MissionManager = {
   },
 
   advanceToNextMission() {
-    this.currentMissionIndex = (this.currentMissionIndex + 1) % this.missions.length;
-    this.currentMission = this.missions[this.currentMissionIndex];
-    this.phase = 'EXPLORE';
-    this.satelliteConfig = null;
+    // Concluiu a missão: limpa a missão ativa para o jogador escolher a próxima andando no mapa!
+    this.clearActiveMission();
 
-    // Nova dica da NASA
-    NasaTips.show();
+    NasaTips.show({
+      title: "Missão Cumprida com Sucesso!",
+      text: "Excelente trabalho, Comandante! Explore o mapa e converse com outro morador para aceitar um novo desafio.",
+      icon: "🎉"
+    });
   },
 
   renderSpaceCollect(ctx, w, h) {
@@ -154,15 +184,15 @@ const MissionManager = {
     ctx.fillRect(25, -14, 45, 28);
     ctx.restore();
 
-    // Textos informativos
+    // Textos informativos no topo (com espaço seguro para não sobrepor o satélite)
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 24px "Segoe UI", sans-serif';
+    ctx.font = 'bold 22px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('📡 RECEBENDO DADOS ESPACIAIS NO VALE DO TAQUARI', w / 2, 70);
+    ctx.fillText('📡 RECEBENDO DADOS ESPACIAIS NO VALE DO TAQUARI', w / 2, 45);
 
     ctx.fillStyle = '#90e0ef';
-    ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Sensoriamento remoto em andamento... Processando telemetria!', w / 2, 100);
+    ctx.font = '14px "Segoe UI", sans-serif';
+    ctx.fillText('Sensoriamento remoto em andamento... Processando telemetria!', w / 2, 75);
 
     ctx.restore();
   },
@@ -242,23 +272,29 @@ const MissionManager = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText(`+${this.missionScore} Pontos!  •  Pontuação Total: ${this.totalScore}`, w / 2, 450);
+    ctx.fillText(`+${this.missionScore} Pontos!  •  Pontuação Total: ${this.totalScore}`, w / 2, 445);
 
-    // Botão continuar
-    const btnW = 320;
-    const btnH = 46;
+    // Botão continuar perfeitamente dimensionado com margem interna
+    const btnText = 'PRÓXIMA MISSÃO [ESPAÇO / ENTER]';
+    ctx.font = 'bold 15px "Segoe UI", sans-serif';
+    const textWidth = ctx.measureText(btnText).width;
+    const btnW = Math.min(460, Math.max(360, textWidth + 60));
+    const btnH = 48;
     const btnX = w / 2 - btnW / 2;
-    const btnY = h - 85;
+    const btnY = Math.max(470, h - 85);
 
     ctx.fillStyle = '#e63946';
-    ctx.fillRect(btnX, btnY, btnW, btnH);
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(btnX, btnY, btnW, btnH, 8) : ctx.rect(btnX, btnY, btnW, btnH);
+    ctx.fill();
+
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 2.5;
-    ctx.strokeRect(btnX, btnY, btnW, btnH);
+    ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText('PRÓXIMA MISSÃO NO VALE [ESPAÇO / ENTER]', w / 2, btnY + 28);
+    ctx.textAlign = 'center';
+    ctx.fillText(btnText, w / 2, btnY + 29);
 
     ctx.restore();
   },

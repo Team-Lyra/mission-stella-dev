@@ -66,6 +66,27 @@ const Game = {
     window.addEventListener('keyup', (e) => {
       this.handleKeyUp(e);
     });
+
+    window.addEventListener('pointerdown', (e) => {
+      if (this.state === 'LAUNCH' && LaunchMinigame.active) {
+        LaunchMinigame.handlePointerDown(e, this.canvas);
+      } else if (this.state === 'MISSION_IMPACT') {
+        MissionManager.advanceToNextMission();
+        this.state = 'PLAYING';
+      }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (this.state === 'LAUNCH' && LaunchMinigame.active) {
+        LaunchMinigame.handlePointerMove(e, this.canvas);
+      }
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      if (this.state === 'LAUNCH' && LaunchMinigame.active) {
+        LaunchMinigame.handlePointerUp(e, this.canvas);
+      }
+    });
   },
 
   handleKeyDown(e) {
@@ -73,6 +94,13 @@ const Game = {
 
     // Se estiver no diálogo ativo
     if (UI.dialog.active) {
+      if (code === 'ArrowUp' || code === 'KeyW' || code === 'ArrowLeft' || code === 'KeyA') {
+        UI.navigateDialog(-1);
+        return;
+      } else if (code === 'ArrowDown' || code === 'KeyS' || code === 'ArrowRight' || code === 'KeyD') {
+        UI.navigateDialog(1);
+        return;
+      }
       if (code === 'Space' || code === 'Enter' || code === 'KeyE') {
         UI.advanceDialog();
         return;
@@ -154,25 +182,71 @@ const Game = {
   tryInteract() {
     const nearby = NPCManager.getNearbyNPC(Player.x, Player.y);
     if (nearby) {
-      // Se for o diretor do Centro Espacial ou o jogador estiver no centro
+      // 1. Se for o diretor do Centro Espacial (Dr. Santos)
       if (nearby.id === 'diretor_nasa') {
-        UI.showDialog(nearby.name, nearby.dialog, nearby.color, null, () => {
-          // Abre montagem de satélite
-          this.state = 'SATELLITE_BUILD';
-          MissionManager.startSatelliteAssembly();
-        });
+        if (!MissionManager.hasActiveMission()) {
+          UI.showDialog(
+            nearby.name,
+            'Olá, Comandante! Você ainda não aceitou nenhuma missão. Explore o Vale do Taquari, converse com um morador (Dona Iracema, Capitão Rodrigo, Professora Mariana ou Cacique Karaí) para descobrir qual problema regional precisamos resolver!',
+            nearby.color
+          );
+          return;
+        }
+
+        const activeM = MissionManager.getCurrent();
+        UI.showDialog(
+          nearby.name,
+          `Pronto para a missão "${activeM.title}"! Vamos ao Centro de Comando projetar o satélite e calibrar os instrumentos da NASA!`,
+          nearby.color,
+          ['🚀 PROJETAR SATÉLITE', 'VOLTAR AO MAPA'],
+          (choice) => {
+            if (choice === 0) {
+              this.state = 'SATELLITE_BUILD';
+              MissionManager.startSatelliteAssembly();
+            }
+          }
+        );
         return;
       }
 
-      // Moradores (Dona Iracema, Capitão Rodrigo, etc.)
-      UI.showDialog(nearby.name, nearby.dialog, nearby.color, null, () => {
-        // Orienta a ir ao Centro Espacial
-        NasaTips.show({
-          title: "Vá ao Centro Espacial!",
-          text: "Problema identificado! Dirija-se ao Centro de Comando no mapa para projetar o satélite adequado.",
-          icon: "🚀"
-        });
-      });
+      // 2. Se for um morador (Dona Iracema, Capitão Rodrigo, Professora Mariana, Cacique Karaí)
+      if (MissionManager.hasActiveMission()) {
+        const activeM = MissionManager.getCurrent();
+        if (activeM.id !== nearby.missionId) {
+          UI.showDialog(
+            nearby.name,
+            `Comandante, você já está ajudando ${activeM.npc_name} na missão "${activeM.title}"! Vá até o Centro de Comando e termine-a antes de aceitar outro desafio.`,
+            nearby.color
+          );
+          return;
+        } else {
+          UI.showDialog(
+            nearby.name,
+            `Obrigado por nos ajudar com essa missão, Comandante! Dirija-se ao Centro de Comando Espacial para montar seu satélite e salvar nossa região!`,
+            nearby.color
+          );
+          return;
+        }
+      }
+
+      // Sem missão ativa: Morador apresenta o problema e oferece aceitar a missão!
+      UI.showDialog(
+        `${nearby.name} (${nearby.role})`,
+        nearby.dialog,
+        nearby.color,
+        ['✅ ACEITAR MISSÃO', '❌ MAIS TARDE'],
+        (choice) => {
+          if (choice === 0) {
+            MissionManager.setActiveMission(nearby.missionId);
+            NasaAudio.lockSuccess();
+            NasaTips.show({
+              title: "Missão Aceita: " + nearby.name,
+              text: "Problema assumido! Dirija-se ao Centro de Comando no mapa para projetar o satélite adequado.",
+              icon: "🚀"
+            });
+          }
+        }
+      );
       return;
     }
 
@@ -180,6 +254,14 @@ const Game = {
     const cc = GameMap.commandCenter;
     const distToCC = Math.hypot((cc.x + cc.w / 2) - (Player.x + 12), (cc.y + cc.h) - (Player.y + 12));
     if (distToCC < 60) {
+      if (!MissionManager.hasActiveMission()) {
+        UI.showDialog(
+          'Centro de Comando Espacial',
+          'Acesso restrito! O Centro de Comando só pode ser acionado após receber o chamado de um morador do Vale do Taquari. Converse com os moradores no mapa primeiro!',
+          '#00b4d8'
+        );
+        return;
+      }
       this.state = 'SATELLITE_BUILD';
       MissionManager.startSatelliteAssembly();
     }
@@ -262,8 +344,8 @@ const Game = {
       UI.renderDialog(ctx, w, h);
     }
 
-    // Renderiza Banner flutuante de Dica da NASA
-    if (NasaTips.showing || NasaTips.alpha > 0) {
+    // Renderiza Banner flutuante de Dica da NASA apenas durante a exploração do mapa
+    if (this.state === 'PLAYING' && (NasaTips.showing || NasaTips.alpha > 0)) {
       this.renderNasaTipBanner(ctx, w, h);
     }
   },
@@ -279,11 +361,18 @@ const Game = {
     ctx.strokeRect(15, 15, w - 30, 48);
 
     // Nome e Missão Atual
+    const hasMission = MissionManager.hasActiveMission();
     const curMission = MissionManager.getCurrent();
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`🚀 MISSÃO ATUAL: ${curMission.title}`, 30, 43);
+    if (hasMission && curMission) {
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 15px "Segoe UI", sans-serif';
+      ctx.fillText(`🚀 MISSÃO ATUAL: ${curMission.title}`, 30, 43);
+    } else {
+      ctx.fillStyle = '#adb5bd';
+      ctx.font = 'bold 14px "Segoe UI", sans-serif';
+      ctx.fillText('🚀 MISSÃO: Nenhuma (Fale com um morador no mapa para aceitar)', 30, 43);
+    }
 
     // Pontuação e Status do Banco de Dados
     ctx.textAlign = 'right';
@@ -298,11 +387,14 @@ const Game = {
 
     // Dica de navegação no rodapé
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(10, 14, 46, 0.75)';
-    ctx.fillRect(w / 2 - 210, h - 38, 420, 28);
+    ctx.fillStyle = 'rgba(10, 14, 46, 0.82)';
+    ctx.fillRect(w / 2 - 300, h - 38, 600, 28);
+    ctx.strokeStyle = 'rgba(0, 180, 216, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(w / 2 - 300, h - 38, 600, 28);
     ctx.fillStyle = '#e0e0ff';
     ctx.font = '12px "Segoe UI", sans-serif';
-    ctx.fillText('Ande com [WASD / Setas] • Fale com moradores e acesse o Centro Espacial com [E]', w / 2, h - 20);
+    ctx.fillText('Ande com [WASD / Setas] • Fale com moradores com [E / Espaço] • 1 missão por vez', w / 2, h - 20);
 
     ctx.restore();
   },

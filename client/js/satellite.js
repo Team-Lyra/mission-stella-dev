@@ -264,15 +264,17 @@ const SatelliteBuilder = {
     // Botão de prosseguir para Lançamento
     const btnY = y + 225;
     ctx.fillStyle = '#e63946';
-    ctx.fillRect(x, btnY, width, 55);
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, btnY, width, 55, 8) : ctx.rect(x, btnY, width, 55);
+    ctx.fill();
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 3;
-    ctx.strokeRect(x, btnY, width, 55);
+    ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 18px "Segoe UI", sans-serif';
+    ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🚀 AVANÇAR PARA LANÇAMENTO E TESTES DA NASA 🚀', x + width / 2, btnY + 34);
+    ctx.fillText('🚀 INICIAR LANÇAMENTO DA NASA [ENTER] 🚀', x + width / 2, btnY + 34);
   },
 
   renderSatellitePreview(ctx, x, y, width, height) {
