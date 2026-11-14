@@ -1082,26 +1082,35 @@ const LaunchMinigame = {
   // BOTÃO DE AUTORIZAÇÃO DE LANÇAMENTO
   // ============================================
   renderLaunchButton(ctx, w, h) {
-    const btnText = '🚀 DECOLAGEM AUTORIZADA! [ESPAÇO / CLIQUE]';
-    ctx.font = 'bold 15px "Segoe UI", sans-serif';
+    const pulse = Math.sin(Date.now() / 150) * 4;
+    const btnText = '🚀 LANÇAR MISSÃO! [ESPAÇO / CLIQUE]';
+    ctx.font = 'bold 18px "Segoe UI", sans-serif';
     const textWidth = ctx.measureText(btnText).width;
-    const btnW = Math.min(520, Math.max(420, textWidth + 60));
-    const btnH = 50;
+    const btnW = Math.min(540, Math.max(440, textWidth + 70));
+    const btnH = 58;
     const btnX = w / 2 - btnW / 2;
-    const btnY = h - 80;
+    const btnY = h - 90 - pulse / 2;
+
+    // Sombra brilhante
+    ctx.shadowColor = '#00f5d4';
+    ctx.shadowBlur = 18;
 
     ctx.fillStyle = '#00f5d4';
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(btnX, btnY, btnW, btnH, 8) : ctx.rect(btnX, btnY, btnW, btnH);
+    ctx.roundRect ? ctx.roundRect(btnX, btnY, btnW, btnH, 12) : ctx.rect(btnX, btnY, btnW, btnH);
     ctx.fill();
 
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3;
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 3.5;
     ctx.stroke();
 
     ctx.fillStyle = '#060a1c';
     ctx.textAlign = 'center';
-    ctx.fillText(btnText, w / 2, btnY + 31);
+    ctx.fillText(btnText, w / 2, btnY + 36);
+
+    // Mensagem da Lyra
+    Lyra.render(ctx, btnX - 45, btnY + 29, 28, 'excited', '');
   },
 
   // ============================================

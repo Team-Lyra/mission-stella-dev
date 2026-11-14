@@ -9,12 +9,12 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Dados iniciais com as missões completas do Vale do Taquari
+// Dados iniciais com as missões completas do Vale do Taquari (Nomenclatura Oficial de Operações)
 const initialMissions = [
   {
     id: 1,
-    title: 'Safra em Perigo: Monitoramento Agrícola',
-    description: 'As lavouras do Vale do Taquari estão sofrendo com uma praga desconhecida que avança rapidamente. Sua missão é configurar um satélite com sensores multiespectrais para monitorar as lavouras e salvar a produção.',
+    title: 'Operação Solo Fértil',
+    description: 'Detectar pragas precoces nas lavouras de milho e soja com sensores NIR antes que a safra de Estrela e região seja perdida.',
     problem_type: 'agricultura',
     difficulty: 1,
     npc_name: 'Dona Iracema',
@@ -25,8 +25,8 @@ const initialMissions = [
   },
   {
     id: 2,
-    title: 'Alerta Vermelho: Prevenção de Deslizamentos',
-    description: 'Após chuvas torrenciais no Vale do Taquari, as encostas de rodovias e morros correm sério risco de deslizamento. Use radar de satélite para mapear o relevo e criar alertas precoces.',
+    title: 'Operação Sentinela das Encostas',
+    description: 'Mapear deformações e umidade no solo de Lajeado através das nuvens com radar SAR para evitar deslizamentos nas rodovias.',
     problem_type: 'deslizamentos',
     difficulty: 2,
     npc_name: 'Capitão Rodrigo',
@@ -37,8 +37,8 @@ const initialMissions = [
   },
   {
     id: 3,
-    title: 'Conexão Taquari: Internet para Produtores Rurais',
-    description: 'Escolas rurais e produtores isolados de Pouso Novo não possuem sinal de rádio ou internet. Projete um satélite de comunicação para conectar comunidades distantes.',
+    title: 'Operação Conexão Taquari',
+    description: 'Levar conexão de alta velocidade e telemedicina para escolas rurais e postos de saúde isolados em Pouso Novo.',
     problem_type: 'comunicacao',
     difficulty: 3,
     npc_name: 'Professora Mariana',
@@ -49,8 +49,8 @@ const initialMissions = [
   },
   {
     id: 4,
-    title: 'Guardiões da Mata: Monitoramento das Matas Ciliares',
-    description: 'A preservação das matas ciliares ao longo do Rio Taquari é vital para evitar assoreamento e proteger a fauna nativa. Monitore focos de desmatamento e queimadas.',
+    title: 'Operação Guardião das Águas e Matas',
+    description: 'Vigiar as matas ciliares do Rio Taquari dia e noite com sensores térmicos contra queimadas e desmatamento clandestino.',
     problem_type: 'florestal',
     difficulty: 3,
     npc_name: 'Cacique Karaí',
@@ -133,6 +133,11 @@ module.exports = {
       id: dbData.players.length > 0 ? Math.max(...dbData.players.map(p => p.id)) + 1 : 1,
       name: (name && name.trim()) ? name.trim() : 'Líder Espacial',
       score: 0,
+      xp: 0,
+      level: 1,
+      coins: 500, // Moedas espaciais iniciais para a lojinha
+      inventory: ['skin_default'],
+      active_skin: 'skin_default',
       current_mission: 1,
       satellite_config: {},
       created_at: new Date().toISOString(),
@@ -149,6 +154,11 @@ module.exports = {
 
     if (data.name !== undefined) player.name = data.name;
     if (data.score !== undefined) player.score = data.score;
+    if (data.xp !== undefined) player.xp = data.xp;
+    if (data.level !== undefined) player.level = data.level;
+    if (data.coins !== undefined) player.coins = data.coins;
+    if (data.inventory !== undefined) player.inventory = data.inventory;
+    if (data.active_skin !== undefined) player.active_skin = data.active_skin;
     if (data.current_mission !== undefined) player.current_mission = data.current_mission;
     if (data.satellite_config !== undefined) player.satellite_config = data.satellite_config;
     player.updated_at = new Date().toISOString();

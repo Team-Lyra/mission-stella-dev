@@ -62,27 +62,79 @@ const API = {
     }
 
     // Fallback local
+    const savedCompleted = JSON.parse(localStorage.getItem('missaoTaquari_completed_missions') || '{}');
     this.currentPlayer = {
       id: parseInt(savedId || '1'),
       name: playerName,
+      city: localStorage.getItem('missaoTaquari_playerCity') || 'Vale do Taquari',
+      onboarded: localStorage.getItem('missaoTaquari_onboarded') === 'true',
       score: parseInt(localStorage.getItem('missaoTaquari_score') || '0'),
+      xp: parseInt(localStorage.getItem('missaoTaquari_xp') || '0'),
+      level: parseInt(localStorage.getItem('missaoTaquari_level') || '1'),
+      coins: parseInt(localStorage.getItem('missaoTaquari_coins') || '500'),
+      inventory: JSON.parse(localStorage.getItem('missaoTaquari_inv') || '["skin_default"]'),
+      active_skin: localStorage.getItem('missaoTaquari_skin') || 'skin_default',
       current_mission: parseInt(localStorage.getItem('missaoTaquari_mission') || '1'),
+      completed_missions: savedCompleted,
       satellite_config: {}
     };
     return this.currentPlayer;
+  },
+
+  /** Marca status da missão (SUCCESS ou FAILED) — Bloqueio: 1 tentativa */
+  setMissionStatus(missionId, status) {
+    if (!this.currentPlayer) return;
+    if (!this.currentPlayer.completed_missions) this.currentPlayer.completed_missions = {};
+    this.currentPlayer.completed_missions[missionId] = status;
+    localStorage.setItem('missaoTaquari_completed_missions', JSON.stringify(this.currentPlayer.completed_missions));
+  },
+
+  /** Verifica se a missão já foi realizada */
+  getMissionStatus(missionId) {
+    if (!this.currentPlayer || !this.currentPlayer.completed_missions) {
+      const saved = JSON.parse(localStorage.getItem('missaoTaquari_completed_missions') || '{}');
+      return saved[missionId] || null;
+    }
+    return this.currentPlayer.completed_missions[missionId] || null;
+  },
+
+  /** Salva onboarding do jogador */
+  setOnboarding(name, city) {
+    if (this.currentPlayer) {
+      this.currentPlayer.name = name;
+      this.currentPlayer.city = city;
+      this.currentPlayer.onboarded = true;
+    }
+    localStorage.setItem('missaoTaquari_playerName', name);
+    localStorage.setItem('missaoTaquari_playerCity', city);
+    localStorage.setItem('missaoTaquari_onboarded', 'true');
   },
 
   /** Salva progresso do jogo no PostgreSQL / backend */
   async saveGame(data) {
     if (this.currentPlayer) {
       if (data.score !== undefined) this.currentPlayer.score = data.score;
+      if (data.xp !== undefined) this.currentPlayer.xp = data.xp;
+      if (data.level !== undefined) this.currentPlayer.level = data.level;
+      if (data.coins !== undefined) this.currentPlayer.coins = data.coins;
+      if (data.inventory !== undefined) this.currentPlayer.inventory = data.inventory;
+      if (data.active_skin !== undefined) this.currentPlayer.active_skin = data.active_skin;
       if (data.current_mission !== undefined) this.currentPlayer.current_mission = data.current_mission;
       if (data.satellite_config !== undefined) this.currentPlayer.satellite_config = data.satellite_config;
+      if (data.completed_missions !== undefined) this.currentPlayer.completed_missions = data.completed_missions;
     }
 
     localStorage.setItem('missaoTaquari_save', JSON.stringify(data));
-    localStorage.setItem('missaoTaquari_score', data.score || 0);
+    localStorage.setItem('missaoTaquari_score', data.score || (this.currentPlayer ? this.currentPlayer.score : 0));
+    localStorage.setItem('missaoTaquari_xp', this.currentPlayer ? this.currentPlayer.xp : 0);
+    localStorage.setItem('missaoTaquari_level', this.currentPlayer ? this.currentPlayer.level : 1);
+    localStorage.setItem('missaoTaquari_coins', this.currentPlayer ? this.currentPlayer.coins : 500);
+    localStorage.setItem('missaoTaquari_inv', JSON.stringify(this.currentPlayer ? this.currentPlayer.inventory : ['skin_default']));
+    localStorage.setItem('missaoTaquari_skin', this.currentPlayer ? this.currentPlayer.active_skin : 'skin_default');
     localStorage.setItem('missaoTaquari_mission', data.current_mission || 1);
+    if (this.currentPlayer && this.currentPlayer.completed_missions) {
+      localStorage.setItem('missaoTaquari_completed_missions', JSON.stringify(this.currentPlayer.completed_missions));
+    }
 
     if (this.online && this.currentPlayer && this.currentPlayer.id) {
       try {
@@ -90,7 +142,12 @@ const API = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            score: data.score,
+            score: this.currentPlayer.score,
+            xp: this.currentPlayer.xp,
+            level: this.currentPlayer.level,
+            coins: this.currentPlayer.coins,
+            inventory: this.currentPlayer.inventory,
+            active_skin: this.currentPlayer.active_skin,
             current_mission: data.current_mission,
             satellite_config: data.satellite_config
           })
@@ -154,11 +211,11 @@ const API = {
       }
     }
 
-    // Missões padrão com base nas especificações do Vale do Taquari
+    // Missões padrão com base nas especificações do Vale do Taquari (Nomenclatura Oficial)
     return [
       {
         id: 1,
-        title: "Safra em Perigo: Monitoramento Agrícola",
+        title: "Operação Solo Fértil",
         problem_type: "agricultura",
         difficulty: 1,
         npc_name: "Dona Iracema",
@@ -169,7 +226,7 @@ const API = {
       },
       {
         id: 2,
-        title: "Alerta Vermelho: Prevenção de Deslizamentos",
+        title: "Operação Sentinela das Encostas",
         problem_type: "deslizamentos",
         difficulty: 2,
         npc_name: "Capitão Rodrigo",
@@ -180,7 +237,7 @@ const API = {
       },
       {
         id: 3,
-        title: "Conexão Taquari: Internet para Produtores Rurais",
+        title: "Operação Conexão Taquari",
         problem_type: "comunicacao",
         difficulty: 3,
         npc_name: "Professora Mariana",
@@ -191,7 +248,7 @@ const API = {
       },
       {
         id: 4,
-        title: "Guardiões da Mata: Monitoramento das Matas Ciliares",
+        title: "Operação Guardião das Águas e Matas",
         problem_type: "florestal",
         difficulty: 3,
         npc_name: "Cacique Karaí",

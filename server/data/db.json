@@ -72,32 +72,110 @@
     {
       "id": 4,
       "name": "Líder Espacial",
-      "score": 900,
-      "current_mission": 3,
+      "score": 2200,
+      "current_mission": 2,
       "satellite_config": {
+        "name": "STELA-1 (Guardiã do Vale)",
+        "crew": {
+          "id": "auto",
+          "name": "Sonda Robótica Automática",
+          "icon": "🛰️",
+          "desc": "100% autônoma, leve e rápida",
+          "bonus": "+15 Eficiência de Voo"
+        },
         "sensor": {
           "id": "multiespectral",
           "name": "Câmera Multiespectral (NIR)",
-          "desc": "Capta luz no infravermelho próximo. Ideal para saúde da vegetação (NDVI) e agricultura.",
           "bestFor": "agricultura",
-          "icon": "🌿"
+          "rel": 60,
+          "mass": 10,
+          "icon": "🌿",
+          "desc": "Índice NDVI de folhas: detecta pragas invisíveis a olho nu!"
         },
-        "material": {
-          "id": "aluminio",
-          "name": "Liga de Alumínio Aeroespacial",
-          "desc": "Padrão NASA: excelente relação resistência/peso e dissipa calor de forma equilibrada.",
-          "bonus": "+150 pts de Confiabilidade Estrutural",
-          "color": "#adb5bd"
+        "battery": {
+          "id": "bat_solar",
+          "name": "Bateria Solar NASA",
+          "energy": 35,
+          "mass": 8,
+          "icon": "☀️",
+          "desc": "Recarrega com a luz do Sol no espaço."
         },
-        "orbit": {
-          "id": "leo",
-          "name": "Órbita Baixa Polar (LEO 600 km)",
-          "desc": "Varre toda a superfície da Terra e do Vale do Taquari em alta resolução a cada 90 minutos.",
-          "ideal": true
+        "cpu": {
+          "id": "cpu_basic",
+          "name": "Processador SCaN Básico",
+          "rel": 35,
+          "mass": 4,
+          "icon": "📟",
+          "desc": "Processador estável e de baixo consumo."
+        },
+        "comms": {
+          "id": "comm_dipole",
+          "name": "Antena Dipolo Simples",
+          "rel": 30,
+          "mass": 3,
+          "icon": "📻",
+          "desc": "Comunicação de rádio padrão confiável."
+        },
+        "stats": {
+          "energy": 85,
+          "mass": 50,
+          "reliability": 62,
+          "successRate": 78,
+          "isBestSensor": true,
+          "bat": {
+            "id": "bat_solar",
+            "name": "Bateria Solar NASA",
+            "energy": 35,
+            "mass": 8,
+            "icon": "☀️",
+            "desc": "Recarrega com a luz do Sol no espaço."
+          },
+          "cpu": {
+            "id": "cpu_basic",
+            "name": "Processador SCaN Básico",
+            "rel": 35,
+            "mass": 4,
+            "icon": "📟",
+            "desc": "Processador estável e de baixo consumo."
+          },
+          "comm": {
+            "id": "comm_dipole",
+            "name": "Antena Dipolo Simples",
+            "rel": 30,
+            "mass": 3,
+            "icon": "📻",
+            "desc": "Comunicação de rádio padrão confiável."
+          },
+          "sens": {
+            "id": "multiespectral",
+            "name": "Câmera Multiespectral (NIR)",
+            "bestFor": "agricultura",
+            "rel": 60,
+            "mass": 10,
+            "icon": "🌿",
+            "desc": "Índice NDVI de folhas: detecta pragas invisíveis a olho nu!"
+          },
+          "crew": {
+            "id": "auto",
+            "name": "Sonda Robótica Automática",
+            "icon": "🛰️",
+            "desc": "100% autônoma, leve e rápida",
+            "bonus": "+15 Eficiência de Voo"
+          }
         }
       },
       "created_at": "2026-11-14T17:53:48.647Z",
-      "updated_at": "2026-11-14T18:31:23.744Z"
+      "updated_at": "2026-11-14T21:27:23.844Z",
+      "xp": 2700,
+      "coins": 1250,
+      "level": 5,
+      "inventory": [
+        "skin_default",
+        "pet_bit",
+        "skin_neon",
+        "gold_antenna"
+      ],
+      "active_skin": "neon"
     }
   ],
   "missions": [
@@ -197,6 +275,15 @@
       "completed_at": "2026-11-14T17:32:55.295Z"
     },
     {
+      "id": 29,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 3,
+      "mission_title": "Conexão Taquari: Internet para Produtores Rurais",
+      "score": 4400,
+      "completed_at": "2026-11-14T20:51:30.185Z"
+    },
+    {
       "id": 18,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -233,6 +320,15 @@
       "completed_at": "2026-11-14T16:15:45.549Z"
     },
     {
+      "id": 28,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 3150,
+      "completed_at": "2026-11-14T20:45:32.617Z"
+    },
+    {
       "id": 17,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -258,6 +354,15 @@
       "mission_title": "Conexão Taquari: Internet para Produtores Rurais",
       "score": 2850,
       "completed_at": "2026-11-14T17:55:13.925Z"
+    },
+    {
+      "id": 27,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 2200,
+      "completed_at": "2026-11-14T20:36:26.075Z"
     },
     {
       "id": 16,
@@ -314,6 +419,15 @@
       "completed_at": "2026-11-14T14:58:09.339Z"
     },
     {
+      "id": 26,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 1250,
+      "completed_at": "2026-11-14T20:33:31.797Z"
+    },
+    {
       "id": 21,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -359,6 +473,15 @@
       "completed_at": "2026-11-14T18:23:54.174Z"
     },
     {
+      "id": 25,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 900,
+      "completed_at": "2026-11-14T18:31:23.743Z"
+    },
+    {
       "id": 11,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -368,13 +491,22 @@
       "completed_at": "2026-11-14T17:54:21.698Z"
     },
     {
-      "id": 25,
+      "id": 30,
       "player_id": 4,
       "player_name": "Líder Espacial",
       "mission_id": 2,
       "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
-      "score": 900,
-      "completed_at": "2026-11-14T18:31:23.743Z"
+      "score": 950,
+      "completed_at": "2026-11-14T21:26:39.958Z"
+    },
+    {
+      "id": 31,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 2200,
+      "completed_at": "2026-11-14T21:27:23.839Z"
     }
   ]
 }
