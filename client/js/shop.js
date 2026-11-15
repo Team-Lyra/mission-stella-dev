@@ -180,11 +180,11 @@ const SpaceShop = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 26px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('🛍️ LOJINHA ESPACIAL STELA', 135, 75);
+    ctx.fillText(I18n.text('🛍️ LOJINHA ESPACIAL STELA'), 135, 75);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Equipe sua nave com tecnologia de ponta e skins divertidas!', 135, 102);
+    ctx.fillText(I18n.text('Equipe sua nave com tecnologia de ponta e skins divertidas!'), 135, 102);
 
     // Saldo de Space Coins no topo direito
     const player = API.currentPlayer;
@@ -199,7 +199,7 @@ const SpaceShop = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText(`🪙 ${coins} Space Coins`, w - 70, 82);
+    ctx.fillText(I18n.text('🪙 {coins} Space Coins', { coins }), w - 70, 82);
 
     // Lista de Itens
     const cardW = Math.min(680, w - 80);
@@ -243,28 +243,28 @@ const SpaceShop = {
       ctx.textAlign = 'left';
       ctx.fillStyle = isSel ? '#ffd700' : (isOwned ? '#7ee2b8' : '#ffffff');
       ctx.font = 'bold 18px "Segoe UI", sans-serif';
-      ctx.fillText((isSel ? '▸ ' : '') + item.name, cardX + 70, iy + 28);
+      ctx.fillText((isSel ? '▸ ' : '') + I18n.text(item.name), cardX + 70, iy + 28);
 
       // Descrição simples e legível (8-12 anos)
       ctx.fillStyle = isSel ? '#e0f2fe' : '#adb5bd';
       ctx.font = '15px "Segoe UI", sans-serif';
-      ctx.fillText(item.desc, cardX + 70, iy + 52, cardW - 240);
+      ctx.fillText(I18n.text(item.desc), cardX + 70, iy + 52, cardW - 240);
 
       // Preço ou Status
       ctx.textAlign = 'right';
       if (isEquipped) {
         ctx.fillStyle = '#00f5d4';
         ctx.font = 'bold 16px "Segoe UI", sans-serif';
-        ctx.fillText('✓ EQUIPADO', cardX + cardW - 20, iy + 42);
+        ctx.fillText(I18n.text('✓ EQUIPADO'), cardX + cardW - 20, iy + 42);
       } else if (isOwned) {
         ctx.fillStyle = isSel ? '#52ff9d' : '#52b788';
         ctx.font = 'bold 16px "Segoe UI", sans-serif';
-        ctx.fillText(item.type === 'skin' ? 'USAR [ENTER]' : '✓ ADQUIRIDO', cardX + cardW - 20, iy + 42);
+        ctx.fillText(I18n.text(item.type === 'skin' ? 'USAR [ENTER]' : '✓ ADQUIRIDO'), cardX + cardW - 20, iy + 42);
       } else {
         const canAfford = coins >= item.price;
         ctx.fillStyle = canAfford ? '#ffd700' : '#e63946';
         ctx.font = 'bold 17px "Segoe UI", sans-serif';
-        ctx.fillText(`🪙 ${item.price} coins`, cardX + cardW - 20, iy + 42);
+        ctx.fillText(I18n.text('🪙 {price} coins', { price: item.price }), cardX + cardW - 20, iy + 42);
       }
     }
 
@@ -283,7 +283,7 @@ const SpaceShop = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('VOLTAR [ESC]', bx + btnW / 2, by + 28);
+    ctx.fillText(I18n.text('VOLTAR [ESC]'), bx + btnW / 2, by + 28);
 
     ctx.restore();
   }

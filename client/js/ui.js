@@ -261,7 +261,7 @@ const UI = {
         ctx.fillStyle = '#ffd700';
         ctx.font = 'bold 14px "Segoe UI", sans-serif';
         ctx.textAlign = 'right';
-        ctx.fillText('Pressione [ESPAÇO] ou [ENTER] ▼', boxX + boxW - 20, boxY + boxH - 18);
+        ctx.fillText(I18n.text('Pressione [ESPAÇO] ou [ENTER] ▼'), boxX + boxW - 20, boxY + boxH - 18);
       }
     }
 

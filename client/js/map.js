@@ -419,7 +419,7 @@ const GameMap = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText('🚀 CENTRO ESPACIAL STELA', ccX, ccY + 1);
+    ctx.fillText(I18n.text('🚀 CENTRO ESPACIAL STELA'), ccX, ccY + 1);
 
     // Entrada Neon da Porta Principal
     const doorX = 11.5 * s - cameraX;
@@ -440,7 +440,7 @@ const GameMap = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('🚪 ENTRADA [Pressione E ou Entre]', doorX, doorY - 22 + pulse);
+    ctx.fillText(I18n.text('🚪 ENTRADA [Pressione E ou Entre]'), doorX, doorY - 22 + pulse);
 
     // Placa Rio Taquari — vertical, cabendo DENTRO da faixa do rio
     const rioX = 17 * s - cameraX;
@@ -455,7 +455,7 @@ const GameMap = {
     ctx.strokeRect(-66, -13, 132, 26);
     ctx.fillStyle = '#90e0ef';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('🌊 Rio Taquari', 0, 4);
+    ctx.fillText(I18n.text('🌊 Rio Taquari'), 0, 4);
     ctx.restore();
 
     // Placa Lavoura de Estrela
@@ -465,7 +465,7 @@ const GameMap = {
     ctx.fillRect(lavX - 85, lavY - 14, 170, 24);
     ctx.fillStyle = '#e9d8a6';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('🌾 Lavouras de Estrela', lavX, lavY + 2);
+    ctx.fillText(I18n.text('🌾 Lavouras de Estrela'), lavX, lavY + 2);
 
     ctx.restore();
   },
@@ -485,7 +485,7 @@ const GameMap = {
       ctx.strokeRect(x - 105, y - 16, 210, 26);
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 12px "Segoe UI", sans-serif';
-      ctx.fillText(label, x - 12, y + 2);
+      ctx.fillText(I18n.text(label), x - 12, y + 2);
       // Badge [E] pulsante
       ctx.fillStyle = `rgba(255, 215, 0, ${pulse})`;
       ctx.fillRect(x + 72, y - 11, 30, 18);

@@ -90,12 +90,12 @@ const NasaTips = {
     ctx.font = 'bold 32px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700';
     ctx.shadowBlur = 15;
-    ctx.fillText('🛰️ CURIOSIDADES ESPACIAIS', w / 2, 70);
+    ctx.fillText(I18n.text('🛰️ CURIOSIDADES ESPACIAIS'), w / 2, 70);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '17px "Segoe UI", sans-serif';
-    ctx.fillText('Fatos incríveis sobre satélites, espaço e a NASA!', w / 2, 105);
+    ctx.fillText(I18n.text('Fatos incríveis sobre satélites, espaço e a NASA!'), w / 2, 105);
 
     const cardW = Math.min(680, w - 80);
     const cardH = 280;
@@ -114,11 +114,11 @@ const NasaTips = {
 
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 22px "Segoe UI", sans-serif';
-    ctx.fillText(tip.title, w / 2, cardY + 130);
+    ctx.fillText(I18n.text(tip.title), w / 2, cardY + 130);
 
     ctx.fillStyle = '#e0e0ff';
     ctx.font = '17px "Segoe UI", sans-serif';
-    const words = tip.text.split(' ');
+    const words = I18n.text(tip.text).split(' ');
     let line = '';
     let ly = cardY + 165;
     for (let i = 0; i < words.length; i++) {
@@ -145,7 +145,7 @@ const NasaTips = {
     ctx.strokeRect(b1x, by, btn1W, btn1H);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('PRÓXIMA ➔', b1x + btn1W / 2, by + 32);
+    ctx.fillText(I18n.text('PRÓXIMA ➔'), b1x + btn1W / 2, by + 32);
 
     const btn2W = 260;
     const b2x = w / 2 + 10;
@@ -154,7 +154,7 @@ const NasaTips = {
     ctx.strokeStyle = '#ffd700';
     ctx.strokeRect(b2x, by, btn2W, btn1H);
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('FECHAR [ESC]', b2x + btn2W / 2, by + 32);
+    ctx.fillText(I18n.text('FECHAR [ESC]'), b2x + btn2W / 2, by + 32);
 
     this._btn1 = { x: b1x, y: by, w: btn1W, h: btn1H };
     this._btn2 = { x: b2x, y: by, w: btn2W, h: btn1H };
@@ -189,10 +189,10 @@ const NasaTips = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`${this.currentTip.icon} Curiosidade: ${this.currentTip.title}`, boxX + 15, boxY + 28);
+    ctx.fillText(`${this.currentTip.icon} ${I18n.text('Curiosidade:')} ${I18n.text(this.currentTip.title)}`, boxX + 15, boxY + 28);
     ctx.fillStyle = '#c8c8ff';
     ctx.font = '13px "Segoe UI", sans-serif';
-    wrapText(ctx, this.currentTip.text, boxX + 15, boxY + 50, boxW - 30, 18);
+    wrapText(ctx, I18n.text(this.currentTip.text), boxX + 15, boxY + 50, boxW - 30, 18);
     ctx.restore();
   }
 };

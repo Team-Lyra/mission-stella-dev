@@ -196,7 +196,7 @@ const NPCManager = {
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 12px "Segoe UI", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(npc.name, rx + npc.w / 2, ry - 8);
+        ctx.fillText(I18n.text(npc.name), rx + npc.w / 2, ry - 8);
       }
 
       // Balão indicador de interação (largura medida pelo texto — nunca vaza)
@@ -204,7 +204,7 @@ const NPCManager = {
         const bounce = Math.sin(time * 3) * 3;
         const bx = rx + npc.w / 2;
         const by = ry - 26 + bounce;
-        const label = 'FALAR [E]';
+        const label = I18n.text('FALAR [E]');
 
         ctx.font = 'bold 11px "Segoe UI", sans-serif';
         const tw = ctx.measureText(label).width;

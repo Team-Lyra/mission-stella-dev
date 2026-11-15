@@ -478,7 +478,7 @@ const LaunchMinigame = {
 
     if (typedClean === expected) {
       this.mariana.history.push(`> ${typedClean}`);
-      this.mariana.history.push(`[OK] COMANDO PROCESSADO: ETAPA ${this.mariana.step + 1} ATIVADA!`);
+      this.mariana.history.push(I18n.text('[OK] COMANDO PROCESSADO: ETAPA {step} ATIVADA!', { step: this.mariana.step + 1 }));
       this.mariana.typed = '';
       this.mariana.errorMsg = '';
       this.mariana.step++;
@@ -486,12 +486,12 @@ const LaunchMinigame = {
 
       if (this.mariana.step >= this.mariana.commands.length) {
         this.mariana.history.push('========================================================');
-        this.mariana.history.push('🎉 SUCESSO! LINK DE 100 Mbps ESTABILIZADO COM A ESCOLA!');
-        this.mariana.history.push('47 Comunidades e Postos de Saúde Conectados à Rede!');
+        this.mariana.history.push(I18n.text('🎉 SUCESSO! LINK DE 100 Mbps ESTABILIZADO COM A ESCOLA!'));
+        this.mariana.history.push(I18n.text('47 Comunidades e Postos de Saúde Conectados à Rede!'));
         this.completeChallenge();
       }
     } else {
-      this.mariana.errorMsg = `✗ Sintaxe incorreta! Digite exatamente: "${expected}"`;
+      this.mariana.errorMsg = I18n.text('✗ Sintaxe incorreta! Digite exatamente: "{command}"', { command: expected });
       NasaAudio.alarmTone();
     }
   },
@@ -505,15 +505,15 @@ const LaunchMinigame = {
       this.rodrigo.hits++;
       this.rodrigo.flashTimer = 0.5;
       NasaAudio.radarPing();
-      this.rodrigo.statusMsg = `✓ PULSO PERFEITO (${this.rodrigo.hits}/${this.rodrigo.neededHits})! Radar penetrou as nuvens e mediu a encosta!`;
+      this.rodrigo.statusMsg = I18n.text('✓ PULSO PERFEITO ({hits}/{total})! Radar penetrou as nuvens e mediu a encosta!', { hits: this.rodrigo.hits, total: this.rodrigo.neededHits });
 
       if (this.rodrigo.hits >= this.rodrigo.neededHits) {
-        this.rodrigo.statusMsg = '🎉 MAPEAMENTO DE ENCOSTA COMPLETO! Alerta emitido para a Defesa Civil!';
+        this.rodrigo.statusMsg = I18n.text('🎉 MAPEAMENTO DE ENCOSTA COMPLETO! Alerta emitido para a Defesa Civil!');
         this.completeChallenge();
       }
     } else {
       NasaAudio.alarmTone();
-      this.rodrigo.statusMsg = '✗ FORA DA JANELA! O ruído de tempestade atenuou o radar. Tente de novo!';
+      this.rodrigo.statusMsg = I18n.text('✗ FORA DA JANELA! O ruído de tempestade atenuou o radar. Tente de novo!');
     }
   },
 
@@ -688,17 +688,17 @@ const LaunchMinigame = {
     let subtitle = '';
 
     if (this.problemType === 'agricultura') {
-      title = '🌿 NASA LANDSAT-9 • SCANNER NDVI DE LAVOURAS (POINT & CLICK)';
-      subtitle = 'Missão: Dona Marta (Estrela) • Clique nos talhões para achar os 3 focos de praga';
+      title = I18n.text('🌿 NASA LANDSAT-9 • SCANNER NDVI DE LAVOURAS (POINT & CLICK)');
+      subtitle = I18n.text('Missão: Dona Marta (Estrela) • Clique nos talhões para achar os 3 focos de praga');
     } else if (this.problemType === 'comunicacao') {
-      title = '📡 NASA SCaN & TDRS • CONSOLE DE DIGITAÇÃO DE TELEMETRIA';
-      subtitle = 'Missão: Profª Clara (Pouso Novo) • Digite os comandos de uplink pelo teclado e dê Enter';
+      title = I18n.text('📡 NASA SCaN & TDRS • CONSOLE DE DIGITAÇÃO DE TELEMETRIA');
+      subtitle = I18n.text('Missão: Profª Clara (Pouso Novo) • Digite os comandos de uplink pelo teclado e dê Enter');
     } else if (this.problemType === 'deslizamentos') {
-      title = '⛰️ NASA NISAR • RADAR SAR DE PENETRAÇÃO (TIMING NO MOMENTO EXATO)';
-      subtitle = 'Missão: Capitão Farias (Lajeado) • Aperte [ESPAÇO] na FAIXA VERDE para atravessar a chuva';
+      title = I18n.text('⛰️ NASA NISAR • RADAR SAR DE PENETRAÇÃO (TIMING NO MOMENTO EXATO)');
+      subtitle = I18n.text('Missão: Capitão Farias (Lajeado) • Aperte [ESPAÇO] na FAIXA VERDE para atravessar a chuva');
     } else {
-      title = '🔥 NASA FIRMS • FILTRO RADIOMÉTRICO TERMAL (ARRASTAR COM O MOUSE)';
-      subtitle = 'Missão: Seu Nilo (Rio Taquari) • Arraste a Lente Térmica sobre o rio para achar o fogo';
+      title = I18n.text('🔥 NASA FIRMS • FILTRO RADIOMÉTRICO TERMAL (ARRASTAR COM O MOUSE)');
+      subtitle = I18n.text('Missão: Seu Nilo (Rio Taquari) • Arraste a Lente Térmica sobre o rio para achar o fogo');
     }
 
     ctx.textAlign = 'left';
@@ -747,10 +747,10 @@ const LaunchMinigame = {
         ctx.fillStyle = '#adb5bd';
         ctx.font = '12px "Segoe UI", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`Talhão ${idx + 1}`, cx + cellW / 2, cy + cellH / 2 - 8);
+        ctx.fillText(I18n.text('Talhão {field}', { field: idx + 1 }), cx + cellW / 2, cy + cellH / 2 - 8);
         ctx.fillStyle = '#606c38';
         ctx.font = '11px "Segoe UI", sans-serif';
-        ctx.fillText('Clique para escanear', cx + cellW / 2, cy + cellH / 2 + 10);
+        ctx.fillText(I18n.text('Clique para escanear'), cx + cellW / 2, cy + cellH / 2 + 10);
       } else if (f.hasPest) {
         // Foco de praga (vermelho vivo com alerta)
         const pulse = (Math.sin(this.timer * 6) + 1) / 2;
@@ -763,10 +763,10 @@ const LaunchMinigame = {
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 13px "Segoe UI", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('🎯 FOCO DE PRAGA!', cx + cellW / 2, cy + cellH / 2 - 8);
+        ctx.fillText(I18n.text('🎯 FOCO DE PRAGA!'), cx + cellW / 2, cy + cellH / 2 - 8);
         ctx.fillStyle = '#ffd700';
         ctx.font = 'bold 11px monospace';
-        ctx.fillText(`NDVI: ${f.ndvi.toFixed(2)} (CRÍTICO)`, cx + cellW / 2, cy + cellH / 2 + 12);
+        ctx.fillText(I18n.text('NDVI: {ndvi} (CRÍTICO)', { ndvi: f.ndvi.toFixed(2) }), cx + cellW / 2, cy + cellH / 2 + 12);
       } else {
         // Talhão saudável (verde esmeralda da NASA)
         ctx.fillStyle = '#2d6a4f';
@@ -775,10 +775,10 @@ const LaunchMinigame = {
         ctx.fillStyle = '#00f5d4';
         ctx.font = 'bold 12px "Segoe UI", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('✓ VEGETAÇÃO SADIA', cx + cellW / 2, cy + cellH / 2 - 8);
+        ctx.fillText(I18n.text('✓ VEGETAÇÃO SADIA'), cx + cellW / 2, cy + cellH / 2 - 8);
         ctx.fillStyle = '#b7e4c7';
         ctx.font = '11px monospace';
-        ctx.fillText(`NDVI: ${f.ndvi.toFixed(2)} (Ótimo)`, cx + cellW / 2, cy + cellH / 2 + 12);
+        ctx.fillText(I18n.text('NDVI: {ndvi} (Ótimo)', { ndvi: f.ndvi.toFixed(2) }), cx + cellW / 2, cy + cellH / 2 + 12);
       }
 
       ctx.strokeStyle = isHover ? '#ffd700' : 'rgba(255, 255, 255, 0.15)';
@@ -792,7 +792,7 @@ const LaunchMinigame = {
     ctx.fillStyle = this.iracema.foundCount >= 3 ? '#00f5d4' : '#ffd700';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.fillText(
-      `FOCOS DE PRAGA ENCONTRADOS: ${this.iracema.foundCount} / 3  •  DICA: Clique nos talhões com o mouse!`,
+      I18n.text('FOCOS DE PRAGA ENCONTRADOS: {found} / 3  •  DICA: Clique nos talhões com o mouse!', { found: this.iracema.foundCount }),
       w / 2,
       statusY
     );
@@ -836,7 +836,7 @@ const LaunchMinigame = {
     const visibleLines = this.mariana.history.slice(-5);
     visibleLines.forEach((line) => {
       ctx.fillStyle = line.startsWith('>') ? '#ffd700' : (line.startsWith('[OK]') ? '#00f5d4' : '#74c69d');
-      ctx.fillText(line, termX + 18, lineY);
+      ctx.fillText(I18n.text(line), termX + 18, lineY);
       lineY += 20;
     });
     ctx.restore();
@@ -848,7 +848,7 @@ const LaunchMinigame = {
 
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 13px "Segoe UI", sans-serif';
-      ctx.fillText(`ETAPA ${this.mariana.step + 1} de 3: ${targetCmd.label}`, termX + 18, inputPanelY);
+      ctx.fillText(I18n.text('ETAPA {step} de 3: {label}', { step: this.mariana.step + 1, label: I18n.text(targetCmd.label) }), termX + 18, inputPanelY);
 
       // Caixa de digitação ativa
       const boxY = inputPanelY + 10;
@@ -862,12 +862,12 @@ const LaunchMinigame = {
       const cursor = Math.floor(this.mariana.cursorTimer) % 2 === 0 ? '_' : ' ';
       ctx.fillStyle = '#ffd700';
       ctx.font = 'bold 16px monospace';
-      ctx.fillText(`DIGITE > ${this.mariana.typed}${cursor}`, termX + 28, boxY + 25);
+      ctx.fillText(`${I18n.lang === 'en' ? 'TYPE' : 'DIGITE'} > ${this.mariana.typed}${cursor}`, termX + 28, boxY + 25);
 
       // Dica de comando
       ctx.fillStyle = '#90e0ef';
       ctx.font = 'italic 12px "Segoe UI", sans-serif';
-      ctx.fillText(`Comando esperado: "${targetCmd.text}" (Digite e aperte ENTER)`, termX + 18, boxY + 54);
+      ctx.fillText(I18n.text('Comando esperado: "{command}" (Digite e aperte ENTER)', { command: targetCmd.text }), termX + 18, boxY + 54);
 
       if (this.mariana.errorMsg) {
         ctx.fillStyle = '#e63946';
@@ -946,7 +946,7 @@ const LaunchMinigame = {
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 11px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('FAIXA IDEAL SAR', sweetX + sweetW / 2, barY - 8);
+    ctx.fillText(I18n.text('FAIXA IDEAL SAR'), sweetX + sweetW / 2, barY - 8);
 
     // Cursor oscilante do radar
     const cursorX = barX + barW * this.rodrigo.oscillator;
@@ -962,11 +962,11 @@ const LaunchMinigame = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText(this.rodrigo.statusMsg, w / 2, barY + barH + 26);
+    ctx.fillText(I18n.text(this.rodrigo.statusMsg), w / 2, barY + barH + 26);
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
-    ctx.fillText(`PULSOS CONFIRMADOS: ${this.rodrigo.hits} / ${this.rodrigo.neededHits}`, w / 2, dispY + 35);
+    ctx.fillText(I18n.text('PULSOS CONFIRMADOS: {hits} / {total}', { hits: this.rodrigo.hits, total: this.rodrigo.neededHits }), w / 2, dispY + 35);
   },
 
   // ============================================
@@ -1071,7 +1071,7 @@ const LaunchMinigame = {
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 11px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('FOGO DETECTADO!', f.canvasX, f.canvasY - 22);
+        ctx.fillText(I18n.text('FOGO DETECTADO!'), f.canvasX, f.canvasY - 22);
       }
     });
 
@@ -1097,7 +1097,7 @@ const LaunchMinigame = {
     ctx.fillStyle = 'rgba(0, 245, 212, 0.9)';
     ctx.font = 'bold 11px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('LENTE FIRMS 3.9µm', lx, ly + lr - 14);
+    ctx.fillText(I18n.text('LENTE FIRMS 3.9µm'), lx, ly + lr - 14);
 
     ctx.restore(); // Fecha o clip geral da caixa do display
 
@@ -1111,7 +1111,7 @@ const LaunchMinigame = {
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(
-      `FOCOS DE QUEIMADA LOCALIZADOS: ${this.karai.foundCount} / 3  •  Arraste a lente com o mouse sobre o rio!`,
+      I18n.text('FOCOS DE QUEIMADA LOCALIZADOS: {found} / 3  •  Arraste a lente com o mouse sobre o rio!', { found: this.karai.foundCount }),
       w / 2,
       h - 55
     );
@@ -1122,7 +1122,7 @@ const LaunchMinigame = {
   // ============================================
   renderLaunchButton(ctx, w, h) {
     const pulse = Math.sin(Date.now() / 150) * 4;
-    const btnText = '🚀 LANÇAR MISSÃO! [ESPAÇO / CLIQUE]';
+    const btnText = I18n.text('🚀 LANÇAR MISSÃO! [ESPAÇO / CLIQUE]');
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
     const textWidth = ctx.measureText(btnText).width;
     const btnW = Math.min(540, Math.max(440, textWidth + 70));
@@ -1239,11 +1239,11 @@ const LaunchMinigame = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 26px "Segoe UI", sans-serif';
-    ctx.fillText('🚀 DECOLAGEM AUTORIZADA!', w / 2, 48);
+    ctx.fillText(I18n.text('🚀 DECOLAGEM AUTORIZADA!'), w / 2, 48);
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
-    ctx.fillText('Satélite calibrado entrando em órbita polar sobre o Vale do Taquari...', w / 2, 75);
+    ctx.fillText(I18n.text('Satélite calibrado entrando em órbita polar sobre o Vale do Taquari...'), w / 2, 75);
 
     // Caixa de Telemetria Lateral abaixo do cabeçalho
     const teleX = 30;
@@ -1260,12 +1260,12 @@ const LaunchMinigame = {
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('🛰️ TELEMETRIA DE VÔO NASA', teleX + 14, teleY + 22);
+    ctx.fillText(I18n.text('🛰️ TELEMETRIA DE VÔO NASA'), teleX + 14, teleY + 22);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '12px monospace';
-    ctx.fillText(`ALTITUDE: ${alt} km (Órbita LEO)`, teleX + 14, teleY + 44);
-    ctx.fillText(`VELOCIDADE: ${vel.toLocaleString()} km/h (7.8 km/s)`, teleX + 14, teleY + 65);
-    ctx.fillText(`STATUS: INJEÇÃO ORBITAL OK`, teleX + 14, teleY + 85);
+    ctx.fillText(I18n.text('ALTITUDE: {alt} km (Órbita LEO)', { alt }), teleX + 14, teleY + 44);
+    ctx.fillText(I18n.text('VELOCIDADE: {speed} km/h (7.8 km/s)', { speed: vel.toLocaleString() }), teleX + 14, teleY + 65);
+    ctx.fillText(I18n.text('STATUS: INJEÇÃO ORBITAL OK'), teleX + 14, teleY + 85);
   }
 };

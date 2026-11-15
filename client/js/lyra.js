@@ -46,11 +46,13 @@ const Lyra = {
 
   // Retorna título de cargo por nível
   getRankTitle(level = 1) {
-    if (level <= 1) return 'Nível 1 • Explorador Mirim';
-    if (level === 2) return 'Nível 2 • Cadete Espacial';
-    if (level === 3) return 'Nível 3 • Engenheiro de Satélites';
-    if (level === 4) return 'Nível 4 • Cientista de Voo';
-    return `Nível ${level} • Comandante Orbital`;
+    if (level <= 1) return I18n.t('rank_1');
+    if (level === 2) return I18n.t('rank_2');
+    if (level === 3) return I18n.t('rank_3');
+    if (level === 4) return I18n.t('rank_4');
+    return I18n.lang === 'en'
+      ? `Level ${level} • Orbital Commander`
+      : `Nível ${level} • Comandante Orbital`;
   },
 
   // Retorna XP necessário para o próximo nível

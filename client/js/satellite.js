@@ -311,11 +311,11 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 28px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('⭐ PASSO 2: BASTIDORES DA MISSÃO STELA', w / 2, 135);
+    ctx.fillText(I18n.text('⭐ PASSO 2: BASTIDORES DA MISSÃO STELA'), w / 2, 135);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Lyra: "Comandante, escolha o nome oficial da nossa nave e quem vai com a gente!"', w / 2, 162);
+    ctx.fillText(I18n.text('Lyra: "Comandante, escolha o nome oficial da nossa nave e quem vai com a gente!"'), w / 2, 162);
 
     const boxW = Math.min(680, w - 60);
     const boxX = w / 2 - boxW / 2;
@@ -330,11 +330,11 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#adb5bd';
     ctx.font = 'bold 13px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('NOME DA SONDA / SATÉLITE (Clique ou use [←/→] para trocar):', boxX + 20, 208);
+    ctx.fillText(I18n.text('NOME DA SONDA / SATÉLITE (Clique ou use [←/→] para trocar):'), boxX + 20, 208);
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 22px "Segoe UI", sans-serif';
-    ctx.fillText(`🚀 ${this.missionNames[this.missionNameIndex]}`, boxX + 20, 245);
+    ctx.fillText(`🚀 ${I18n.text(this.missionNames[this.missionNameIndex])}`, boxX + 20, 245);
 
     // Card 2: Tripulação / Copiloto
     ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
@@ -345,16 +345,16 @@ const SatelliteBuilder = {
 
     ctx.fillStyle = '#adb5bd';
     ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('SISTEMA DE PILOTAGEM (Clique ou use [TAB] para alternar):', boxX + 20, 308);
+    ctx.fillText(I18n.text('SISTEMA DE PILOTAGEM (Clique ou use [TAB] para alternar):'), boxX + 20, 308);
 
     const crew = this.crewOptions[this.crewIndex];
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText(`${crew.icon} ${crew.name}`, boxX + 20, 342);
+    ctx.fillText(`${crew.icon} ${I18n.text(crew.name)}`, boxX + 20, 342);
 
     ctx.fillStyle = '#52b788';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText(crew.bonus, boxX + 20, 366);
+    ctx.fillText(I18n.text(crew.bonus), boxX + 20, 366);
 
     // Card 3: Orçamento fornecido
     ctx.fillStyle = 'rgba(255, 215, 0, 0.1)';
@@ -364,7 +364,7 @@ const SatelliteBuilder = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText('🪙 Orçamento Governamental: 1.000 Space Credits Liberados!', boxX + 20, 434);
+    ctx.fillText(I18n.text('🪙 Orçamento Governamental: 1.000 Space Credits Liberados!'), boxX + 20, 434);
 
     // Botão de prosseguir
     const btnW = 340;
@@ -383,7 +383,7 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('IR PARA A BANCADA [ENTER] ➔', w / 2, by + 33);
+    ctx.fillText(I18n.text('IR PARA A BANCADA [ENTER] ➔'), w / 2, by + 33);
   },
 
   // 2. Bancada Drag & Drop e Montagem Visual
@@ -392,11 +392,11 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 24px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🔬 BANCADA DE ENGENHARIA — MONTAGEM VISUAL', w / 2, 40);
+    ctx.fillText(I18n.text('🔬 BANCADA DE ENGENHARIA — MONTAGEM VISUAL'), w / 2, 40);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText('Clique nas peças na estante para equipar cada módulo do seu satélite!', w / 2, 65);
+    ctx.fillText(I18n.text('Clique nas peças na estante para equipar cada módulo do seu satélite!'), w / 2, 65);
 
     // Tabs de Categorias
     const tabW = 140;
@@ -417,7 +417,7 @@ const SatelliteBuilder = {
       ctx.fillStyle = isSel ? '#000000' : '#ffffff';
       ctx.font = 'bold 15px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`${cat.icon} ${cat.name}`, tx + tabW / 2, 116);
+      ctx.fillText(`${cat.icon} ${I18n.text(cat.name)}`, tx + tabW / 2, 116);
     }
 
     // Lado Esquerdo: Peças da Categoria Ativa
@@ -463,12 +463,12 @@ const SatelliteBuilder = {
       ctx.fillStyle = isSel ? '#ffd700' : (isEquipped ? '#7ee2b8' : '#ffffff');
       ctx.font = 'bold 17px "Segoe UI", sans-serif';
       const prefix = isSel ? '▸ ' : (isEquipped ? '✓ ' : '');
-      ctx.fillText(prefix + item.name, cardStartX + 60, iy + 28);
+      ctx.fillText(prefix + I18n.text(item.name), cardStartX + 60, iy + 28);
 
       // Descrição simples para crianças
       ctx.fillStyle = isSel ? '#e0f2fe' : '#adb5bd';
       ctx.font = '14px "Segoe UI", sans-serif';
-      ctx.fillText(item.desc, cardStartX + 60, iy + 52, cardW - 75);
+      ctx.fillText(I18n.text(item.desc), cardStartX + 60, iy + 52, cardW - 75);
     }
 
     // Lado Direito: Visualização Esquemática da Nave montada em tempo real
@@ -496,7 +496,7 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('AVANÇAR PARA STATUS FINAL [ENTER] ➔', w / 2, by + 32);
+    ctx.fillText(I18n.text('AVANÇAR PARA STATUS FINAL [ENTER] ➔'), w / 2, by + 32);
   },
 
   // 3. Revisão Final com Estatísticas e Chance de Sucesso
@@ -506,11 +506,11 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 28px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(`🚀 NAVE PRONTA: ${this.missionNames[this.missionNameIndex]}`, w / 2, 50);
+    ctx.fillText(I18n.text('🚀 NAVE PRONTA: {name}', { name: I18n.text(this.missionNames[this.missionNameIndex]) }), w / 2, 50);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('A Lyra analisou todas as peças da sua nave espacial!', w / 2, 78);
+    ctx.fillText(I18n.text('A Lyra analisou todas as peças da sua nave espacial!'), w / 2, 78);
 
     const boxW = Math.min(760, w - 80);
     const boxX = w / 2 - boxW / 2;
@@ -530,17 +530,17 @@ const SatelliteBuilder = {
     // Barra 1: Energia / Força
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
-    ctx.fillText(`⚡ Força / Energia: ${stats.energy} / 100`, boxX + 150, 145);
+    ctx.fillText(I18n.text('⚡ Força / Energia: {val} / 100', { val: stats.energy }), boxX + 150, 145);
     this.drawProgressBar(ctx, boxX + 150, 155, 380, 14, stats.energy / 100, '#ffd700');
 
     // Barra 2: Confiabilidade dos Sistemas
     ctx.fillStyle = '#38bdf8';
-    ctx.fillText(`🛡️ Confiabilidade dos Sensores: ${stats.reliability}%`, boxX + 150, 195);
+    ctx.fillText(I18n.text('🛡️ Confiabilidade dos Sensores: {val}%', { val: stats.reliability }), boxX + 150, 195);
     this.drawProgressBar(ctx, boxX + 150, 205, 380, 14, stats.reliability / 100, '#38bdf8');
 
     // Massa Total
     ctx.fillStyle = '#adb5bd';
-    ctx.fillText(`⚖️ Massa Total: ${stats.mass} kg (Carga Leve e Aerodinâmica)`, boxX + 150, 245);
+    ctx.fillText(I18n.text('⚖️ Massa Total: {mass} kg (Carga Leve e Aerodinâmica)', { mass: stats.mass }), boxX + 150, 245);
 
     // CHANCE DE SUCESSO DA MISSÃO (Grande destaque para crianças)
     ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
@@ -551,14 +551,14 @@ const SatelliteBuilder = {
 
     ctx.fillStyle = '#22c55e';
     ctx.font = 'bold 22px "Segoe UI", sans-serif';
-    ctx.fillText(`🎯 CHANCE DE SUCESSO DA MISSÃO: ${stats.successRate}%`, boxX + 25, 360);
+    ctx.fillText(I18n.text('🎯 CHANCE DE SUCESSO DA MISSÃO: {rate}%', { rate: stats.successRate }), boxX + 25, 360);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '14px "Segoe UI", sans-serif';
     ctx.fillText(
-      stats.isBestSensor
+      I18n.text(stats.isBestSensor
         ? '✓ Sensor perfeito para o problema do Vale do Taquari! Ganha bônus de pontuação!'
-        : '⚠️ Dica: Você pode testar este sensor, mas o ideal para esta região seria o sensor especializado.',
+        : '⚠️ Dica: Você pode testar este sensor, mas o ideal para esta região seria o sensor especializado.'),
       boxX + 25, 390
     );
 
@@ -579,7 +579,7 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🔬 INICIAR TESTES CIENTÍFICOS DA NASA [ENTER] ➔', w / 2, by + 35);
+    ctx.fillText(I18n.text('🔬 INICIAR TESTES CIENTÍFICOS DA NASA [ENTER] ➔'), w / 2, by + 35);
   },
 
   drawProgressBar(ctx, x, y, w, h, pct, color) {
@@ -602,7 +602,7 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 13px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🛰️ MONTAGEM EM TEMPO REAL', x + width / 2, y + 25);
+    ctx.fillText(I18n.text('🛰️ MONTAGEM EM TEMPO REAL'), x + width / 2, y + 25);
 
     const cx = x + width / 2;
     const cy = y + height / 2;

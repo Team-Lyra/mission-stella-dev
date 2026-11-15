@@ -163,16 +163,16 @@ const MissionManager = {
   // Gera o feedback divertido do Passo 6 baseado nas peças escolhidas
   generateChoiceFeedback() {
     const cfg = this.satelliteConfig || {};
-    const bat = cfg.battery ? cfg.battery.name : 'Bateria Solar';
-    const cpu = cfg.cpu ? cfg.cpu.name : 'Computador NASA';
-    const comm = cfg.comms ? cfg.comms.name : 'Transponder Ku';
+    const bat = I18n.text(cfg.battery ? cfg.battery.name : 'Bateria Solar');
+    const cpu = I18n.text(cfg.cpu ? cfg.cpu.name : 'Computador NASA');
+    const comm = I18n.text(cfg.comms ? cfg.comms.name : 'Transponder Ku');
     const crew = cfg.crew ? cfg.crew.name : 'Sonda Automática';
 
-    let fb = `⚡ A ${bat} que você escolheu manteve todos os instrumentos ligados no vácuo espacial! `;
-    fb += `💻 O ${cpu} processou a telemetria sem falhas. `;
-    fb += `📡 A comunicação via ${comm} enviou os mapas perfeitos para a base! `;
+    let fb = I18n.text('⚡ A {battery} que você escolheu manteve todos os instrumentos ligados no vácuo espacial! ', { battery: bat });
+    fb += I18n.text('💻 O {computer} processou a telemetria sem falhas. ', { computer: cpu });
+    fb += I18n.text('📡 A comunicação via {comms} enviou os mapas perfeitos para a base! ', { comms: comm });
     if (crew.includes('Bit')) {
-      fb += `🤖 O Robô Copiloto Bit ajudou a calibrar tudo 20% mais rápido!`;
+      fb += I18n.text('🤖 O Robô Copiloto Bit ajudou a calibrar tudo 20% mais rápido!');
     }
 
     this.choiceFeedback = fb;
@@ -227,8 +227,8 @@ const MissionManager = {
     }
 
     NasaTips.show({
-      title: 'Missão Cumprida com Sucesso!',
-      text: 'Excelente trabalho, Comandante! Explore o Vale do Taquari para aceitar o próximo desafio.',
+      title: I18n.text('Missão Cumprida com Sucesso!'),
+      text: I18n.text('Excelente trabalho, Comandante! Explore o Vale do Taquari para aceitar o próximo desafio.'),
       icon: '🎉'
     });
   },
@@ -264,12 +264,12 @@ const MissionManager = {
     ctx.textAlign = 'left';
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 24px "Segoe UI", sans-serif';
-    ctx.fillText(`🚨 ALERTA NO VALE DO TAQUARI: ${m.npc_name}`, boxX + 130, boxY + 52);
+    ctx.fillText(I18n.text('🚨 ALERTA NO VALE DO TAQUARI: {name}', { name: I18n.text(m.npc_name) }), boxX + 130, boxY + 52);
 
     // Badge de Dificuldade Progressiva
-    const diffText = m.difficulty === 1 ? '🟢 Dificuldade: Iniciante (Fácil)' :
+    const diffText = I18n.text(m.difficulty === 1 ? '🟢 Dificuldade: Iniciante (Fácil)' :
                      m.difficulty === 2 ? '🟡 Dificuldade: Moderada' :
-                     m.difficulty === 3 ? '🟠 Dificuldade: Avançada' : '🔴 Dificuldade: Especialista';
+                     m.difficulty === 3 ? '🟠 Dificuldade: Avançada' : '🔴 Dificuldade: Especialista');
     ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.fillText(diffText, boxX + 130, boxY + 80);
@@ -283,11 +283,11 @@ const MissionManager = {
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText(`Relato de ${m.npc_name}:`, boxX + 45, boxY + 142);
+    ctx.fillText(I18n.text('Relato de {name}:', { name: I18n.text(m.npc_name) }), boxX + 45, boxY + 142);
 
     ctx.fillStyle = '#e0e0ff';
     ctx.font = '16px "Segoe UI", sans-serif';
-    this.wrapText(ctx, `"${m.npc_dialog}"`, boxX + 45, boxY + 172, boxW - 90, 24);
+    this.wrapText(ctx, `"${I18n.text(m.npc_dialog)}"`, boxX + 45, boxY + 172, boxW - 90, 24);
 
     // Bloco Objetivo Espacial da Missão
     ctx.fillStyle = 'rgba(255, 215, 0, 0.12)';
@@ -297,11 +297,11 @@ const MissionManager = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText('🎯 SEU OBJETIVO ESPACIAL (PASSO 1):', boxX + 45, boxY + 308);
+    ctx.fillText(I18n.text('🎯 SEU OBJETIVO ESPACIAL (PASSO 1):'), boxX + 45, boxY + 308);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '15px "Segoe UI", sans-serif';
-    this.wrapText(ctx, m.description, boxX + 45, boxY + 334, boxW - 90, 22);
+    this.wrapText(ctx, I18n.text(m.description), boxX + 45, boxY + 334, boxW - 90, 22);
 
     // Botão Grande Aceitar Desafio
     const btnW = 380;
@@ -320,7 +320,7 @@ const MissionManager = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('✅ ACEITAR DESAFIO [ENTER] ➔', w / 2, by + 34);
+    ctx.fillText(I18n.text('✅ ACEITAR DESAFIO [ENTER] ➔'), w / 2, by + 34);
 
     ctx.restore();
   },
@@ -402,13 +402,13 @@ const MissionManager = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('⭐ PASSO 5: COLETA DE DADOS EM ÓRBITA', 200, 78);
+    ctx.fillText(I18n.text('⭐ PASSO 5: COLETA DE DADOS EM ÓRBITA'), 200, 78);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '15px "Segoe UI", sans-serif';
     this.wrapText(
       ctx,
-      'Lyra: "Olha só que lindo! Nosso satélite está a 600 km de altitude sobrevoando o Vale do Taquari! Os feixes de dados já estão chegando às estações terrestres!"',
+      I18n.text('Lyra: "Olha só que lindo! Nosso satélite está a 600 km de altitude sobrevoando o Vale do Taquari! Os feixes de dados já estão chegando às estações terrestres!"'),
       200, 104, bubbleW - 40, 20
     );
 
@@ -429,7 +429,7 @@ const MissionManager = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    const collectBtnLabel = this.missionFailed ? '⚠️ VER RESULTADO [ESPAÇO]' : 'VER IMPACTO NA TERRA [ESPAÇO] ➔';
+    const collectBtnLabel = I18n.text(this.missionFailed ? '⚠️ VER RESULTADO [ESPAÇO]' : 'VER IMPACTO NA TERRA [ESPAÇO] ➔');
     ctx.fillText(collectBtnLabel, w / 2, by + 32);
 
     ctx.restore();
@@ -454,11 +454,11 @@ const MissionManager = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 30px "Segoe UI", sans-serif';
-    ctx.fillText('🎉 MISSÃO CUMPRIDA COM SUCESSO!', w / 2, 45);
+    ctx.fillText(I18n.text('🎉 MISSÃO CUMPRIDA COM SUCESSO!'), w / 2, 45);
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText(m.title, w / 2, 76);
+    ctx.fillText(I18n.text(m.title), w / 2, 76);
 
     // Layout dinâmico: caixas se ajustam ao texto (cabe sempre)
     ctx.textAlign = 'left';
@@ -477,21 +477,21 @@ const MissionManager = {
 
       ctx.fillStyle = headerColor;
       ctx.font = 'bold 17px "Segoe UI", sans-serif';
-      ctx.fillText(header, boxX + 20, y + 26);
+      ctx.fillText(I18n.text(header), boxX + 20, y + 26);
 
       ctx.fillStyle = bodyColor;
       ctx.font = bodyFont;
-      this.wrapText(ctx, body, boxX + 20, y + 52, innerW, lineH);
+      this.wrapText(ctx, I18n.text(body), boxX + 20, y + 52, innerW, lineH);
       y += blockH + 12;
     };
 
     // 1. Impacto no Vale do Taquari
     drawBlock('🌍 Impacto Real no Vale do Taquari:', '#22c55e',
-      m.impact_text, '#ffffff', '16px "Segoe UI", sans-serif', 22);
+      I18n.text(m.impact_text), '#ffffff', '16px "Segoe UI", sans-serif', 22);
 
     // 2. Feedback das peças escolhidas
     if (this.choiceFeedback) {
-      drawBlock('🛠️ Feedback das Suas Escolhas de Engenharia:', '#00f5d4',
+      drawBlock(I18n.text('🛠️ Feedback das Suas Escolhas de Engenharia:'), '#00f5d4',
         this.choiceFeedback, '#e0e0ff', '16px "Segoe UI", sans-serif', 22);
     }
 
@@ -504,27 +504,27 @@ const MissionManager = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('🏆 RECOMPENSAS DA AGÊNCIA ESPACIAL:', boxX + 20, y + 26);
+    ctx.fillText(I18n.text('🏆 RECOMPENSAS DA AGÊNCIA ESPACIAL:'), boxX + 20, y + 26);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText(`⭐ +${this.xpGained} XP  •  🪙 +${this.coinsGained} Space Coins!`, boxX + 20, y + 52);
+    ctx.fillText(I18n.text('⭐ +{xp} XP  •  🪙 +{coins} Space Coins!', { xp: this.xpGained, coins: this.coinsGained }), boxX + 20, y + 52);
 
     if (this.leveledUp) {
       ctx.fillStyle = '#22c55e';
       ctx.font = 'bold 16px "Segoe UI", sans-serif';
-      ctx.fillText(`🎉 SUBIU DE NÍVEL! Novo Cargo: ${this.newRankTitle}`, boxX + 20, y + 78);
+      ctx.fillText(I18n.text('🎉 SUBIU DE NÍVEL! Novo Cargo: {rank}', { rank: this.newRankTitle }), boxX + 20, y + 78);
     } else {
       const curLvl = API.currentPlayer ? API.currentPlayer.level : 1;
       ctx.fillStyle = '#adb5bd';
       ctx.font = '15px "Segoe UI", sans-serif';
-      ctx.fillText(`Cargo Atual: ${Lyra.getRankTitle(curLvl)}`, boxX + 20, y + 74);
+      ctx.fillText(I18n.text('Cargo Atual: {rank}', { rank: Lyra.getRankTitle(curLvl) }), boxX + 20, y + 74);
     }
     y += rewH + 12;
 
     // 4. Dica NASA
     drawBlock('🛰️ O Que Aprendemos com a NASA:', '#c084fc',
-      m.nasa_tips, '#f8f9fa', '15px "Segoe UI", sans-serif', 20);
+      I18n.text(m.nasa_tips), '#f8f9fa', '15px "Segoe UI", sans-serif', 20);
 
     // Botão Avançar
     const btnW = 380;
@@ -543,7 +543,7 @@ const MissionManager = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('CONTINUAR JORNADA [ENTER] ➔', w / 2, by + 32);
+    ctx.fillText(I18n.text('CONTINUAR JORNADA [ENTER] ➔'), w / 2, by + 32);
 
     ctx.restore();
   },
@@ -560,11 +560,11 @@ const MissionManager = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 34px "Segoe UI", sans-serif';
-    ctx.fillText('🎉 PARABÉNS, COMANDANTE! 🎉', w / 2, 100);
+    ctx.fillText(I18n.text('🎉 PARABÉNS, COMANDANTE! 🎉'), w / 2, 100);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText('Você usou o espaço para ajudar o nosso planeta!', w / 2, 138);
+    ctx.fillText(I18n.text('Você usou o espaço para ajudar o nosso planeta!'), w / 2, 138);
 
     const boxW = Math.min(760, w - 80);
     const boxX = w / 2 - boxW / 2;
@@ -581,12 +581,12 @@ const MissionManager = {
     ctx.textAlign = 'left';
     ctx.fillStyle = '#00f5d4';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText('🌐 DADOS REAIS UTILIZADOS NO JOGO:', boxX + 25, panelY + 35);
+    ctx.fillText(I18n.text('🌐 DADOS REAIS UTILIZADOS NO JOGO:'), boxX + 25, panelY + 35);
 
     // Link 1: Meteomatics API
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('1. Meteomatics Weather & Climate API (clima em tempo real):', boxX + 25, panelY + 72);
+    ctx.fillText(I18n.text('1. Meteomatics Weather & Climate API (clima em tempo real):'), boxX + 25, panelY + 72);
     ctx.fillStyle = '#38bdf8';
     ctx.font = '15px monospace';
     ctx.fillText('https://www.meteomatics.com/en/api/getting-started/', boxX + 45, panelY + 96);
@@ -594,14 +594,14 @@ const MissionManager = {
     // Link 2: NASA Worldview
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('2. NASA Worldview (Camadas MODIS, FIRMS e Alertas Climáticos):', boxX + 25, panelY + 128);
+    ctx.fillText(I18n.text('2. NASA Worldview (Camadas MODIS, FIRMS e Alertas Climáticos):'), boxX + 25, panelY + 128);
     ctx.fillStyle = '#38bdf8';
     ctx.font = '15px monospace';
     ctx.fillText('https://worldview.earthdata.nasa.gov/', boxX + 45, panelY + 152);
 
     ctx.fillStyle = '#adb5bd';
     ctx.font = '15px "Segoe UI", sans-serif';
-    this.wrapText(ctx, 'Missões inspiradas em dados NASA.', boxX + 25, panelY + 185, boxW - 50, 20);
+    this.wrapText(ctx, I18n.text('Missões inspiradas em dados NASA.'), boxX + 25, panelY + 185, boxW - 50, 20);
 
     // Lyra comemorando ABAIXO do quadro de dados
     Lyra.render(ctx, w / 2, panelY + panelH + 55, 45, 'excited', '');
@@ -623,7 +623,7 @@ const MissionManager = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('VOLTAR AO MENU [ESC]', w / 2, by + 30);
+    ctx.fillText(I18n.text('VOLTAR AO MENU [ESC]'), w / 2, by + 30);
 
     ctx.restore();
   },
@@ -643,12 +643,12 @@ const MissionManager = {
     ctx.font = 'bold 32px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ef4444';
     ctx.shadowBlur = 20;
-    ctx.fillText('💥 MISSÃO COMPROMETIDA!', w / 2, 70);
+    ctx.fillText(I18n.text('💥 MISSÃO COMPROMETIDA!'), w / 2, 70);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#fca5a5';
     ctx.font = '18px "Segoe UI", sans-serif';
-    ctx.fillText('💥 O lançamento não deu certo desta vez!', w / 2, 108);
+    ctx.fillText(I18n.text('💥 O lançamento não deu certo desta vez!'), w / 2, 108);
 
     // Lyra triste (sem rótulo para não sobrepor o texto)
     Lyra.render(ctx, w / 2, 170, 42, 'sad', '');
@@ -664,18 +664,18 @@ const MissionManager = {
     ctx.fillStyle = '#ef4444';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('⚠️ O que aconteceu:', boxX + 20, 243);
+    ctx.fillText(I18n.text('⚠️ O que aconteceu:'), boxX + 20, 243);
 
     const cfg = this.satelliteConfig || {};
     const stats = cfg.stats || {};
     const sr = stats.successRate || 0;
     ctx.fillStyle = '#fca5a5';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText(`Sua nave tinha ${sr}% de Chance de Sucesso.`, boxX + 20, 270);
-    ctx.fillText('Naves com menos de 75% de chance podem falhar! Melhore as peças! 🔧', boxX + 20, 296);
+    ctx.fillText(I18n.text('Sua nave tinha {rate}% de Chance de Sucesso.', { rate: sr }), boxX + 20, 270);
+    ctx.fillText(I18n.text('Naves com menos de 75% de chance podem falhar! Melhore as peças! 🔧'), boxX + 20, 296);
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText('💡 Dica: Melhore as peças e refaça com confiança!', boxX + 20, 322);
+    ctx.fillText(I18n.text('💡 Dica: Melhore as peças e refaça com confiança!'), boxX + 20, 322);
 
     // Caminho para refazer: falar com o DIRETOR no Centro Espacial
     const hintW = Math.min(520, boxW - 40);
@@ -691,8 +691,8 @@ const MissionManager = {
     ctx.fillStyle = '#e0f2fe';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🗺️ Fale com o DIRETOR no Centro Espacial', w / 2, hy + 27);
-    ctx.fillText('para refazer a missão! 💪', w / 2, hy + 50);
+    ctx.fillText(I18n.text('🗺️ Fale com o DIRETOR no Centro Espacial'), w / 2, hy + 27);
+    ctx.fillText(I18n.text('para refazer a missão! 💪'), w / 2, hy + 50);
 
     // Botão voltar
     const btnW = 340; const btnH = 52;
@@ -704,7 +704,7 @@ const MissionManager = {
     ctx.strokeRect(bx, by, btnW, btnH);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('VOLTAR AO CENTRO ESPACIAL [ENTER]', bx + btnW / 2, by + 33);
+    ctx.fillText(I18n.text('VOLTAR AO CENTRO ESPACIAL [ENTER]'), bx + btnW / 2, by + 33);
 
     ctx.restore();
   },

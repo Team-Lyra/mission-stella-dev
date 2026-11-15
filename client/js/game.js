@@ -40,6 +40,7 @@ const Game = {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.resize();
+    this.updateMenuLabels();
 
     this.logoImg = new Image();
     this.logoImg.src = 'assets/logo.jpg';
@@ -105,7 +106,7 @@ const Game = {
     // Cutscene Passo 1
     if (MissionManager.cutsceneActive) {
       MissionManager.closeMissionIntro();
-      NasaTips.show({ title: "Problema Assumido!", text: "Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!", icon: "🚀" });
+      NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
       return;
     }
 
@@ -189,7 +190,7 @@ const Game = {
     if (MissionManager.cutsceneActive) {
       if (code === 'Space' || code === 'Enter' || code === 'KeyE') {
         MissionManager.closeMissionIntro();
-        NasaTips.show({ title: "Problema Assumido!", text: "Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!", icon: "🚀" });
+        NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
         return;
       }
     }
@@ -305,14 +306,14 @@ const Game = {
     overlay.innerHTML = `
       <div style="background:rgba(15,23,42,0.98);border:3px solid #ffd700;border-radius:20px;padding:48px 56px;max-width:560px;width:90%;text-align:center;box-shadow:0 0 40px rgba(255,215,0,0.3);">
         <div style="font-size:52px;margin-bottom:12px;">⭐</div>
-        <h1 style="color:#ffd700;font-size:26px;margin:0 0 8px;">IDENTIFICAÇÃO DO EXPLORADOR</h1>
-        <p style="color:#90e0ef;font-size:16px;margin:0 0 32px;">A Lyra quer te conhecer antes da decolagem!</p>
-        <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">Seu Nome de Comandante:</label>
-        <input id="ob_name" type="text" placeholder="Ex: Alex" maxlength="24" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:20px;box-sizing:border-box;outline:none;" value="${this.onboarding.nameInput}">
-        <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">Sua Cidade:</label>
-        <input id="ob_city" type="text" placeholder="Ex: Guaporé, Estrela, Lajeado..." maxlength="48" autocomplete="off" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:8px;box-sizing:border-box;outline:none;" value="${this.onboarding.cityInput}">
+        <h1 style="color:#ffd700;font-size:26px;margin:0 0 8px;">${I18n.t('onboard_title')}</h1>
+        <p style="color:#90e0ef;font-size:16px;margin:0 0 32px;">${I18n.t('onboard_subtitle')}</p>
+        <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">${I18n.t('onboard_name_label')}</label>
+        <input id="ob_name" type="text" placeholder="${I18n.t('onboard_placeholder_name')}" maxlength="24" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:20px;box-sizing:border-box;outline:none;" value="${this.onboarding.nameInput}">
+        <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">${I18n.t('onboard_city_label')}</label>
+        <input id="ob_city" type="text" placeholder="${I18n.t('onboard_placeholder_city')}" maxlength="48" autocomplete="off" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:8px;box-sizing:border-box;outline:none;" value="${this.onboarding.cityInput}">
         <div id="ob_city_list" style="max-height:120px;overflow-y:auto;margin-bottom:20px;text-align:left;"></div>
-        <button id="ob_btn" style="width:100%;padding:16px;font-size:19px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;cursor:pointer;letter-spacing:1px;">DECOLAR COM A LYRA! 🚀</button>
+        <button id="ob_btn" style="width:100%;padding:16px;font-size:19px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;cursor:pointer;letter-spacing:1px;">${I18n.t('onboard_start_btn')}</button>
         <p id="ob_err" style="color:#ef4444;font-size:14px;margin-top:12px;min-height:20px;"></p>
       </div>`;
 
@@ -332,7 +333,7 @@ const Game = {
     const renderCityList = (results, msg) => {
       if (msg) { cityList.innerHTML = `<p style="color:#94a3b8;font-size:13px;margin:4px 0 0;">${msg}</p>`; return; }
       if (!results || !results.length) {
-        cityList.innerHTML = '<p style="color:#94a3b8;font-size:13px;margin:4px 0 0;">🔍 Cidade não encontrada — pode continuar, o clima usará a região do Vale do Taquari.</p>';
+        cityList.innerHTML = `<p style="color:#94a3b8;font-size:13px;margin:4px 0 0;">${I18n.text('🔍 Cidade não encontrada — pode continuar, o clima usará a região do Vale do Taquari.')}</p>`;
         return;
       }
       cityList.innerHTML = results.map((r, i) =>
@@ -343,7 +344,7 @@ const Game = {
           const r = results[parseInt(btn.dataset.i)];
           cityInput.value = r.name;
           this.onboarding.cityCoords = { lat: r.lat, lon: r.lon };
-          cityList.innerHTML = `<p style="color:#22c55e;font-size:13px;margin:4px 0 0;">✅ ${r.label} — selecionada!</p>`;
+          cityList.innerHTML = `<p style="color:#22c55e;font-size:13px;margin:4px 0 0;">${I18n.text('✅ {label} — selecionada!', { label: r.label })}</p>`;
         });
       });
     };
@@ -353,14 +354,14 @@ const Game = {
       clearTimeout(searchTimer);
       const q = cityInput.value.trim();
       if (q.length < 2) { cityList.innerHTML = ''; return; }
-      cityList.innerHTML = '<p style="color:#38bdf8;font-size:13px;margin:4px 0 0;">🔎 Buscando cidades...</p>';
+      cityList.innerHTML = `<p style="color:#38bdf8;font-size:13px;margin:4px 0 0;">${I18n.text('🔎 Buscando cidades...')}</p>`;
       searchTimer = setTimeout(async () => {
         try {
           const res = await fetch(`/api/geocode?name=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(6000) });
           const data = await res.json();
           renderCityList(data.results);
         } catch {
-          renderCityList(null, '🔍 Busca indisponível — pode continuar mesmo assim!');
+          renderCityList(null, I18n.text('🔍 Busca indisponível — pode continuar mesmo assim!'));
         }
       }, 400);
     });
@@ -370,8 +371,8 @@ const Game = {
     const name = (document.getElementById('ob_name').value || '').trim();
     const city = (document.getElementById('ob_city').value || '').trim();
     const err = document.getElementById('ob_err');
-    if (!name) { if (err) err.textContent = 'Digite seu nome de Comandante!'; return; }
-    if (!city) { if (err) err.textContent = 'Digite sua cidade!'; return; }
+    if (!name) { if (err) err.textContent = I18n.text('Digite seu nome de Comandante!'); return; }
+    if (!city) { if (err) err.textContent = I18n.text('Digite sua cidade!'); return; }
 
     API.setOnboarding(name, city);
 
@@ -401,12 +402,12 @@ const Game = {
   // Tutorial em 2 passos: o que é o jogo + como jogar (setas e E)
   showTutorial() {
     const player = API.currentPlayer || {};
-    const explorer = player.name || 'Comandante';
-    const homeCity = localStorage.getItem('missaoTaquari_playerCity') || 'Vale do Taquari';
-    UI.showDialog('⭐', `Oiii, ${explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de ${homeCity} na nossa equipe! Bem-vindo à Missão STELA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀`,
-      '#ffd700', ['PRÓXIMO ➔'], () => {
-        UI.showDialog('⭐', 'Como jogar: ande com as SETAS ➡️⬅️⬆️⬇️ do teclado e aperte a tecla [E] para conversar e abrir as coisas! Fácil, né? Vamos lá! 🌟',
-          '#ffd700', ['VAMOS NESSA! ⭐'], () => {
+    const explorer = player.name || I18n.t('default_explorer');
+    const homeCity = localStorage.getItem('missaoTaquari_playerCity') || I18n.t('default_city');
+    UI.showDialog('⭐', I18n.text('Oiii, {explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de {city} na nossa equipe! Bem-vindo à Missão STELA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀', { explorer, city: homeCity }),
+      '#ffd700', [I18n.text('PRÓXIMO ➔')], () => {
+        UI.showDialog('⭐', I18n.text('Como jogar: ande com as SETAS ➡️⬅️⬆️⬇️ do teclado e aperte a tecla [E] para conversar e abrir as coisas! Fácil, né? Vamos lá! 🌟'),
+          '#ffd700', [I18n.text('VAMOS NESSA! ⭐')], () => {
             localStorage.setItem('missaoTaquari_tutorialSeen', 'true');
             MissionManager.tutorialActive = false;
           });
@@ -441,18 +442,18 @@ const Game = {
       const nearby = NPCManager.getNearbyNPC(Player.x, Player.y);
       if (nearby) {
         if (nearby.id === 'recepcionista') {
-          UI.showDialog(nearby.name,
-            'Olá, Comandante! A porta de entrada do Centro Espacial STELA está logo aqui ao lado. Quer entrar na Sala de Comando?',
-            nearby.color, ['🚀 ENTRAR NO CENTRO ESPACIAL', 'CONTINUAR NO VALE'],
+          UI.showDialog(I18n.text(nearby.name),
+            I18n.text('Olá, Comandante! A porta de entrada do Centro Espacial STELA está logo aqui ao lado. Quer entrar na Sala de Comando?'),
+            nearby.color, [I18n.text('🚀 ENTRAR NO CENTRO ESPACIAL'), I18n.text('CONTINUAR NO VALE')],
             (choice) => { if (choice === 0) GameMap.switchZone('SPACE_CENTER'); });
           return;
         }
         if (MissionManager.hasActiveMission()) {
           const activeM = MissionManager.getCurrent();
           if (activeM.id !== nearby.missionId) {
-            UI.showDialog('⭐ Lyra', `Comandante, você já está em "${activeM.title}"! Entre no Centro Espacial para projetar o satélite!`, '#ffd700');
+            UI.showDialog('⭐ Lyra', I18n.text('Comandante, você já está em "{title}"! Entre no Centro Espacial para projetar o satélite!', { title: I18n.text(activeM.title) }), '#ffd700');
           } else {
-            UI.showDialog(nearby.name, `Obrigado por nos ajudar, Comandante! Vá ao Centro Espacial para projetar seu satélite!`, nearby.color);
+            UI.showDialog(I18n.text(nearby.name), I18n.text('Obrigado por nos ajudar, Comandante! Vá ao Centro Espacial para projetar seu satélite!'), nearby.color);
           }
           return;
         }
@@ -462,7 +463,7 @@ const Game = {
           const mStatus = API.getMissionStatus(mission.id);
           if (mStatus) {
             const statusLabel = mStatus === 'SUCCESS' ? '✅ já concluída com sucesso!' : '❌ encerrada (missão falhou).';
-            UI.showDialog('⭐ Lyra', `Esta operação já foi ${statusLabel} Cada missão tem 1 tentativa. Vá ao Centro Espacial para ver o painel de operações!`, '#ffd700');
+            UI.showDialog('⭐ Lyra', I18n.text('Esta operação já foi {status} Cada missão tem 1 tentativa. Vá ao Centro Espacial para ver o painel de operações!', { status: I18n.text(statusLabel) }), '#ffd700');
             return;
           }
           MissionManager.startMissionIntro(mission);
@@ -481,7 +482,7 @@ const Game = {
       const wSt = GameMap.stations.workshop;
       if (Math.hypot((wSt.x + wSt.w / 2) - px, (wSt.y + wSt.h / 2) - py) < 80) {
         if (!MissionManager.hasActiveMission()) {
-          UI.showDialog('⭐ Lyra', 'Oii! A bancada está pronta, mas precisamos aceitar um desafio lá fora primeiro! Fale com a Dona Marta, Capitão Farias, Professora Clara ou Seu Nilo!', '#ffd700');
+          UI.showDialog('⭐ Lyra', I18n.text('Oii! A bancada está pronta, mas precisamos aceitar um desafio lá fora primeiro! Fale com a Dona Marta, Capitão Farias, Professora Clara ou Seu Nilo!'), '#ffd700');
           return;
         }
         this.state = 'SATELLITE_BUILD';
@@ -505,15 +506,15 @@ const Game = {
         if (nearbyInternal.id === 'diretor_nasa') {
           const failed = MissionManager.getFailedMission();
           if (failed) {
-            UI.showDialog(nearbyInternal.name,
-              `Comandante! Vi que a "${failed.title}" não foi dessa vez... Posso liberar os sistemas para você refazer? Você pode tentar quantas vezes precisar!`,
-              nearbyInternal.color, ['🔁 SIM, REFAZER', '🗺️ PAINEL DE OPERAÇÕES'],
+            UI.showDialog(I18n.text(nearbyInternal.name),
+              I18n.text('Comandante! Vi que a "{title}" não foi dessa vez... Posso liberar os sistemas para você refazer? Você pode tentar quantas vezes precisar!', { title: I18n.text(failed.title) }),
+              nearbyInternal.color, [I18n.text('🔁 SIM, REFAZER'), I18n.text('🗺️ PAINEL DE OPERAÇÕES')],
               (choice) => {
                 if (choice === 0) {
                   MissionManager.unlockFailedMission(failed);
-                  UI.showDialog(nearbyInternal.name,
-                    `Sistemas liberados! Vá lá fora falar com o responsável pela missão e aceite o desafio de novo. Dessa vez vai dar certo! 🚀⭐`,
-                    nearbyInternal.color, ['OBRIGADO, DIRETOR! ⭐']);
+                  UI.showDialog(I18n.text(nearbyInternal.name),
+                    I18n.text('Sistemas liberados! Vá lá fora falar com o responsável pela missão e aceite o desafio de novo. Dessa vez vai dar certo! 🚀⭐'),
+                    nearbyInternal.color, [I18n.text('OBRIGADO, DIRETOR! ⭐')]);
                 } else {
                   this.state = 'MISSION_OPS';
                 }
@@ -525,7 +526,7 @@ const Game = {
           NasaAudio.lockSuccess();
           return;
         }
-        UI.showDialog(nearbyInternal.name, nearbyInternal.dialog, nearbyInternal.color);
+        UI.showDialog(I18n.text(nearbyInternal.name), I18n.text(nearbyInternal.dialog), nearbyInternal.color);
         return;
       }
     }
@@ -738,7 +739,7 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     const curM = MissionManager.getCurrent();
-    const missionLabel = curM ? `🚀 ${curM.title}` : (GameMap.currentZone === 'SPACE_CENTER' ? '🔬 CENTRO ESPACIAL STELA' : '🌍 VALE DO TAQUARI');
+    const missionLabel = curM ? `🚀 ${I18n.text(curM.title)}` : (GameMap.currentZone === 'SPACE_CENTER' ? I18n.text('🔬 CENTRO ESPACIAL STELA') : I18n.text('🌍 VALE DO TAQUARI'));
     ctx.fillText(missionLabel, 30, 34);
 
     ctx.fillStyle = '#38bdf8';
@@ -748,11 +749,12 @@ const Game = {
     ctx.textAlign = 'right';
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText(`🪙 ${coins} Space Coins   ⭐ ${score} pts`, w - 160, 42);
+    const coinsLabel = I18n.text('🪙 {coins} Space Coins   ⭐ {score} pts', { coins, score });
+    ctx.fillText(coinsLabel, w - 160, 42);
 
     ctx.fillStyle = API.online ? '#22c55e' : '#ffd166';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText(API.online ? '🟢 Conectado' : '🟡 Local', w - 35, 42);
+    ctx.fillText(I18n.text(API.online ? '🟢 Conectado' : '🟡 Local'), w - 35, 42);
 
     // Clima real (Meteomatics) entre o título (esquerda) e as moedas (direita):
     // cidade + temperatura + todas as informações da API (chuva, umidade, vento,
@@ -763,7 +765,7 @@ const Game = {
       ctx.font = 'bold 15px "Segoe UI", sans-serif';
       const missionEnd = 30 + ctx.measureText(missionLabel).width;
       ctx.font = 'bold 16px "Segoe UI", sans-serif';
-      const coinsW = ctx.measureText(`🪙 ${coins} Space Coins   ⭐ ${score} pts`).width;
+      const coinsW = ctx.measureText(coinsLabel).width;
       const coinsStart = (w - 160) - coinsW;
       ctx.font = 'bold 13px "Segoe UI", sans-serif';
 
@@ -799,7 +801,7 @@ const Game = {
       ctx.font = 'bold 13px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('⏸️ PAUSA [ESC]', chipX + chipW / 2, chipY + chipH / 2 + 1);
+      ctx.fillText(I18n.text('⏸️ PAUSA [ESC]'), chipX + chipW / 2, chipY + chipH / 2 + 1);
       ctx.textBaseline = 'alphabetic';
     } else {
       this.pauseChipBtn = null;
@@ -814,9 +816,9 @@ const Game = {
     ctx.fillStyle = '#e0e7ff';
     ctx.font = '13px "Segoe UI", sans-serif';
     if (GameMap.currentZone === 'SPACE_CENTER') {
-      ctx.fillText('Aperte [E] na Bancada • Lojinha • Fale com o Diretor (Operações) • Saída', w / 2, h - 20);
+      ctx.fillText(I18n.text('Aperte [E] na Bancada • Lojinha • Fale com o Diretor (Operações) • Saída'), w / 2, h - 20);
     } else {
-      ctx.fillText('Ande com as SETAS ⬆️⬇️⬅️➡️ • Aperte [E] para conversar e abrir!', w / 2, h - 20);
+      ctx.fillText(I18n.text('Ande com as SETAS ⬆️⬇️⬅️➡️ • Aperte [E] para conversar e abrir!'), w / 2, h - 20);
     }
     ctx.restore();
   },
@@ -928,11 +930,11 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 40px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 16;
-    ctx.fillText('⏸️ PAUSA', w / 2, 120);
+    ctx.fillText(I18n.text('⏸️ PAUSA'), w / 2, 120);
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Missão STELA — respire, o espaço espera por você ✨', w / 2, 152);
+    ctx.fillText(I18n.text('Missão STELA — respire, o espaço espera por você ✨'), w / 2, 152);
 
     // Botões do menu de pausa
     const btnW = Math.min(430, w - 80);
@@ -953,13 +955,13 @@ const Game = {
 
       ctx.fillStyle = isSel ? '#ffd700' : '#ffffff';
       ctx.font = isSel ? 'bold 20px "Segoe UI", sans-serif' : '18px "Segoe UI", sans-serif';
-      ctx.fillText((isSel ? '▸ ' : '') + this.pauseItems[i], w / 2, y + btnH / 2 + 7);
+      ctx.fillText((isSel ? '▸ ' : '') + I18n.text(this.pauseItems[i]), w / 2, y + btnH / 2 + 7);
     }
 
     // Rodapé de ajuda
     ctx.fillStyle = '#6b7280';
     ctx.font = '14px "Segoe UI", sans-serif';
-    ctx.fillText('[↑/↓] Escolher  •  [ENTER] Confirmar  •  [ESC] Voltar ao jogo', w / 2, h - 30);
+    ctx.fillText(I18n.text('[↑/↓] Escolher  •  [ENTER] Confirmar  •  [ESC] Voltar ao jogo'), w / 2, h - 30);
 
     // Confirmação de reinício (tudo apagado)
     if (this.confirmReset) {
@@ -976,11 +978,11 @@ const Game = {
 
       ctx.fillStyle = '#ef4444';
       ctx.font = 'bold 26px "Segoe UI", sans-serif';
-      ctx.fillText('🔄 REINICIAR DO ZERO?', w / 2, by + 45);
+      ctx.fillText(I18n.text('🔄 REINICIAR DO ZERO?'), w / 2, by + 45);
       ctx.fillStyle = '#fca5a5';
       ctx.font = '16px "Segoe UI", sans-serif';
-      ctx.fillText('Apaga TODO o seu progresso salvo neste dispositivo:', w / 2, by + 82);
-      ctx.fillText('missões, moedas, itens, XP e nome. Tudo é perdido! 😱', w / 2, by + 106);
+      ctx.fillText(I18n.text('Apaga TODO o seu progresso salvo neste dispositivo:'), w / 2, by + 82);
+      ctx.fillText(I18n.text('missões, moedas, itens, XP e nome. Tudo é perdido! 😱'), w / 2, by + 106);
 
       const cbW = 200, cbH = 48;
       const cbY = by + bh - 66;
@@ -994,14 +996,14 @@ const Game = {
       ctx.strokeStyle = sel0 ? '#fecaca' : '#ef4444'; ctx.lineWidth = 2;
       ctx.strokeRect(this.confirmBtnRects[0].x, cbY, cbW, cbH);
       ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px "Segoe UI", sans-serif';
-      ctx.fillText('SIM, APAGAR 🗑️', this.confirmBtnRects[0].x + cbW / 2, cbY + 30);
+      ctx.fillText(I18n.text('SIM, APAGAR 🗑️'), this.confirmBtnRects[0].x + cbW / 2, cbY + 30);
 
       ctx.fillStyle = sel1 ? 'rgba(34, 197, 94, 0.85)' : 'rgba(34, 197, 94, 0.2)';
       ctx.fillRect(this.confirmBtnRects[1].x, cbY, cbW, cbH);
       ctx.strokeStyle = sel1 ? '#bbf7d0' : '#22c55e';
       ctx.strokeRect(this.confirmBtnRects[1].x, cbY, cbW, cbH);
       ctx.fillStyle = '#ffffff';
-      ctx.fillText('NÃO, VOLTAR ✔️', this.confirmBtnRects[1].x + cbW / 2, cbY + 30);
+      ctx.fillText(I18n.text('NÃO, VOLTAR ✔️'), this.confirmBtnRects[1].x + cbW / 2, cbY + 30);
     } else {
       this.confirmBtnRects = [];
     }
@@ -1038,11 +1040,11 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 38px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 18;
-    ctx.fillText('🚀 MISSÃO STELA', w / 2, logoY + logoSize / 2 + 80);
+    ctx.fillText(I18n.t('game_title'), w / 2, logoY + logoSize / 2 + 80);
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Exploração & Simulação Espacial no Vale do Taquari • Padrão NASA', w / 2, logoY + logoSize / 2 + 115);
+    ctx.fillText(I18n.t('game_subtitle'), w / 2, logoY + logoSize / 2 + 115);
 
     const startY = h * 0.52;
     for (let i = 0; i < this.menuItems.length; i++) {
@@ -1065,12 +1067,11 @@ const Game = {
     ctx.strokeRect(w / 2 - 150, h - 55 - 18, 300, 36);
     ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    const langLabel = I18n.lang === 'pt-BR' ? '🌐 Idioma: Português  [clique p/ EN]' : '🌐 Language: English  [click for PT-BR]';
-    ctx.fillText(langLabel, w / 2, h - 55);
+    ctx.fillText(I18n.t('lang_switch'), w / 2, h - 55);
 
     ctx.fillStyle = '#6b7280';
     ctx.font = '13px "Segoe UI", sans-serif';
-    ctx.fillText('Clique nas opções ou use [↑/↓] e [ENTER]', w / 2, h - 18);
+    ctx.fillText(I18n.t('menu_hint'), w / 2, h - 18);
     ctx.restore();
   },
 
@@ -1089,12 +1090,12 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 26px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
-    ctx.fillText('🗺️ PAINEL DE OPERAÇÕES ESPACIAIS', w / 2, 110);
+    ctx.fillText(I18n.text('🗺️ PAINEL DE OPERAÇÕES ESPACIAIS'), w / 2, 110);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText('Status das operações do Vale do Taquari  •  Regra: 1 tentativa por missão', w / 2, 138);
+    ctx.fillText(I18n.text('Status das operações do Vale do Taquari  •  Regra: 1 tentativa por missão'), w / 2, 138);
 
     const missions = MissionManager.missions || [];
     const panelW = Math.min(720, w - 60);
@@ -1116,21 +1117,21 @@ const Game = {
 
       // Difficulty badge
       const diffIcon = m.difficulty === 1 ? '🟢' : m.difficulty === 2 ? '🟡' : m.difficulty === 3 ? '🟠' : '🔴';
-      const diffLabel = m.difficulty === 1 ? 'Iniciante' : m.difficulty === 2 ? 'Moderada' : m.difficulty === 3 ? 'Avançada' : 'Especialista';
+      const diffLabel = I18n.text(m.difficulty === 1 ? 'Iniciante' : m.difficulty === 2 ? 'Moderada' : m.difficulty === 3 ? 'Avançada' : 'Especialista');
 
       ctx.textAlign = 'left';
       ctx.fillStyle = '#ffd700';
       ctx.font = 'bold 17px "Segoe UI", sans-serif';
-      ctx.fillText(`${i + 1}. ${m.title}`, panelX + 18, rowY + 28);
+      ctx.fillText(`${i + 1}. ${I18n.text(m.title)}`, panelX + 18, rowY + 28);
 
       ctx.fillStyle = '#adb5bd';
       ctx.font = '14px "Segoe UI", sans-serif';
-      ctx.fillText(`${diffIcon} ${diffLabel}  •  NPC: ${m.npc_name}`, panelX + 18, rowY + 52);
+      ctx.fillText(`${diffIcon} ${diffLabel}  •  ${I18n.lang === 'en' ? 'Resident' : 'NPC'}: ${I18n.text(m.npc_name)}`, panelX + 18, rowY + 52);
 
       // Status badge (right side)
-      const statusText = status === 'SUCCESS' ? '✅ CONCLUÍDA COM SUCESSO'
+      const statusText = I18n.text(status === 'SUCCESS' ? '✅ CONCLUÍDA COM SUCESSO'
         : status === 'FAILED' ? '❌ FALHOU — ENCERRADA'
-        : '🚀 DISPONÍVEL';
+        : '🚀 DISPONÍVEL');
       const statusColor = status === 'SUCCESS' ? '#22c55e' : status === 'FAILED' ? '#ef4444' : '#38bdf8';
       ctx.textAlign = 'right';
       ctx.fillStyle = statusColor;
@@ -1149,7 +1150,7 @@ const Game = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('FECHAR [ESC / ENTER]', bx + btnW / 2, by + 31);
+    ctx.fillText(I18n.text('FECHAR [ESC / ENTER]'), bx + btnW / 2, by + 31);
 
     ctx.restore();
   },
@@ -1182,19 +1183,19 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 32px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 20;
-    ctx.fillText(`🎆 PARABÉNS, ${name.toUpperCase()}! 🎆`, w / 2, 75);
+    ctx.fillText(I18n.text('🎆 PARABÉNS, {name}! 🎆', { name: name.toUpperCase() }), w / 2, 75);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '18px "Segoe UI", sans-serif';
-    ctx.fillText('Todas as operações do Vale do Taquari foram concluídas!', w / 2, 112);
+    ctx.fillText(I18n.text('Todas as operações do Vale do Taquari foram concluídas!'), w / 2, 112);
 
     // Impacto acumulado (cards de métricas)
     const metrics = [
-      { icon: '🌾', label: '78% da Safra Salva', color: '#22c55e' },
-      { icon: '👥', label: '+50.000 Vidas Protegidas', color: '#38bdf8' },
-      { icon: '📡', label: '47 Comunidades Conectadas', color: '#c084fc' },
-      { icon: '🌳', label: '1.200 ha de Mata Preservados', color: '#4ade80' }
+      { icon: '🌾', label: I18n.text('78% da Safra Salva'), color: '#22c55e' },
+      { icon: '👥', label: I18n.text('+50.000 Vidas Protegidas'), color: '#38bdf8' },
+      { icon: '📡', label: I18n.text('47 Comunidades Conectadas'), color: '#c084fc' },
+      { icon: '🌳', label: I18n.text('1.200 ha de Mata Preservados'), color: '#4ade80' }
     ];
     const cardW = Math.min(170, (w - 100) / 4);
     const totalCardsW = metrics.length * cardW + (metrics.length - 1) * 15;
@@ -1226,10 +1227,10 @@ const Game = {
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText(`❤️ Mais de 50.000 vidas e famílias protegidas em ${city} e região!`, w / 2, 285);
+    ctx.fillText(I18n.text('❤️ Mais de 50.000 vidas e famílias protegidas em {city} e região!', { city }), w / 2, 285);
     ctx.fillStyle = '#86efac';
     ctx.font = '17px "Segoe UI", sans-serif';
-    ctx.fillText('🌱 1.200 hectares de floresta preservados e 78% da produção rural protegida.', w / 2, 318);
+    ctx.fillText(I18n.text('🌱 1.200 hectares de floresta preservados e 78% da produção rural protegida.'), w / 2, 318);
 
     // Pontuação total
     const total = MissionManager.totalScore || 0;
@@ -1239,7 +1240,7 @@ const Game = {
     ctx.strokeRect(w / 2 - 200, 345, 400, 60);
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 20px "Segoe UI", sans-serif';
-    ctx.fillText(`⭐ PONTUAÇÃO TOTAL: ${total} pts`, w / 2, 383);
+    ctx.fillText(I18n.text('⭐ PONTUAÇÃO TOTAL: {score} pts', { score: total }), w / 2, 383);
 
     // Botão
     const btnW = 340; const btnH = 52;
@@ -1251,7 +1252,7 @@ const Game = {
     ctx.strokeRect(bx, by, btnW, btnH);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText('VER CRÉDITOS [ENTER] ➔', bx + btnW / 2, by + 33);
+    ctx.fillText(I18n.text('VER CRÉDITOS [ENTER] ➔'), bx + btnW / 2, by + 33);
 
     ctx.restore();
   },
@@ -1268,7 +1269,7 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 30px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 12;
-    ctx.fillText('📜 CRÉDITOS OFICIAIS DO PROJETO', w / 2, 125);
+    ctx.fillText(I18n.text('📜 CRÉDITOS OFICIAIS DO PROJETO'), w / 2, 125);
     ctx.shadowBlur = 0;
 
     const boxW = Math.min(680, w - 80);
@@ -1280,22 +1281,22 @@ const Game = {
     ctx.strokeRect(boxX, 148, boxW, 320);
 
     const lines = [
-      { text: 'Desenvolvedoras:', color: '#38bdf8', font: 'bold 17px "Segoe UI", sans-serif', y: 185 },
+      { text: I18n.text('Desenvolvedoras:'), color: '#38bdf8', font: 'bold 17px "Segoe UI", sans-serif', y: 185 },
       { text: '• Alexandra König Padilha', color: '#ffffff', font: '16px "Segoe UI", sans-serif', y: 215 },
       { text: '• Carine Teixeira Da Silva', color: '#ffffff', font: '16px "Segoe UI", sans-serif', y: 243 },
       { text: '• Isabelli Sehn', color: '#ffffff', font: '16px "Segoe UI", sans-serif', y: 271 },
       { text: '• Júlia Agosti', color: '#ffffff', font: '16px "Segoe UI", sans-serif', y: 299 },
       { text: '━━━━━━━━━━━━━━━━━━━━━━━━', color: '#374151', font: '14px "Segoe UI", sans-serif', y: 325 },
-      { text: 'Projeto desenvolvido para o NASA Space Apps Challenge', color: '#ffd700', font: 'bold 15px "Segoe UI", sans-serif', y: 355 },
+      { text: I18n.text('Projeto desenvolvido para o NASA Space Apps Challenge'), color: '#ffd700', font: 'bold 15px "Segoe UI", sans-serif', y: 355 },
       { text: '━━━━━━━━━━━━━━━━━━━━━━━━', color: '#374151', font: '14px "Segoe UI", sans-serif', y: 375 },
-      { text: 'Agradecimento especial à nossa primeira tester: Lulu 💖', color: '#f9a8d4', font: 'bold 15px "Segoe UI", sans-serif', y: 405 },
-      { text: 'Clima em tempo real: Meteomatics Weather API • Fontes: NASA Worldview', color: '#6b7280', font: '13px "Segoe UI", sans-serif', y: 435 }
+      { text: I18n.text('Agradecimento especial à nossa primeira tester: Lulu 💖'), color: '#f9a8d4', font: 'bold 15px "Segoe UI", sans-serif', y: 405 },
+      { text: I18n.text('Clima em tempo real: Meteomatics Weather API • Fontes: NASA Worldview'), color: '#6b7280', font: '13px "Segoe UI", sans-serif', y: 435 }
     ];
 
     for (const l of lines) {
       ctx.fillStyle = l.color;
       ctx.font = l.font;
-      ctx.fillText(l.text, w / 2, l.y);
+      ctx.fillText(I18n.text(l.text), w / 2, l.y);
     }
 
     // Botão
@@ -1308,7 +1309,7 @@ const Game = {
     ctx.strokeRect(bx, by, btnW, btnH);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText('CONTINUAR [ENTER] ➔', bx + btnW / 2, by + 32);
+    ctx.fillText(I18n.text('CONTINUAR [ENTER] ➔'), bx + btnW / 2, by + 32);
 
     ctx.restore();
   },
@@ -1325,20 +1326,20 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 36px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 20;
-    ctx.fillText('Missão STELA', w / 2, h / 2 - 30);
+    ctx.fillText(I18n.text('Missão STELA'), w / 2, h / 2 - 30);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = 'bold 22px "Segoe UI", sans-serif';
-    ctx.fillText('Em desenvolvimento 🚀', w / 2, h / 2 + 15);
+    ctx.fillText(I18n.text('Em desenvolvimento 🚀'), w / 2, h / 2 + 15);
 
     ctx.fillStyle = '#6b7280';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText('Obrigado por jogar e cuidar do nosso planeta!', w / 2, h / 2 + 55);
+    ctx.fillText(I18n.text('Obrigado por jogar e cuidar do nosso planeta!'), w / 2, h / 2 + 55);
 
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.font = '14px "Segoe UI", sans-serif';
-    ctx.fillText('Pressione qualquer tecla para voltar ao menu', w / 2, h - 50);
+    ctx.fillText(I18n.text('Pressione qualquer tecla para voltar ao menu'), w / 2, h - 50);
 
     ctx.restore();
   },
@@ -1357,11 +1358,11 @@ const Game = {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 30px "Segoe UI", sans-serif';
-    ctx.fillText('🏆 TELÃO DE RANKING ESPACIAL', w / 2, 115);
+    ctx.fillText(I18n.text('🏆 TELÃO DE RANKING ESPACIAL'), w / 2, 115);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText('Astronautas e Líderes em Destaque no Vale do Taquari', w / 2, 142);
+    ctx.fillText(I18n.text('Astronautas e Líderes em Destaque no Vale do Taquari'), w / 2, 142);
 
     const tableW = Math.min(680, w - 60);
     const tableX = w / 2 - tableW / 2;
@@ -1374,12 +1375,12 @@ const Game = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Posição / Comandante', tableX + 20, 189);
+    ctx.fillText(I18n.text('Posição / Comandante'), tableX + 20, 189);
     ctx.textAlign = 'right';
-    ctx.fillText('Pontuação', tableX + tableW - 20, 189);
+    ctx.fillText(I18n.text('Pontuação'), tableX + tableW - 20, 189);
 
     const list = this.leaderboardData && this.leaderboardData.length > 0 ? this.leaderboardData : [
-      { player_name: 'Comandante Taquari (Você)', score: MissionManager.totalScore || 1500 }
+      { player_name: I18n.text('Comandante Taquari (Você)'), score: MissionManager.totalScore || 1500 }
     ];
 
     list.slice(0, 7).forEach((item, idx) => {
@@ -1389,7 +1390,7 @@ const Game = {
       ctx.fillStyle = idx === 0 ? '#ffd700' : '#ffffff';
       ctx.font = '15px "Segoe UI", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(`${idx + 1}º  ${item.player_name || 'Líder Espacial'}`, tableX + 20, rowY + 24);
+      ctx.fillText(`${I18n.lang === 'en' ? `${idx + 1}.` : `${idx + 1}º`}  ${I18n.text(item.player_name || 'Líder Espacial')}`, tableX + 20, rowY + 24);
       ctx.textAlign = 'right';
       ctx.fillStyle = '#ffd700';
       ctx.fillText(`${item.score} pts`, tableX + tableW - 20, rowY + 24);
@@ -1404,7 +1405,7 @@ const Game = {
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 16px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('VOLTAR [ESC]', bx + btnW / 2, by + 29);
+    ctx.fillText(I18n.text('VOLTAR [ESC]'), bx + btnW / 2, by + 29);
 
     ctx.restore();
   }
