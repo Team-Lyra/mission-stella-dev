@@ -106,7 +106,7 @@ const Game = {
     // Cutscene Passo 1
     if (MissionManager.cutsceneActive) {
       MissionManager.closeMissionIntro();
-      NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
+      NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELLA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
       return;
     }
 
@@ -190,7 +190,7 @@ const Game = {
     if (MissionManager.cutsceneActive) {
       if (code === 'Space' || code === 'Enter' || code === 'KeyE') {
         MissionManager.closeMissionIntro();
-        NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
+        NasaTips.show({ title: I18n.text('Problema Assumido!'), text: I18n.text('Agora entre no Centro Espacial STELLA e use a Bancada de Projetos para montar sua nave!'), icon: "🚀" });
         return;
       }
     }
@@ -404,7 +404,7 @@ const Game = {
     const player = API.currentPlayer || {};
     const explorer = player.name || I18n.t('default_explorer');
     const homeCity = localStorage.getItem('missaoTaquari_playerCity') || I18n.t('default_city');
-    UI.showDialog('⭐', I18n.text('Oiii, {explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de {city} na nossa equipe! Bem-vindo à Missão STELA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀', { explorer, city: homeCity }),
+    UI.showDialog('⭐', I18n.text('Oiii, {explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de {city} na nossa equipe! Bem-vindo à Missão STELLA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀', { explorer, city: homeCity }),
       '#ffd700', [I18n.text('PRÓXIMO ➔')], () => {
         UI.showDialog('⭐', I18n.text('Como jogar: ande com as SETAS ➡️⬅️⬆️⬇️ do teclado e aperte a tecla [E] para conversar e abrir as coisas! Fácil, né? Vamos lá! 🌟'),
           '#ffd700', [I18n.text('VAMOS NESSA! ⭐')], () => {
@@ -443,7 +443,7 @@ const Game = {
       if (nearby) {
         if (nearby.id === 'recepcionista') {
           UI.showDialog(I18n.text(nearby.name),
-            I18n.text('Olá, Comandante! A porta de entrada do Centro Espacial STELA está logo aqui ao lado. Quer entrar na Sala de Comando?'),
+            I18n.text('Olá, Comandante! A porta de entrada do Centro Espacial STELLA está logo aqui ao lado. Quer entrar na Sala de Comando?'),
             nearby.color, [I18n.text('🚀 ENTRAR NO CENTRO ESPACIAL'), I18n.text('CONTINUAR NO VALE')],
             (choice) => { if (choice === 0) GameMap.switchZone('SPACE_CENTER'); });
           return;
@@ -739,7 +739,7 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 15px "Segoe UI", sans-serif';
     const curM = MissionManager.getCurrent();
-    const missionLabel = curM ? `🚀 ${I18n.text(curM.title)}` : (GameMap.currentZone === 'SPACE_CENTER' ? I18n.text('🔬 CENTRO ESPACIAL STELA') : I18n.text('🌍 VALE DO TAQUARI'));
+    const missionLabel = curM ? `🚀 ${I18n.text(curM.title)}` : (GameMap.currentZone === 'SPACE_CENTER' ? I18n.text('🔬 CENTRO ESPACIAL STELLA') : I18n.text('🌍 VALE DO TAQUARI'));
     ctx.fillText(missionLabel, 30, 34);
 
     ctx.fillStyle = '#38bdf8';
@@ -934,7 +934,7 @@ const Game = {
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText(I18n.text('Missão STELA — respire, o espaço espera por você ✨'), w / 2, 152);
+    ctx.fillText(I18n.text('Missão STELLA — respire, o espaço espera por você ✨'), w / 2, 152);
 
     // Botões do menu de pausa
     const btnW = Math.min(430, w - 80);
@@ -1326,7 +1326,7 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 36px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 20;
-    ctx.fillText(I18n.text('Missão STELA'), w / 2, h / 2 - 30);
+    ctx.fillText(I18n.text('Missão STELLA'), w / 2, h / 2 - 30);
     ctx.shadowBlur = 0;
 
     ctx.fillStyle = '#90e0ef';

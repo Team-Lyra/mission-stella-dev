@@ -80,7 +80,7 @@
       "score": 2200,
       "current_mission": 2,
       "satellite_config": {
-        "name": "STELA-1 (Guardiã do Vale)",
+        "name": "STELLA-1 (Guardiã do Vale)",
         "crew": {
           "id": "auto",
           "name": "Sonda Robótica Automática",
@@ -198,7 +198,7 @@
       "active_skin": "gold",
       "current_mission": 5,
       "satellite_config": {
-        "name": "STELA-1 (Guardiã do Vale)",
+        "name": "STELLA-1 (Guardiã do Vale)",
         "crew": {
           "id": "auto",
           "name": "Sonda Robótica Automática",
@@ -337,7 +337,7 @@
       "active_skin": "skin_default",
       "current_mission": 4,
       "satellite_config": {
-        "name": "STELA-1 (Guardiã do Vale)",
+        "name": "STELLA-1 (Guardiã do Vale)",
         "crew": {
           "id": "auto",
           "name": "Sonda Robótica Automática",
@@ -552,7 +552,7 @@
       "active_skin": "skin_default",
       "current_mission": 3,
       "satellite_config": {
-        "name": "STELA-1 (Guardiã do Vale)",
+        "name": "STELLA-1 (Guardiã do Vale)",
         "crew": {
           "id": "auto",
           "name": "Sonda Robótica Automática",

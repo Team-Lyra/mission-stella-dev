@@ -80,7 +80,7 @@ const NPCManager = {
         id: 'recepcionista',
         zone: 'OUTDOOR',
         name: 'Guia do Centro Espacial',
-        role: 'Recepção STELA',
+        role: 'Recepção STELLA',
         missionId: null,
         color: '#00b4d8',
         x: 14 * 48,
@@ -90,7 +90,7 @@ const NPCManager = {
         hatColor: '#0077b6',
         shirtColor: '#90e0ef',
         hairColor: '#ffffff',
-        dialog: 'Bem-vindo ao Centro Espacial STELA! A porta de entrada está logo ali ao lado. Quer que eu te acompanhe para entrar na Sala de Comando?',
+        dialog: 'Bem-vindo ao Centro Espacial STELLA! A porta de entrada está logo ali ao lado. Quer que eu te acompanhe para entrar na Sala de Comando?',
         hint: 'Pressione [E] na porta ou fale comigo para entrar!'
       },
 

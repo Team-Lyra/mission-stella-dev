@@ -13,9 +13,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     const title = loading.querySelector('h1');
     const subtitle = loading.querySelector('p');
     const logo = loading.querySelector('img');
-    if (title) title.textContent = I18n.text('🚀 Missão STELA');
+    if (title) title.textContent = I18n.text('🚀 Missão STELLA');
     if (subtitle) subtitle.textContent = I18n.text('Conectando tecnologia espacial ao Vale do Taquari...');
-    if (logo) logo.alt = I18n.text('Logo da Missão STELA');
+    if (logo) logo.alt = I18n.text('Logo da Missão STELLA');
   }
 
   try {

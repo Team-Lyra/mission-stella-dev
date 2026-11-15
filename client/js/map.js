@@ -1,5 +1,5 @@
 // ============================================
-// map.js — Mapa 2D com Ambientes Externo (Vale do Taquari) e Interno (Centro Espacial STELA)
+// map.js — Mapa 2D com Ambientes Externo (Vale do Taquari) e Interno (Centro Espacial STELLA)
 // ============================================
 
 const GameMap = {
@@ -35,7 +35,7 @@ const GameMap = {
     [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
   ],
 
-  // Mapa Interno: Centro Espacial STELA (Sala de Comando & Laboratório)
+  // Mapa Interno: Centro Espacial STELLA (Sala de Comando & Laboratório)
   // 10 = Parede de Aço/Laboratório, 11 = Piso de Alta Tecnologia, 12 = Bancada Montagem,
   // 13 = Telão de Ranking, 14 = Balcão Lojinha, 15 = Porta de Saída, 16 = Servidores/Consoles
   spaceCenterCols: 18,
@@ -332,7 +332,7 @@ const GameMap = {
         ctx.fillRect(x + 20, y + 28, 8, 14);
         break;
 
-      case 5: // Centro de Comando Espacial STELA
+      case 5: // Centro de Comando Espacial STELLA
         ctx.fillStyle = '#0d1b2a';
         ctx.fillRect(x, y, s, s);
         ctx.strokeStyle = '#00b4d8';
@@ -408,7 +408,7 @@ const GameMap = {
     ctx.save();
     ctx.textAlign = 'center';
 
-    // Fachada do Centro de Comando Espacial STELA
+    // Fachada do Centro de Comando Espacial STELLA
     const ccX = 11.5 * s - cameraX;
     const ccY = 1.8 * s - cameraY;
     ctx.fillStyle = 'rgba(10, 15, 35, 0.95)';
@@ -419,7 +419,7 @@ const GameMap = {
 
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText(I18n.text('🚀 CENTRO ESPACIAL STELA'), ccX, ccY + 1);
+    ctx.fillText(I18n.text('🚀 CENTRO ESPACIAL STELLA'), ccX, ccY + 1);
 
     // Entrada Neon da Porta Principal
     const doorX = 11.5 * s - cameraX;

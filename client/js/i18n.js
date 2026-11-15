@@ -61,8 +61,8 @@ const I18n = {
     'Saudações! O Rio Taquari precisa de suas árvores vivas para respirar. Tratores e queimadas destroem a margem do rio escondidos na escuridão. Precisamos de sensores infravermelhos no céu para proteger a floresta!': 'Greetings! The Taquari River needs its trees to breathe. Tractors and fires secretly destroy the riverbanks under cover of darkness. We need infrared sensors in the sky to protect the forest!',
     'Problema: Focos de calor e desmatamento • Sensor: Câmera Térmica Infravermelha': 'Problem: Hotspots and deforestation • Sensor: Infrared Thermal Camera',
     'Guia do Centro Espacial': 'Space Center Guide',
-    'Recepção STELA': 'STELA Reception',
-    'Bem-vindo ao Centro Espacial STELA! A porta de entrada está logo ali ao lado. Quer que eu te acompanhe para entrar na Sala de Comando?': 'Welcome to the STELA Space Center! The entrance is right over there. Would you like me to show you to the Command Room?',
+    'Recepção STELLA': 'STELLA Reception',
+    'Bem-vindo ao Centro Espacial STELLA! A porta de entrada está logo ali ao lado. Quer que eu te acompanhe para entrar na Sala de Comando?': 'Welcome to the STELLA Space Center! The entrance is right over there. Would you like me to show you to the Command Room?',
     'Pressione [E] na porta ou fale comigo para entrar!': 'Press [E] at the door or talk to me to enter!',
     'Dr. Santos (Diretor de Voo)': 'Dr. Santos (Flight Director)',
     'Sala de Controle': 'Control Room',
@@ -88,13 +88,13 @@ const I18n = {
     '🔍 Busca indisponível — pode continuar mesmo assim!': '🔍 Search unavailable — you can still continue!',
     'Digite seu nome de Comandante!': 'Enter your Commander name!',
     'Digite sua cidade!': 'Enter your city!',
-    'Oiii, {explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de {city} na nossa equipe! Bem-vindo à Missão STELA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀': 'Hi, {explorer}! I’m Lyra, your star guide! We’re so glad to have someone from {city} on our team! Welcome to Mission STELA! We’ll use NASA satellites to help the people of Taquari Valley. 🚀',
+    'Oiii, {explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de {city} na nossa equipe! Bem-vindo à Missão STELLA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀': 'Hi, {explorer}! I’m Lyra, your star guide! We’re so glad to have someone from {city} on our team! Welcome to Mission STELLA! We’ll use NASA satellites to help the people of Taquari Valley. 🚀',
     'Como jogar: ande com as SETAS ➡️⬅️⬆️⬇️ do teclado e aperte a tecla [E] para conversar e abrir as coisas! Fácil, né? Vamos lá! 🌟': 'How to play: move with the ARROW KEYS ➡️⬅️⬆️⬇️ and press [E] to talk and interact! Easy, right? Let’s go! 🌟',
     'PRÓXIMO ➔': 'NEXT ➔',
     'VAMOS NESSA! ⭐': 'LET’S GO! ⭐',
 
     // Interactions
-    'Olá, Comandante! A porta de entrada do Centro Espacial STELA está logo aqui ao lado. Quer entrar na Sala de Comando?': 'Hello, Commander! The entrance to the STELA Space Center is right over there. Would you like to enter the Command Room?',
+    'Olá, Comandante! A porta de entrada do Centro Espacial STELLA está logo aqui ao lado. Quer entrar na Sala de Comando?': 'Hello, Commander! The entrance to the STELLA Space Center is right over there. Would you like to enter the Command Room?',
     '🚀 ENTRAR NO CENTRO ESPACIAL': '🚀 ENTER THE SPACE CENTER',
     'CONTINUAR NO VALE': 'STAY IN THE VALLEY',
     'Comandante, você já está em "{title}"! Entre no Centro Espacial para projetar o satélite!': 'Commander, you are already working on “{title}”! Go to the Space Center to design your satellite!',
@@ -110,7 +110,7 @@ const I18n = {
     'OBRIGADO, DIRETOR! ⭐': 'THANK YOU, DIRECTOR! ⭐',
 
     // Map and HUD
-    '🚀 CENTRO ESPACIAL STELA': '🚀 STELA SPACE CENTER',
+    '🚀 CENTRO ESPACIAL STELLA': '🚀 STELLA SPACE CENTER',
     '🚪 ENTRADA [Pressione E ou Entre]': '🚪 ENTRANCE [Press E or Enter]',
     '🌊 Rio Taquari': '🌊 Taquari River',
     '🌾 Lavouras de Estrela': '🌾 Estrela Farmlands',
@@ -119,7 +119,7 @@ const I18n = {
     '🛍️ LOJINHA ESPACIAL': '🛍️ SPACE SHOP',
     '🚪 SAÍDA (VALE DO TAQUARI)': '🚪 EXIT (TAQUARI VALLEY)',
     '🌍 VALE DO TAQUARI': '🌍 TAQUARI VALLEY',
-    '🔬 CENTRO ESPACIAL STELA': '🔬 STELA SPACE CENTER',
+    '🔬 CENTRO ESPACIAL STELLA': '🔬 STELLA SPACE CENTER',
     '🪙 {coins} Space Coins   ⭐ {score} pts': '🪙 {coins} Space Coins   ⭐ {score} pts',
     '🟢 Conectado': '🟢 Online',
     '🟡 Local': '🟡 Offline',
@@ -132,14 +132,14 @@ const I18n = {
     '🏠  VOLTAR AO MENU': '🏠  BACK TO MENU',
     '🔄  REINICIAR DO ZERO': '🔄  RESET PROGRESS',
     '⏸️ PAUSA': '⏸️ PAUSED',
-    'Missão STELA — respire, o espaço espera por você ✨': 'Mission STELA — take a breath, space can wait ✨',
+    'Missão STELLA — respire, o espaço espera por você ✨': 'Mission STELLA — take a breath, space can wait ✨',
     '[↑/↓] Escolher  •  [ENTER] Confirmar  •  [ESC] Voltar ao jogo': '[↑/↓] Select  •  [ENTER] Confirm  •  [ESC] Return to game',
     '🔄 REINICIAR DO ZERO?': '🔄 RESET YOUR PROGRESS?',
     'Apaga TODO o seu progresso salvo neste dispositivo:': 'This will erase ALL your progress saved on this device:',
     'missões, moedas, itens, XP e nome. Tudo é perdido! 😱': 'missions, coins, items, XP, and name. Everything will be lost! 😱',
     'SIM, APAGAR 🗑️': 'YES, RESET 🗑️',
     'NÃO, VOLTAR ✔️': 'NO, GO BACK ✔️',
-    '🚀 MISSÃO STELA': '🚀 MISSION STELA',
+    '🚀 MISSÃO STELLA': '🚀 MISSION STELLA',
     'Exploração & Simulação Espacial no Vale do Taquari • Padrão NASA': 'Space Exploration & Simulation in Taquari Valley • NASA Standard',
     '🌐 Idioma: Português  [clique p/ EN]': '🌐 Language: English  [click for PT-BR]',
     '🌐 Language: English  [click for PT-BR]': '🌐 Language: English  [click for PT-BR]',
@@ -254,12 +254,12 @@ const I18n = {
     'Retransmite internet e sinal telefônico para áreas rurais!': 'Relays internet and phone service to rural areas!',
     'Sensor Térmico Infravermelho': 'Infrared Thermal Sensor',
     'Enxerga calor à noite para evitar queimadas no Rio Taquari!': 'Detects heat at night to prevent fires along the Taquari River!',
-    '⭐ PASSO 2: BASTIDORES DA MISSÃO STELA': '⭐ STEP 2: BEHIND THE SCENES OF MISSION STELA',
+    '⭐ PASSO 2: BASTIDORES DA MISSÃO STELLA': '⭐ STEP 2: BEHIND THE SCENES OF MISSION STELLA',
     'Lyra: "Comandante, escolha o nome oficial da nossa nave e quem vai com a gente!"': 'Lyra: “Commander, choose our spacecraft’s official name and who will come along!”',
     'NOME DA SONDA / SATÉLITE (Clique ou use [←/→] para trocar):': 'PROBE / SATELLITE NAME (Click or use [←/→] to change):',
     'SISTEMA DE PILOTAGEM (Clique ou use [TAB] para alternar):': 'PILOTING SYSTEM (Click or press [TAB] to switch):',
     '🪙 Orçamento Governamental: 1.000 Space Credits Liberados!': '🪙 Government Budget: 1,000 Space Credits Approved!',
-    'STELA-1 (Guardiã do Vale)': 'STELA-1 (Valley Guardian)',
+    'STELLA-1 (Guardiã do Vale)': 'STELLA-1 (Valley Guardian)',
     'Eco-Taquari Orbital': 'Orbital Taquari Echo',
     'Astro-Lajeado': 'Astro-Lajeado',
     'Pioneiro RS-1': 'Pioneer RS-1',
@@ -427,7 +427,7 @@ const I18n = {
 
     // Additional flows and dynamic status
     'Problema Assumido!': 'Challenge Accepted!',
-    'Agora entre no Centro Espacial STELA e use a Bancada de Projetos para montar sua nave!': 'Now enter the STELA Space Center and use the Project Workbench to build your spacecraft!',
+    'Agora entre no Centro Espacial STELLA e use a Bancada de Projetos para montar sua nave!': 'Now enter the STELLA Space Center and use the Project Workbench to build your spacecraft!',
     'Missão Cumprida com Sucesso!': 'Mission Completed Successfully!',
     'Excelente trabalho, Comandante! Explore o Vale do Taquari para aceitar o próximo desafio.': 'Excellent work, Commander! Explore Taquari Valley to accept your next challenge.',
     '🌍 Impacto Real no Vale do Taquari:': '🌍 Real Impact in Taquari Valley:',
@@ -437,7 +437,7 @@ const I18n = {
     '📡 A comunicação via {comms} enviou os mapas perfeitos para a base! ': '📡 The {comms} communication system sent perfect maps to the base! ',
     '🤖 O Robô Copiloto Bit ajudou a calibrar tudo 20% mais rápido!': '🤖 Bit the Robot Copilot helped calibrate everything 20% faster!',
     '🚪 ENTRADA [Pressione E ou Entre]': '🚪 ENTRANCE [Press E or Enter]',
-    '🛍️ LOJINHA ESPACIAL STELA': '🛍️ STELA SPACE SHOP',
+    '🛍️ LOJINHA ESPACIAL STELLA': '🛍️ STELLA SPACE SHOP',
     'Comando esperado: "{command}" (Digite e aperte ENTER)': 'Expected command: “{command}” (Type it and press ENTER)',
     '1. Estabelecer canal com o satélite de retransmissão TDRS-13': '1. Establish a link with the TDRS-13 relay satellite',
     '2. Sintonizar transponder de micro-ondas Ku para alta velocidade': '2. Tune the Ku-band microwave transponder for high-speed service',
@@ -447,7 +447,7 @@ const I18n = {
     'Ranking': 'Leaderboard',
     'EQUIPADO': 'EQUIPPED',
     'Error': 'Error',
-    'Missão STELA': 'Mission STELA',
+    'Missão STELLA': 'Mission STELLA',
     'ETAPA {step} de 3: {label}': 'STEP {step} of 3: {label}',
     'Lyra: "Olha só que lindo! Nosso satélite está a 600 km de altitude sobrevoando o Vale do Taquari! Os feixes de dados já estão chegando às estações terrestres!"': 'Lyra: “Look how beautiful! Our satellite is 600 km above Taquari Valley! The data beams are already reaching the ground stations!”',
     '🪙 {coins} Space Coins': '🪙 {coins} Space Coins',
@@ -455,8 +455,8 @@ const I18n = {
 
     // Startup and errors
     'Conectando tecnologia espacial ao Vale do Taquari...': 'Connecting space technology with Taquari Valley...',
-    '🚀 Missão STELA': '🚀 Mission STELA',
-    'Logo da Missão STELA': 'Mission STELA logo',
+    '🚀 Missão STELLA': '🚀 Mission STELLA',
+    'Logo da Missão STELLA': 'Mission STELLA logo',
     'Erro ao Carregar': 'Loading Error',
     'Tentar Novamente': 'Try Again'
   },
@@ -464,7 +464,7 @@ const I18n = {
   translations: {
     'pt-BR': {
       // Menu Principal
-      'game_title': '🚀 MISSÃO STELA',
+      'game_title': '🚀 MISSÃO STELLA',
       'game_subtitle': 'Exploração Espacial no Vale do Taquari • Padrão NASA',
       'menu_start': '🚀 Iniciar Exploração',
       'menu_mission_map': '🗺️ Mapa de Operações',
@@ -493,7 +493,7 @@ const I18n = {
       'hud_online': '🟢 Conectado',
       'hud_offline': '🟡 Local',
       'hud_mission_none': '🌍 VALE DO TAQUARI • Escolha uma Operação',
-      'hud_space_center': '🔬 CENTRO ESPACIAL STELA • Sala de Controle',
+      'hud_space_center': '🔬 CENTRO ESPACIAL STELLA • Sala de Controle',
 
       // Cargos / Ranks
       'rank_1': 'Nível 1 • Explorador Mirim',
@@ -512,7 +512,7 @@ const I18n = {
       'dialog_continue': 'Pressione [ESPAÇO] ou [ENTER] ▼',
 
       // Mapa e Locais
-      'map_center_label': '🚀 CENTRO ESPACIAL STELA',
+      'map_center_label': '🚀 CENTRO ESPACIAL STELLA',
       'map_door_label': '🚪 ENTRADA [Pressione E ou Entre]',
       'map_river': '🌊 Rio Taquari',
       'map_crops': '🌾 Lavouras de Estrela',
@@ -610,12 +610,12 @@ const I18n = {
       'credits_nasa': 'Projeto desenvolvido para o NASA Space Apps Challenge',
       'credits_tester': 'Agradecimento especial à nossa primeira tester: Lulu 💖',
       'credits_sources': 'Clima em tempo real: Meteomatics Weather API • Fontes: NASA Worldview',
-      'endgame_dev_status': 'Missão STELA — Em desenvolvimento 🚀\nObrigado por jogar e cuidar do nosso planeta!'
+      'endgame_dev_status': 'Missão STELLA — Em desenvolvimento 🚀\nObrigado por jogar e cuidar do nosso planeta!'
     },
 
     'en': {
       // Main Menu
-      'game_title': '🚀 MISSION STELA',
+      'game_title': '🚀 MISSION STELLA',
       'game_subtitle': 'Space Exploration in Taquari Valley • NASA Standard',
       'menu_start': '🚀 Start Exploration',
       'menu_mission_map': '🗺️ Operations Map',
@@ -644,7 +644,7 @@ const I18n = {
       'hud_online': '🟢 Online',
       'hud_offline': '🟡 Local',
       'hud_mission_none': '🌍 TAQUARI VALLEY • Choose an Operation',
-      'hud_space_center': '🔬 STELA SPACE CENTER • Control Room',
+      'hud_space_center': '🔬 STELLA SPACE CENTER • Control Room',
 
       // Ranks
       'rank_1': 'Level 1 • Junior Explorer',
@@ -663,7 +663,7 @@ const I18n = {
       'dialog_continue': 'Press [SPACE] or [ENTER] ▼',
 
       // Map & Locations
-      'map_center_label': '🚀 STELA SPACE CENTER',
+      'map_center_label': '🚀 STELLA SPACE CENTER',
       'map_door_label': '🚪 ENTRANCE [Press E or Step in]',
       'map_river': '🌊 Taquari River',
       'map_crops': '🌾 Estrela Farmlands',
@@ -761,7 +761,7 @@ const I18n = {
       'credits_nasa': 'Project developed for the NASA Space Apps Challenge',
       'credits_tester': 'Special thanks to our first tester: Lulu 💖',
       'credits_sources': 'Real-time weather: Meteomatics Weather API • Sources: NASA Worldview',
-      'endgame_dev_status': 'Mission STELA — Under development 🚀\nThank you for playing and protecting our planet!'
+      'endgame_dev_status': 'Mission STELLA — Under development 🚀\nThank you for playing and protecting our planet!'
     }
   }
 };

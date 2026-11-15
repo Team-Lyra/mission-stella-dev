@@ -180,7 +180,7 @@ const SpaceShop = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 26px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(I18n.text('🛍️ LOJINHA ESPACIAL STELA'), 135, 75);
+    ctx.fillText(I18n.text('🛍️ LOJINHA ESPACIAL STELLA'), 135, 75);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';

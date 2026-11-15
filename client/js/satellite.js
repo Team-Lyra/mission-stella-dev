@@ -10,7 +10,7 @@ const SatelliteBuilder = {
 
   // Customização da Missão
   missionNameIndex: 0,
-  missionNames: ['STELA-1 (Guardiã do Vale)', 'Eco-Taquari Orbital', 'Astro-Lajeado', 'Pioneiro RS-1'],
+  missionNames: ['STELLA-1 (Guardiã do Vale)', 'Eco-Taquari Orbital', 'Astro-Lajeado', 'Pioneiro RS-1'],
   crewIndex: 0,
   crewOptions: [
     { id: 'auto', name: 'Sonda Robótica Automática', icon: '🛰️', desc: '100% autônoma, leve e rápida', bonus: '+15 Eficiência de Voo' },
@@ -311,7 +311,7 @@ const SatelliteBuilder = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 28px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(I18n.text('⭐ PASSO 2: BASTIDORES DA MISSÃO STELA'), w / 2, 135);
+    ctx.fillText(I18n.text('⭐ PASSO 2: BASTIDORES DA MISSÃO STELLA'), w / 2, 135);
 
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
