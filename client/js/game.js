@@ -3,13 +3,22 @@
 // ============================================
 
 const Game = {
-  state: 'MENU', // MENU, ONBOARDING, PLAYING, SATELLITE_BUILD, LAUNCH, SPACE_COLLECT, MISSION_IMPACT, MISSION_FAILED, MISSION_OPS, LEADERBOARD, CREDITS, ENDGAME, DEV_END
+  state: 'MENU', // MENU, ONBOARDING, PLAYING, PAUSED, SATELLITE_BUILD, LAUNCH, SPACE_COLLECT, MISSION_IMPACT, MISSION_FAILED, MISSION_OPS, LEADERBOARD, CREDITS, ENDGAME, DEV_END
   canvas: null,
   ctx: null,
   width: 800,
   height: 600,
   lastTime: 0,
   logoImg: null,
+
+  // Pausa durante o jogo
+  pauseChipBtn: null,
+  pauseSelected: 0,
+  pauseItems: ['▶️  CONTINUAR', '🏠  VOLTAR AO MENU', '🔄  REINICIAR DO ZERO'],
+  pauseItemRects: [],
+  confirmReset: false,
+  confirmResetChoice: 1, // 0 = SIM APAGAR, 1 = NÃO (voltar)
+  confirmBtnRects: [],
 
   camera: { x: 0, y: 0 },
 
@@ -81,8 +90,17 @@ const Game = {
     // Lojinha
     if (SpaceShop.active) { SpaceShop.handleClick(mx, my, this.width, this.height); return; }
 
-    // Diálogo
-    if (UI.dialog.active) { UI.advanceDialog(); return; }
+    // Chip de pausa (canto inferior direito) durante o jogo
+    if (this.state === 'PLAYING' && this.pauseChipBtn) {
+      const b = this.pauseChipBtn;
+      if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) { this.openPause(); return; }
+    }
+
+    // Tela de pausa (botões e confirmação de reinício)
+    if (this.state === 'PAUSED') { this.handlePauseClick(mx, my); return; }
+
+    // Diálogo (clique no botão certo = escolhe aquela opção)
+    if (UI.dialog.active) { UI.handleDialogClick(mx, my); return; }
 
     // Cutscene Passo 1
     if (MissionManager.cutsceneActive) {
@@ -129,8 +147,12 @@ const Game = {
     // Passo 6
     if (this.state === 'MISSION_IMPACT') { this.advanceAfterImpact(); return; }
 
-    // Falha
-    if (this.state === 'MISSION_FAILED') { this.state = 'PLAYING'; MissionManager.clearActiveMission(); return; }
+    // Falha (o refazer é liberado pelo Diretor no Centro Espacial)
+    if (this.state === 'MISSION_FAILED') {
+      this.state = 'PLAYING';
+      MissionManager.clearActiveMission();
+      return;
+    }
 
     // Mapa de Operações
     if (this.state === 'MISSION_OPS') { this.state = 'PLAYING'; return; }
@@ -192,7 +214,9 @@ const Game = {
       if (code === 'ArrowUp' || code === 'KeyW') this.input.up = true;
       if (code === 'ArrowDown' || code === 'KeyS') this.input.down = true;
       if (code === 'KeyE' || code === 'Enter' || code === 'Space') this.tryInteract();
-      if (code === 'Escape') this.state = 'MENU';
+      if (code === 'Escape' || code === 'KeyP') this.openPause();
+    } else if (this.state === 'PAUSED') {
+      this.handlePauseKey(code);
     } else if (this.state === 'SATELLITE_BUILD') {
       const config = SatelliteBuilder.handleInput(code);
       if (config) { this.state = 'LAUNCH'; MissionManager.completeSatelliteAssembly(config); }
@@ -205,7 +229,11 @@ const Game = {
     } else if (this.state === 'MISSION_IMPACT') {
       if (code === 'Space' || code === 'Enter' || code === 'KeyE') this.advanceAfterImpact();
     } else if (this.state === 'MISSION_FAILED') {
-      if (code === 'Space' || code === 'Enter' || code === 'Escape') { this.state = 'PLAYING'; MissionManager.clearActiveMission(); }
+      // Só volta ao jogo; o refazer é liberado pelo Diretor no Centro Espacial
+      if (code === 'Space' || code === 'Enter' || code === 'Escape') {
+        this.state = 'PLAYING';
+        MissionManager.clearActiveMission();
+      }
     } else if (this.state === 'MISSION_OPS') {
       if (code === 'Escape' || code === 'Enter' || code === 'Space') this.state = 'PLAYING';
     } else if (this.state === 'LEADERBOARD' || this.state === 'CREDITS') {
@@ -247,17 +275,10 @@ const Game = {
         return;
       }
       this.state = 'PLAYING';
-      if (MissionManager.tutorialActive) {
-        const name = player.name || 'Comandante';
-        UI.showDialog('⭐ Lyra (Sua Guia)',
-          `Oiii, ${name}! Eu sou a Lyra, sua guia estelar! Bem-vindo à Missão STELA no Vale do Taquari! Usamos satélites da NASA para resolver problemas reais aqui!`,
-          '#ffd700', ['VAMOS NESSA! ⭐'], () => {
-            UI.showDialog('⭐ Lyra (Sua Guia)',
-              'Explore o mapa com [WASD], fale com os moradores [E] para descobrir os desafios e venha ao Centro Espacial para projetar sua nave!',
-              '#ffd700');
-            localStorage.setItem('missaoTaquari_tutorialSeen', 'true');
-            MissionManager.tutorialActive = false;
-          });
+      // Tutorial da Lyra: sempre na primeira entrada em jogo da sessão
+      if (!this.tutorialShownThisSession) {
+        this.tutorialShownThisSession = true;
+        this.showTutorial();
       }
     } else if (index === 1) {
       this.leaderboardData = await API.getLeaderboard();
@@ -289,7 +310,8 @@ const Game = {
         <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">Seu Nome de Comandante:</label>
         <input id="ob_name" type="text" placeholder="Ex: Alex" maxlength="24" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:20px;box-sizing:border-box;outline:none;" value="${this.onboarding.nameInput}">
         <label style="color:#adb5bd;font-size:15px;display:block;text-align:left;margin-bottom:6px;">Sua Cidade:</label>
-        <input id="ob_city" type="text" placeholder="Ex: Estrela, Lajeado..." maxlength="32" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:28px;box-sizing:border-box;outline:none;" value="${this.onboarding.cityInput}">
+        <input id="ob_city" type="text" placeholder="Ex: Guaporé, Estrela, Lajeado..." maxlength="48" autocomplete="off" style="width:100%;padding:14px 16px;font-size:18px;border-radius:10px;border:2px solid #00b4d8;background:#0a1628;color:#fff;margin-bottom:8px;box-sizing:border-box;outline:none;" value="${this.onboarding.cityInput}">
+        <div id="ob_city_list" style="max-height:120px;overflow-y:auto;margin-bottom:20px;text-align:left;"></div>
         <button id="ob_btn" style="width:100%;padding:16px;font-size:19px;font-weight:bold;border:none;border-radius:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;cursor:pointer;letter-spacing:1px;">DECOLAR COM A LYRA! 🚀</button>
         <p id="ob_err" style="color:#ef4444;font-size:14px;margin-top:12px;min-height:20px;"></p>
       </div>`;
@@ -300,6 +322,48 @@ const Game = {
     document.getElementById('ob_btn').addEventListener('click', () => this.submitOnboarding());
     document.getElementById('ob_name').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('ob_city').focus(); });
     document.getElementById('ob_city').addEventListener('keydown', (e) => { if (e.key === 'Enter') this.submitOnboarding(); });
+
+    // ---- Seletor de cidade (geocodificação) ----
+    this.onboarding.cityCoords = null;
+    const cityInput = document.getElementById('ob_city');
+    const cityList = document.getElementById('ob_city_list');
+    let searchTimer = null;
+
+    const renderCityList = (results, msg) => {
+      if (msg) { cityList.innerHTML = `<p style="color:#94a3b8;font-size:13px;margin:4px 0 0;">${msg}</p>`; return; }
+      if (!results || !results.length) {
+        cityList.innerHTML = '<p style="color:#94a3b8;font-size:13px;margin:4px 0 0;">🔍 Cidade não encontrada — pode continuar, o clima usará a região do Vale do Taquari.</p>';
+        return;
+      }
+      cityList.innerHTML = results.map((r, i) =>
+        `<button type="button" data-i="${i}" style="display:block;width:100%;padding:9px 12px;margin:3px 0;font-size:14px;text-align:left;border-radius:8px;border:1.5px solid #334155;background:#0f172a;color:#e0e7ff;cursor:pointer;">📍 ${r.label}</button>`
+      ).join('');
+      cityList.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const r = results[parseInt(btn.dataset.i)];
+          cityInput.value = r.name;
+          this.onboarding.cityCoords = { lat: r.lat, lon: r.lon };
+          cityList.innerHTML = `<p style="color:#22c55e;font-size:13px;margin:4px 0 0;">✅ ${r.label} — selecionada!</p>`;
+        });
+      });
+    };
+
+    cityInput.addEventListener('input', () => {
+      this.onboarding.cityCoords = null;
+      clearTimeout(searchTimer);
+      const q = cityInput.value.trim();
+      if (q.length < 2) { cityList.innerHTML = ''; return; }
+      cityList.innerHTML = '<p style="color:#38bdf8;font-size:13px;margin:4px 0 0;">🔎 Buscando cidades...</p>';
+      searchTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/geocode?name=${encodeURIComponent(q)}`, { signal: AbortSignal.timeout(6000) });
+          const data = await res.json();
+          renderCityList(data.results);
+        } catch {
+          renderCityList(null, '🔍 Busca indisponível — pode continuar mesmo assim!');
+        }
+      }, 400);
+    });
   },
 
   submitOnboarding() {
@@ -310,22 +374,43 @@ const Game = {
     if (!city) { if (err) err.textContent = 'Digite sua cidade!'; return; }
 
     API.setOnboarding(name, city);
+
+    // Salva coordenadas da cidade escolhida (usadas pelo widget de clima)
+    if (this.onboarding.cityCoords) {
+      localStorage.setItem('missaoTaquari_cityLat', String(this.onboarding.cityCoords.lat));
+      localStorage.setItem('missaoTaquari_cityLon', String(this.onboarding.cityCoords.lon));
+    }
+
     const overlay = document.getElementById('onboardingOverlay');
     if (overlay) overlay.remove();
     this.onboarding.domShown = false;
 
-    this.state = 'PLAYING';
-    if (MissionManager.tutorialActive) {
-      UI.showDialog('⭐ Lyra (Sua Guia)',
-        `Oiii, ${name}! Eu sou a Lyra, sua guia estelar! Que bom que você está aqui em ${city}! Bem-vindo à Missão STELA no Vale do Taquari!`,
-        '#ffd700', ['VAMOS NESSA! ⭐'], () => {
-          UI.showDialog('⭐ Lyra (Sua Guia)',
-            'Explore o mapa com [WASD], fale com os moradores [E] para descobrir os desafios e venha ao Centro Espacial para projetar sua nave!',
-            '#ffd700');
-          localStorage.setItem('missaoTaquari_tutorialSeen', 'true');
-          MissionManager.tutorialActive = false;
-        });
+    // Atualiza o widget de clima com a cidade do jogador imediatamente
+    if (typeof Weather !== 'undefined') Weather.refresh().catch(() => {});
+
+    // Tutorial da Lyra: sempre mostra na primeira vez que entra em jogo nesta sessão
+    if (!this.tutorialShownThisSession) {
+      this.tutorialShownThisSession = true;
+      this.state = 'PLAYING';
+      this.showTutorial();
+    } else {
+      this.state = 'PLAYING';
     }
+  },
+
+  // Tutorial em 2 passos: o que é o jogo + como jogar (setas e E)
+  showTutorial() {
+    const player = API.currentPlayer || {};
+    const explorer = player.name || 'Comandante';
+    const homeCity = localStorage.getItem('missaoTaquari_playerCity') || 'Vale do Taquari';
+    UI.showDialog('⭐', `Oiii, ${explorer}! Eu sou a Lyra, sua guia estelar! Que bom ter alguém lá de ${homeCity} na nossa equipe! Bem-vindo à Missão STELA! Vamos usar satélites da NASA para ajudar as pessoas do Vale do Taquari. 🚀`,
+      '#ffd700', ['PRÓXIMO ➔'], () => {
+        UI.showDialog('⭐', 'Como jogar: ande com as SETAS ➡️⬅️⬆️⬇️ do teclado e aperte a tecla [E] para conversar e abrir as coisas! Fácil, né? Vamos lá! 🌟',
+          '#ffd700', ['VAMOS NESSA! ⭐'], () => {
+            localStorage.setItem('missaoTaquari_tutorialSeen', 'true');
+            MissionManager.tutorialActive = false;
+          });
+      });
   },
 
   handleOnboardingClick(mx, my) { /* handled via DOM */ },
@@ -396,7 +481,7 @@ const Game = {
       const wSt = GameMap.stations.workshop;
       if (Math.hypot((wSt.x + wSt.w / 2) - px, (wSt.y + wSt.h / 2) - py) < 80) {
         if (!MissionManager.hasActiveMission()) {
-          UI.showDialog('⭐ Lyra', 'Oii! A bancada está pronta, mas precisamos aceitar um desafio lá fora primeiro! Fale com a Dona Iracema, Capitão Rodrigo, Professora Mariana ou Cacique Karaí!', '#ffd700');
+          UI.showDialog('⭐ Lyra', 'Oii! A bancada está pronta, mas precisamos aceitar um desafio lá fora primeiro! Fale com a Dona Marta, Capitão Farias, Professora Clara ou Seu Nilo!', '#ffd700');
           return;
         }
         this.state = 'SATELLITE_BUILD';
@@ -414,14 +499,32 @@ const Game = {
         this.selectMenuItem(1); return;
       }
 
-      // Mapa de Operações (terminal padrão T no centro)
-      const opX = 9 * 48; const opY = 6 * 48;
-      if (Math.hypot(opX - px, opY - py) < 90) {
-        this.state = 'MISSION_OPS'; return;
-      }
-
+      // Diretor: libera o refazer de missões falhadas ou abre o Painel de Operações
       const nearbyInternal = NPCManager.getNearbyNPC(Player.x, Player.y);
       if (nearbyInternal) {
+        if (nearbyInternal.id === 'diretor_nasa') {
+          const failed = MissionManager.getFailedMission();
+          if (failed) {
+            UI.showDialog(nearbyInternal.name,
+              `Comandante! Vi que a "${failed.title}" não foi dessa vez... Posso liberar os sistemas para você refazer? Você pode tentar quantas vezes precisar!`,
+              nearbyInternal.color, ['🔁 SIM, REFAZER', '🗺️ PAINEL DE OPERAÇÕES'],
+              (choice) => {
+                if (choice === 0) {
+                  MissionManager.unlockFailedMission(failed);
+                  UI.showDialog(nearbyInternal.name,
+                    `Sistemas liberados! Vá lá fora falar com o responsável pela missão e aceite o desafio de novo. Dessa vez vai dar certo! 🚀⭐`,
+                    nearbyInternal.color, ['OBRIGADO, DIRETOR! ⭐']);
+                } else {
+                  this.state = 'MISSION_OPS';
+                }
+              });
+            return;
+          }
+          // Sem missão falhada: abre direto o Painel de Operações
+          this.state = 'MISSION_OPS';
+          NasaAudio.lockSuccess();
+          return;
+        }
         UI.showDialog(nearbyInternal.name, nearbyInternal.dialog, nearbyInternal.color);
         return;
       }
@@ -577,6 +680,14 @@ const Game = {
       if (MissionManager.cutsceneActive) MissionManager.renderCutscene(ctx, w, h);
     } else if (this.state === 'SATELLITE_BUILD') {
       SatelliteBuilder.render(ctx, w, h);
+    } else if (this.state === 'PAUSED') {
+      // Mundo congelado ao fundo + menu de pausa por cima
+      GameMap.render(ctx, this.camera.x, this.camera.y, w, h);
+      const nearby = NPCManager.getNearbyNPC(Player.x, Player.y);
+      NPCManager.render(ctx, this.camera.x, this.camera.y, nearby);
+      Player.render(ctx, this.camera.x, this.camera.y);
+      this.renderHUD(ctx, w, h);
+      this.renderPauseOverlay(ctx, w, h);
     } else if (this.state === 'LAUNCH') {
       LaunchMinigame.render(ctx, w, h);
     } else if (this.state === 'SPACE_COLLECT') {
@@ -643,6 +754,57 @@ const Game = {
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
     ctx.fillText(API.online ? '🟢 Conectado' : '🟡 Local', w - 35, 42);
 
+    // Clima real (Meteomatics) entre o título (esquerda) e as moedas (direita):
+    // cidade + temperatura + todas as informações da API (chuva, umidade, vento,
+    // rajada, direção e pressão). Mostra a versão mais completa que couber,
+    // centralizada na zona LIVRE (não no meio do canvas), e some junto com a barra.
+    if (typeof Weather !== 'undefined' && Weather.lastData) {
+      // Mede cada texto com a MESMA fonte com que é desenhado
+      ctx.font = 'bold 15px "Segoe UI", sans-serif';
+      const missionEnd = 30 + ctx.measureText(missionLabel).width;
+      ctx.font = 'bold 16px "Segoe UI", sans-serif';
+      const coinsW = ctx.measureText(`🪙 ${coins} Space Coins   ⭐ ${score} pts`).width;
+      const coinsStart = (w - 160) - coinsW;
+      ctx.font = 'bold 13px "Segoe UI", sans-serif';
+
+      const leftBound = missionEnd + 16;
+      const rightBound = coinsStart - 16;
+      const avail = rightBound - leftBound;
+      let weatherText = null;
+      for (const mode of ['full', 'short', 'tiny', 'mini']) {
+        const t = Weather.hudText(mode);
+        if (!t) break;
+        if (ctx.measureText(t).width <= avail) { weatherText = t; break; }
+      }
+      if (weatherText) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#e0e7ff';
+        ctx.fillText(weatherText, (leftBound + rightBound) / 2, 42);
+      }
+    }
+
+    // Botão de PAUSA (canto inferior direito) — só durante o jogo (abre o menu de pausa)
+    if (this.state === 'PLAYING') {
+      const chipW = 150, chipH = 30;
+      const chipX = w - chipW - 12, chipY = h - chipH - 34;
+      this.pauseChipBtn = { x: chipX, y: chipY, w: chipW, h: chipH };
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(chipX, chipY, chipW, chipH, 9) : ctx.rect(chipX, chipY, chipW, chipH);
+      ctx.fill();
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 13px "Segoe UI", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('⏸️ PAUSA [ESC]', chipX + chipW / 2, chipY + chipH / 2 + 1);
+      ctx.textBaseline = 'alphabetic';
+    } else {
+      this.pauseChipBtn = null;
+    }
+
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(10, 16, 42, 0.85)';
     ctx.fillRect(w / 2 - 320, h - 38, 640, 28);
@@ -652,10 +814,198 @@ const Game = {
     ctx.fillStyle = '#e0e7ff';
     ctx.font = '13px "Segoe UI", sans-serif';
     if (GameMap.currentZone === 'SPACE_CENTER') {
-      ctx.fillText('[E] Bancada p/ Montar • [E] Lojinha • [E] Terminal de Operações • [E] Saída', w / 2, h - 20);
+      ctx.fillText('Aperte [E] na Bancada • Lojinha • Fale com o Diretor (Operações) • Saída', w / 2, h - 20);
     } else {
-      ctx.fillText('Ande com [WASD] • Interaja com moradores e portas usando [E / ESPAÇO]', w / 2, h - 20);
+      ctx.fillText('Ande com as SETAS ⬆️⬇️⬅️➡️ • Aperte [E] para conversar e abrir!', w / 2, h - 20);
     }
+    ctx.restore();
+  },
+
+  // ============================================
+  // PAUSA (durante o jogo): Continuar • Voltar ao Menu • Reiniciar
+  // ============================================
+  openPause() {
+    this.state = 'PAUSED';
+    this.pauseSelected = 0;
+    this.confirmReset = false;
+    this.confirmResetChoice = 1;
+    NasaAudio.click();
+  },
+
+  handlePauseKey(code) {
+    // Confirmação de reinício (2 passos para não apagar sem querer)
+    if (this.confirmReset) {
+      if (code === 'ArrowLeft' || code === 'ArrowRight' || code === 'ArrowUp' || code === 'ArrowDown' || code === 'KeyA' || code === 'KeyD') {
+        this.confirmResetChoice = this.confirmResetChoice === 0 ? 1 : 0;
+        NasaAudio.click();
+      } else if (code === 'Enter' || code === 'Space' || code === 'KeyE') {
+        if (this.confirmResetChoice === 0) {
+          this.resetProgress();
+        } else {
+          this.confirmReset = false;
+          NasaAudio.click();
+        }
+      } else if (code === 'Escape') {
+        this.confirmReset = false;
+        NasaAudio.click();
+      }
+      return;
+    }
+
+    if (code === 'ArrowUp' || code === 'KeyW') {
+      this.pauseSelected = (this.pauseSelected - 1 + this.pauseItems.length) % this.pauseItems.length;
+      NasaAudio.click();
+    } else if (code === 'ArrowDown' || code === 'KeyS') {
+      this.pauseSelected = (this.pauseSelected + 1) % this.pauseItems.length;
+      NasaAudio.click();
+    } else if (code === 'Enter' || code === 'Space' || code === 'KeyE') {
+      this.activatePauseItem(this.pauseSelected);
+    } else if (code === 'Escape' || code === 'KeyP') {
+      this.state = 'PLAYING';
+      NasaAudio.click();
+    }
+  },
+
+  activatePauseItem(index) {
+    if (index === 0) {
+      this.state = 'PLAYING';
+    } else if (index === 1) {
+      // Volta ao menu mantendo o progresso salvo
+      this.state = 'MENU';
+    } else if (index === 2) {
+      this.confirmReset = true;
+      this.confirmResetChoice = 1;
+      NasaAudio.alarmTone();
+    }
+    NasaAudio.click();
+  },
+
+  /** Apaga TODO o progresso salvo no dispositivo e recarrega o jogo */
+  resetProgress() {
+    const doomed = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('missaoTaquari_')) doomed.push(k);
+    }
+    doomed.forEach(k => localStorage.removeItem(k));
+    location.reload();
+  },
+
+  handlePauseClick(mx, my) {
+    // Confirmação de reinício
+    if (this.confirmReset) {
+      for (let i = 0; i < this.confirmBtnRects.length; i++) {
+        const b = this.confirmBtnRects[i];
+        if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+          if (i === 0) { this.resetProgress(); return true; }
+          this.confirmReset = false;
+          NasaAudio.click();
+          return true;
+        }
+      }
+      return true;
+    }
+    // Itens do menu de pausa
+    for (let i = 0; i < this.pauseItemRects.length; i++) {
+      const b = this.pauseItemRects[i];
+      if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+        this.pauseSelected = i;
+        this.activatePauseItem(i);
+        return true;
+      }
+    }
+    return true;
+  },
+
+  renderPauseOverlay(ctx, w, h) {
+    ctx.save();
+    // Escurece o mundo congelado ao fundo
+    ctx.fillStyle = 'rgba(5, 8, 25, 0.82)';
+    ctx.fillRect(0, 0, w, h);
+    UI.renderStars(ctx, w, h);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffd700';
+    ctx.font = 'bold 40px "Segoe UI", sans-serif';
+    ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 16;
+    ctx.fillText('⏸️ PAUSA', w / 2, 120);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#90e0ef';
+    ctx.font = '16px "Segoe UI", sans-serif';
+    ctx.fillText('Missão STELA — respire, o espaço espera por você ✨', w / 2, 152);
+
+    // Botões do menu de pausa
+    const btnW = Math.min(430, w - 80);
+    const btnH = 56;
+    const startY = 210;
+    this.pauseItemRects = [];
+    for (let i = 0; i < this.pauseItems.length; i++) {
+      const isSel = i === this.pauseSelected;
+      const y = startY + i * (btnH + 16);
+      const x = w / 2 - btnW / 2;
+      this.pauseItemRects.push({ x, y, w: btnW, h: btnH });
+
+      ctx.fillStyle = isSel ? 'rgba(0, 180, 216, 0.35)' : 'rgba(255, 255, 255, 0.07)';
+      ctx.fillRect(x, y, btnW, btnH);
+      ctx.strokeStyle = isSel ? '#ffd700' : 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = isSel ? 3 : 1.5;
+      ctx.strokeRect(x, y, btnW, btnH);
+
+      ctx.fillStyle = isSel ? '#ffd700' : '#ffffff';
+      ctx.font = isSel ? 'bold 20px "Segoe UI", sans-serif' : '18px "Segoe UI", sans-serif';
+      ctx.fillText((isSel ? '▸ ' : '') + this.pauseItems[i], w / 2, y + btnH / 2 + 7);
+    }
+
+    // Rodapé de ajuda
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '14px "Segoe UI", sans-serif';
+    ctx.fillText('[↑/↓] Escolher  •  [ENTER] Confirmar  •  [ESC] Voltar ao jogo', w / 2, h - 30);
+
+    // Confirmação de reinício (tudo apagado)
+    if (this.confirmReset) {
+      ctx.fillStyle = 'rgba(5, 8, 25, 0.85)';
+      ctx.fillRect(0, 0, w, h);
+
+      const bw = Math.min(620, w - 60), bh = 250;
+      const bx = w / 2 - bw / 2, by = h / 2 - bh / 2;
+      ctx.fillStyle = 'rgba(69, 10, 10, 0.97)';
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(bx, by, bw, bh);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 26px "Segoe UI", sans-serif';
+      ctx.fillText('🔄 REINICIAR DO ZERO?', w / 2, by + 45);
+      ctx.fillStyle = '#fca5a5';
+      ctx.font = '16px "Segoe UI", sans-serif';
+      ctx.fillText('Apaga TODO o seu progresso salvo neste dispositivo:', w / 2, by + 82);
+      ctx.fillText('missões, moedas, itens, XP e nome. Tudo é perdido! 😱', w / 2, by + 106);
+
+      const cbW = 200, cbH = 48;
+      const cbY = by + bh - 66;
+      this.confirmBtnRects = [
+        { x: w / 2 - cbW - 20, y: cbY, w: cbW, h: cbH },  // 0 = SIM, APAGAR
+        { x: w / 2 + 20,       y: cbY, w: cbW, h: cbH }   // 1 = NÃO, VOLTAR
+      ];
+      const sel0 = this.confirmResetChoice === 0, sel1 = this.confirmResetChoice === 1;
+      ctx.fillStyle = sel0 ? 'rgba(239, 68, 68, 0.85)' : 'rgba(239, 68, 68, 0.25)';
+      ctx.fillRect(this.confirmBtnRects[0].x, cbY, cbW, cbH);
+      ctx.strokeStyle = sel0 ? '#fecaca' : '#ef4444'; ctx.lineWidth = 2;
+      ctx.strokeRect(this.confirmBtnRects[0].x, cbY, cbW, cbH);
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px "Segoe UI", sans-serif';
+      ctx.fillText('SIM, APAGAR 🗑️', this.confirmBtnRects[0].x + cbW / 2, cbY + 30);
+
+      ctx.fillStyle = sel1 ? 'rgba(34, 197, 94, 0.85)' : 'rgba(34, 197, 94, 0.2)';
+      ctx.fillRect(this.confirmBtnRects[1].x, cbY, cbW, cbH);
+      ctx.strokeStyle = sel1 ? '#bbf7d0' : '#22c55e';
+      ctx.strokeRect(this.confirmBtnRects[1].x, cbY, cbW, cbH);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('NÃO, VOLTAR ✔️', this.confirmBtnRects[1].x + cbW / 2, cbY + 30);
+    } else {
+      this.confirmBtnRects = [];
+    }
+
     ctx.restore();
   },
 
@@ -669,7 +1019,7 @@ const Game = {
     UI.renderStars(ctx, w, h);
 
     const logoSize = Math.min(130, h * 0.22);
-    const logoY = h * 0.16;
+    const logoY = h * 0.155;
 
     if (this.logoImg && this.logoImg.complete && this.logoImg.naturalWidth > 0) {
       ctx.save();
@@ -688,11 +1038,11 @@ const Game = {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 38px "Segoe UI", sans-serif';
     ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 18;
-    ctx.fillText('🚀 MISSÃO STELA', w / 2, logoY + logoSize / 2 + 35);
+    ctx.fillText('🚀 MISSÃO STELA', w / 2, logoY + logoSize / 2 + 80);
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#90e0ef';
     ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Exploração & Simulação Espacial no Vale do Taquari • Padrão NASA', w / 2, logoY + logoSize / 2 + 65);
+    ctx.fillText('Exploração & Simulação Espacial no Vale do Taquari • Padrão NASA', w / 2, logoY + logoSize / 2 + 115);
 
     const startY = h * 0.52;
     for (let i = 0; i < this.menuItems.length; i++) {
@@ -939,7 +1289,7 @@ const Game = {
       { text: 'Projeto desenvolvido para o NASA Space Apps Challenge', color: '#ffd700', font: 'bold 15px "Segoe UI", sans-serif', y: 355 },
       { text: '━━━━━━━━━━━━━━━━━━━━━━━━', color: '#374151', font: '14px "Segoe UI", sans-serif', y: 375 },
       { text: 'Agradecimento especial à nossa primeira tester: Lulu 💖', color: '#f9a8d4', font: 'bold 15px "Segoe UI", sans-serif', y: 405 },
-      { text: 'Fontes: Meteomatics Weather API & NASA Worldview', color: '#6b7280', font: '13px "Segoe UI", sans-serif', y: 435 }
+      { text: 'Clima em tempo real: Meteomatics Weather API • Fontes: NASA Worldview', color: '#6b7280', font: '13px "Segoe UI", sans-serif', y: 435 }
     ];
 
     for (const l of lines) {

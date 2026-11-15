@@ -17,8 +17,8 @@ const initialMissions = [
     description: 'Detectar pragas precoces nas lavouras de milho e soja com sensores NIR antes que a safra de Estrela e região seja perdida.',
     problem_type: 'agricultura',
     difficulty: 1,
-    npc_name: 'Dona Iracema',
-    npc_dialog: 'Olá, jovem líder espacial! Sou a Dona Iracema, agricultora aqui em Estrela. Uma praga misteriosa está atacando nossas plantações de milho e soja! Se a gente conseguisse ver as lavouras do alto pelo espaço com satélites, podíamos agir antes. Você pode nos ajudar a construir e lançar um satélite de monitoramento?',
+    npc_name: 'Dona Marta',
+    npc_dialog: 'Olá, jovem líder espacial! Sou a Dona Marta, agricultora aqui em Estrela. Uma praga misteriosa está atacando nossas plantações de milho e soja! Se a gente conseguisse ver as lavouras do alto pelo espaço com satélites, podíamos agir antes. Você pode nos ajudar a construir e lançar um satélite de monitoramento?',
     solution_text: 'Excelente! Ao configurar o satélite com sensores multiespectrais no infravermelho próximo (NIR), calculamos o índice NDVI da vegetação antes dos sintomas ficarem visíveis a olho nu.',
     impact_text: 'Com o satélite em órbita, os agricultores de Estrela e do Vale do Taquari reduziram o uso de defensivos em 40% e salvaram mais de 78% da safra de milho e soja! Mais de 200 famílias foram beneficiadas.',
     nasa_tips: '🛰️ DICA NASA: O programa Landsat da NASA monitora lavouras e florestas desde 1972! Sensores multiespectrais revelam a saúde da clorofila refletindo ondas infravermelhas.'
@@ -29,8 +29,8 @@ const initialMissions = [
     description: 'Mapear deformações e umidade no solo de Lajeado através das nuvens com radar SAR para evitar deslizamentos nas rodovias.',
     problem_type: 'deslizamentos',
     difficulty: 2,
-    npc_name: 'Capitão Rodrigo',
-    npc_dialog: 'Comandante! Sou o Capitão Rodrigo da Defesa Civil de Lajeado. Após os fortes temporais no Vale, encostas inteiras ameaçam desabar. Precisamos de dados de radar de satélite para medir a movimentação do solo e umidade em tempo real antes que ocorra uma tragédia!',
+    npc_name: 'Capitão Farias',
+    npc_dialog: 'Comandante! Sou o Capitão Farias da Defesa Civil de Lajeado. Após os fortes temporais no Vale, encostas inteiras ameaçam desabar. Precisamos de dados de radar de satélite para medir a movimentação do solo e umidade em tempo real antes que ocorra uma tragédia!',
     solution_text: 'Missão cumprida! Com tecnologia SAR (Radar de Abertura Sintética), o satélite enxerga através das nuvens e mede alterações milimétricas no relevo do solo.',
     impact_text: 'Mais de 50.000 moradores de Lajeado e região agora estão protegidos por alertas automáticos. Um deslizamento na serra foi detectado com 48h de antecedência, permitindo evacuação segura!',
     nasa_tips: '🛰️ DICA NASA: O satélite GPM da NASA mede chuva global a cada 3 horas, e radares SAR conseguem mapear milímetros de deformação no solo dia e noite!'
@@ -41,8 +41,8 @@ const initialMissions = [
     description: 'Levar conexão de alta velocidade e telemedicina para escolas rurais e postos de saúde isolados em Pouso Novo.',
     problem_type: 'comunicacao',
     difficulty: 3,
-    npc_name: 'Professora Mariana',
-    npc_dialog: 'Oi, líder espacial! Sou a Professora Mariana da Escola Municipal de Pouso Novo. Nossos alunos no interior não têm conexão com o mundo e os postos de saúde ficam incomunicáveis. Será que podemos lançar um satélite de retransmissão para conectar nossa comunidade?',
+    npc_name: 'Professora Clara',
+    npc_dialog: 'Oi, líder espacial! Sou a Professora Clara da Escola Municipal de Pouso Novo. Nossos alunos no interior não têm conexão com o mundo e os postos de saúde ficam incomunicáveis. Será que podemos lançar um satélite de retransmissão para conectar nossa comunidade?',
     solution_text: 'Brilhante! Satélite de órbita baixa LEO configurado com antenas de banda Ku e transponders de alto ganho com alimentação solar.',
     impact_text: 'A rede espacial conectou 47 comunidades rurais isoladas no Vale do Taquari! Escolas agora têm teleaulas e postos médicos atendem por telemedicina.',
     nasa_tips: '🛰️ DICA NASA: A Deep Space Network (DSN) da NASA conecta naves espaciais a bilhões de quilômetros da Terra com antenas parabólicas gigantes de alta frequência!'
@@ -53,8 +53,8 @@ const initialMissions = [
     description: 'Vigiar as matas ciliares do Rio Taquari dia e noite com sensores térmicos contra queimadas e desmatamento clandestino.',
     problem_type: 'florestal',
     difficulty: 3,
-    npc_name: 'Cacique Karaí',
-    npc_dialog: 'Saudações, guardião da ciência! Sou o Cacique Karaí. O Rio Taquari precisa das suas matas ciliares em pé para respirar. Tratores e queimadas destroem a beira do rio na calada da noite. Precisamos de um olhar do espaço que vigie nossas matas 24 horas por dia!',
+    npc_name: 'Seu Nilo',
+    npc_dialog: 'Saudações, guardião da ciência! Sou o Seu Nilo. O Rio Taquari precisa das suas matas ciliares em pé para respirar. Tratores e queimadas destroem a beira do rio na calada da noite. Precisamos de um olhar do espaço que vigie nossas matas 24 horas por dia!',
     solution_text: 'Combinamos imagens ópticas de alta resolução com sensores infravermelhos termais para alertas automáticos de desmatamento e calor.',
     impact_text: 'O desmatamento ilegal caiu 62% nas margens do Rio Taquari! 45 focos de incêndio foram combatidos a tempo e 1.200 hectares de mata atlântica foram protegidos.',
     nasa_tips: '🛰️ DICA NASA: O sistema FIRMS da NASA usa sensores MODIS e VIIRS para detectar focos de calor e queimadas no mundo todo em tempo real!'

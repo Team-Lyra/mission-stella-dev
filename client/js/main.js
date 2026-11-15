@@ -12,6 +12,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Inicializa o motor do jogo
     await Game.init(canvas);
 
+    // Widget de clima real (Meteomatics) — falha silenciosa se servidor offline
+    Weather.init().catch(() => {});
+
     // Remove tela de loading com transição suave
     if (loading) {
       loading.classList.add('hidden');

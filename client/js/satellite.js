@@ -5,6 +5,7 @@
 const SatelliteBuilder = {
   active: false,
   subStep: 0, // 0 = Briefing/Customização, 1 = Bancada Drag & Drop, 2 = Status Final
+  selectedPartIndex: 0, // Peça em destaque na bancada (último clique/seta)
   currentMission: null,
 
   // Customização da Missão
@@ -150,16 +151,20 @@ const SatelliteBuilder = {
     } else if (this.subStep === 1) {
       if (key === 'Tab') {
         this.selectedCategory = (this.selectedCategory + 1) % this.categories.length;
+        const catId = this.categories[this.selectedCategory].id;
+        this.selectedPartIndex = this.equipped[catId] || 0;
         NasaAudio.click();
       } else if (key === 'ArrowLeft' || key === 'KeyA') {
         const catId = this.categories[this.selectedCategory].id;
         const count = this.parts[catId].length;
         this.equipped[catId] = (this.equipped[catId] - 1 + count) % count;
+        this.selectedPartIndex = this.equipped[catId];
         NasaAudio.click();
       } else if (key === 'ArrowRight' || key === 'KeyD') {
         const catId = this.categories[this.selectedCategory].id;
         const count = this.parts[catId].length;
         this.equipped[catId] = (this.equipped[catId] + 1) % count;
+        this.selectedPartIndex = this.equipped[catId];
         NasaAudio.click();
       } else if (key === 'Enter' || key === 'Space') {
         this.subStep = 2; // Vai para a revisão final
@@ -237,18 +242,19 @@ const SatelliteBuilder = {
         }
       }
 
-      // Seleção de peças na prateleira esquerda
+      // Seleção de peças na prateleira esquerda (áreas idênticas ao renderWorkbench)
       const catId = this.categories[this.selectedCategory].id;
       const list = this.parts[catId];
-      const cardW = Math.min(380, w * 0.42);
+      const cardW = Math.min(420, w * 0.44);
       const cardStartX = 60;
-      const startY = 160;
-      const cardH = 80;
+      const startY = 145;
+      const cardH = 75;
 
       for (let i = 0; i < list.length; i++) {
         const cy = startY + i * (cardH + 12);
         if (mx >= cardStartX && mx <= cardStartX + cardW && my >= cy && my <= cy + cardH) {
           this.equipped[catId] = i;
+          this.selectedPartIndex = i;
           NasaAudio.inspectChime();
           return null;
         }
@@ -425,28 +431,43 @@ const SatelliteBuilder = {
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
       const isEquipped = this.equipped[catId] === i;
+      const isSel = this.selectedPartIndex === i;
       const iy = startY + i * (cardH + 12);
 
-      ctx.fillStyle = isEquipped ? 'rgba(34, 197, 94, 0.25)' : 'rgba(255, 255, 255, 0.05)';
+      // Fundo: selecionado = vivo com pulso; equipado = verde
+      if (isSel) {
+        const glow = 0.7 + 0.3 * Math.sin(Date.now() / 220);
+        ctx.fillStyle = `rgba(255, 215, 0, ${0.25 * glow})`;
+      } else if (isEquipped) {
+        ctx.fillStyle = 'rgba(34, 197, 94, 0.25)';
+      } else {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      }
       ctx.fillRect(cardStartX, iy, cardW, cardH);
-      ctx.strokeStyle = isEquipped ? '#22c55e' : 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = isEquipped ? 2.5 : 1;
+      ctx.strokeStyle = isSel ? '#ffd700' : (isEquipped ? '#22c55e' : 'rgba(255, 255, 255, 0.25)');
+      ctx.lineWidth = isSel ? 3.5 : (isEquipped ? 2.5 : 1);
       ctx.strokeRect(cardStartX, iy, cardW, cardH);
 
-      // Ícone
-      ctx.font = '28px "Segoe UI", sans-serif';
+      // Ícone — maior e brilhante quando selecionado
+      ctx.font = isSel ? '34px "Segoe UI", sans-serif' : '28px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(item.icon, cardStartX + 30, iy + 48);
+      if (isSel) {
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 20;
+      }
+      ctx.fillText(item.icon, cardStartX + (isSel ? 32 : 30), iy + (isSel ? 49 : 48));
+      ctx.shadowBlur = 0;
 
       // Título
       ctx.textAlign = 'left';
-      ctx.fillStyle = isEquipped ? '#ffd700' : '#ffffff';
-      ctx.font = 'bold 16px "Segoe UI", sans-serif';
-      ctx.fillText((isEquipped ? '✓ ' : '') + item.name, cardStartX + 60, iy + 28);
+      ctx.fillStyle = isSel ? '#ffd700' : (isEquipped ? '#7ee2b8' : '#ffffff');
+      ctx.font = 'bold 17px "Segoe UI", sans-serif';
+      const prefix = isSel ? '▸ ' : (isEquipped ? '✓ ' : '');
+      ctx.fillText(prefix + item.name, cardStartX + 60, iy + 28);
 
       // Descrição simples para crianças
-      ctx.fillStyle = '#adb5bd';
-      ctx.font = '13px "Segoe UI", sans-serif';
+      ctx.fillStyle = isSel ? '#e0f2fe' : '#adb5bd';
+      ctx.font = '14px "Segoe UI", sans-serif';
       ctx.fillText(item.desc, cardStartX + 60, iy + 52, cardW - 75);
     }
 
@@ -494,8 +515,8 @@ const SatelliteBuilder = {
     const boxW = Math.min(760, w - 80);
     const boxX = w / 2 - boxW / 2;
 
-    // Mascote Lyra avaliando
-    Lyra.render(ctx, boxX + 60, 160, 42, 'excited', 'Inspetora Lyra');
+    // Mascote Lyra avaliando (sem rótulo para não sobrepor o painel)
+    Lyra.render(ctx, boxX + 60, 160, 42, 'excited', '');
 
     // Painel de Estatísticas Gamificadas
     ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
@@ -587,31 +608,53 @@ const SatelliteBuilder = {
     const cy = y + height / 2;
     const time = Date.now() / 600;
 
+    // Cores de cada parte conforme a peça equipada (mudam em tempo real!)
+    const bat = this.parts.battery[this.equipped.battery] || this.parts.battery[0];
+    const cpu = this.parts.cpu[this.equipped.cpu] || this.parts.cpu[0];
+    const comm = this.parts.comms[this.equipped.comms] || this.parts.comms[0];
+    const sens = this.parts.sensor[this.equipped.sensor] || this.parts.sensor[0];
+
+    // Cor das asas/painéis conforme a bateria
+    const wingColor = bat.id === 'bat_rtg' ? '#a78bfa' :
+      bat.id === 'bat_lithium' ? '#22d3ee' : '#0284c7';
+    const wingEdge = bat.id === 'bat_rtg' ? '#c4b5fd' :
+      bat.id === 'bat_lithium' ? '#67e8f9' : '#38bdf8';
+
+    // Cor do núcleo conforme o computador
+    const cpuColor = cpu.id === 'cpu_quantum' ? '#f472b6' :
+      cpu.id === 'cpu_nasa' ? '#facc15' : '#1e293b';
+    const cpuEdge = cpu.id === 'cpu_quantum' ? '#fbcfe8' :
+      cpu.id === 'cpu_nasa' ? '#fef08a' : '#475569';
+
+    // Cor da antena conforme a comunicação
+    const commColor = comm.id === 'comm_laser' ? '#f97316' :
+      comm.id === 'comm_dipole' ? '#94a3b8' : '#ffd700';
+
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(Math.sin(time) * 0.04);
 
-    // Asas / Painéis Solares
-    ctx.fillStyle = '#0284c7';
-    ctx.strokeStyle = '#38bdf8';
+    // Asas / Painéis Solares (pintadas pela BATERIA escolhida)
+    ctx.fillStyle = wingColor;
+    ctx.strokeStyle = wingEdge;
     ctx.lineWidth = 1.5;
 
     // Asa esquerda
     ctx.fillRect(-110, -22, 60, 44);
     ctx.strokeRect(-110, -22, 60, 44);
     // Linhas fotovoltaicas
-    ctx.strokeStyle = '#0369a1';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
     ctx.beginPath();
     ctx.moveTo(-80, -22); ctx.lineTo(-80, 22);
     ctx.moveTo(-110, 0); ctx.lineTo(-50, 0);
     ctx.stroke();
 
     // Asa direita
-    ctx.fillStyle = '#0284c7';
-    ctx.strokeStyle = '#38bdf8';
+    ctx.fillStyle = wingColor;
+    ctx.strokeStyle = wingEdge;
     ctx.fillRect(50, -22, 60, 44);
     ctx.strokeRect(50, -22, 60, 44);
-    ctx.strokeStyle = '#0369a1';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
     ctx.beginPath();
     ctx.moveTo(80, -22); ctx.lineTo(80, 22);
     ctx.moveTo(50, 0); ctx.lineTo(110, 0);
@@ -628,12 +671,14 @@ const SatelliteBuilder = {
     ctx.lineWidth = 2.5;
     ctx.strokeRect(-35, -35, 70, 70);
 
-    // Núcleo do processador / CPU
-    ctx.fillStyle = '#1e293b';
+    // Núcleo do processador / CPU (pintado pelo COMPUTADOR escolhido)
+    ctx.fillStyle = cpuColor;
     ctx.fillRect(-20, -20, 40, 40);
+    ctx.strokeStyle = cpuEdge;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-20, -20, 40, 40);
 
-    // Sensor Lente Central
-    const sens = this.parts.sensor[this.equipped.sensor] || this.parts.sensor[0];
+    // Sensor Lente Central (pintado pelo SENSOR escolhido)
     ctx.fillStyle = sens.bestFor === 'agricultura' ? '#10b981' :
       sens.bestFor === 'deslizamentos' ? '#ef4444' :
         sens.bestFor === 'comunicacao' ? '#3b82f6' : '#f97316';
@@ -644,15 +689,15 @@ const SatelliteBuilder = {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Antena no topo
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 2;
+    // Antena no topo (pintada pela COMUNICAÇÃO escolhida)
+    ctx.strokeStyle = commColor;
+    ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(0, -35);
     ctx.lineTo(0, -58);
     ctx.lineTo(14, -64);
     ctx.stroke();
-    ctx.fillStyle = '#ffd700';
+    ctx.fillStyle = commColor;
     ctx.beginPath();
     ctx.arc(14, -64, 5, 0, Math.PI * 2);
     ctx.fill();

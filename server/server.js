@@ -7,6 +7,8 @@ const path = require('path');
 const playersRouter = require('./routes/players');
 const missionsRouter = require('./routes/missions');
 const scoresRouter = require('./routes/scores');
+const weatherRouter = require('./routes/weather');
+const geocodeRouter = require('./routes/geocode');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +24,8 @@ app.use(express.static(path.join(__dirname, '..', 'client')));
 app.use('/api/players', playersRouter);
 app.use('/api/missions', missionsRouter);
 app.use('/api/scores', scoresRouter);
+app.use('/api/weather', weatherRouter);
+app.use('/api/geocode', geocodeRouter);
 
 // Rota de saúde
 app.get('/api/health', (req, res) => {
