@@ -659,6 +659,22 @@
       "satellite_config": {},
       "created_at": "2026-11-15T15:02:52.107Z",
       "updated_at": "2026-11-15T15:02:52.107Z"
+    },
+    {
+      "id": 12,
+      "name": "Líder Espacial",
+      "score": 0,
+      "xp": 0,
+      "level": 1,
+      "coins": 500,
+      "inventory": [
+        "skin_default"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 1,
+      "satellite_config": {},
+      "created_at": "2026-11-15T21:20:49.906Z",
+      "updated_at": "2026-11-15T21:20:49.906Z"
     }
   ],
   "missions": [
