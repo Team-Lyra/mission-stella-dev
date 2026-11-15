@@ -11,7 +11,7 @@ const NPCManager = {
       {
         id: 'iracema',
         zone: 'OUTDOOR',
-        name: 'Dona Iracema',
+        name: 'Dona Marta',
         role: 'Agricultora de Estrela',
         missionId: 1,
         color: '#2a9d8f',
@@ -28,7 +28,7 @@ const NPCManager = {
       {
         id: 'rodrigo',
         zone: 'OUTDOOR',
-        name: 'Capitão Rodrigo',
+        name: 'Capitão Farias',
         role: 'Defesa Civil de Lajeado',
         missionId: 2,
         color: '#e63946',
@@ -45,7 +45,7 @@ const NPCManager = {
       {
         id: 'mariana',
         zone: 'OUTDOOR',
-        name: 'Professora Mariana',
+        name: 'Professora Clara',
         role: 'Escola de Pouso Novo',
         missionId: 3,
         color: '#9b5de5',
@@ -62,8 +62,8 @@ const NPCManager = {
       {
         id: 'karai',
         zone: 'OUTDOOR',
-        name: 'Cacique Karaí',
-        role: 'Guardião da Mata Ciliar',
+        name: 'Seu Nilo',
+        role: 'Guardião do Rio Taquari',
         missionId: 4,
         color: '#588157',
         x: 9 * 48,
@@ -109,8 +109,8 @@ const NPCManager = {
         hatColor: '#0077b6',
         shirtColor: '#90e0ef',
         hairColor: '#e0e1dd',
-        dialog: 'Comandante na sala! A bancada à esquerda está pronta para montarmos sua sonda ou satélite. Quando tudo estiver testado, autorizo a decolagem!',
-        hint: 'Vá até a Bancada de Projetos para construir sua nave!'
+        dialog: 'Bem-vindo à sala de controle! Aqui você acompanha todas as suas operações. Abrindo o Painel de Operações na sua frente...',
+        hint: 'Aperte [E] para abrir o Painel de Operações!'
       },
       {
         id: 'lyra_npc',
@@ -191,36 +191,46 @@ const NPCManager = {
         ctx.fill();
       }
 
-      // Nome do NPC acima dele (fonte maior para acessibilidade)
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 12px "Segoe UI", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(npc.name, rx + npc.w / 2, ry - 8);
+      // Nome do NPC acima dele — mas a Lyra fica SEM nome (não sobrepõe as conversas)
+      if (!npc.isLyra) {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(npc.name, rx + npc.w / 2, ry - 8);
+      }
 
-      // Balão indicador de interação
+      // Balão indicador de interação (largura medida pelo texto — nunca vaza)
       if (isNear) {
         const bounce = Math.sin(time * 3) * 3;
         const bx = rx + npc.w / 2;
         const by = ry - 26 + bounce;
+        const label = 'FALAR [E]';
+
+        ctx.font = 'bold 11px "Segoe UI", sans-serif';
+        const tw = ctx.measureText(label).width;
+        const bw = Math.max(84, tw + 26);
+        const bh = 22;
 
         // Fundo do balão
         ctx.fillStyle = '#ffd700';
         ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(bx - 42, by - 14, 84, 22, 7) : ctx.rect(bx - 42, by - 14, 84, 22);
+        ctx.roundRect ? ctx.roundRect(bx - bw / 2, by - 14, bw, bh, 7) : ctx.rect(bx - bw / 2, by - 14, bw, bh);
         ctx.fill();
 
         // Triângulo do balão
         ctx.beginPath();
-        ctx.moveTo(bx - 5, by + 8);
-        ctx.lineTo(bx + 5, by + 8);
+        ctx.moveTo(bx - 5, by + 7);
+        ctx.lineTo(bx + 5, by + 7);
         ctx.lineTo(bx, by + 13);
         ctx.closePath();
         ctx.fill();
 
-        // Texto no balão
+        // Texto no balão (centralizado na vertical e na horizontal)
         ctx.fillStyle = '#0a0a2e';
-        ctx.font = 'bold 12px "Segoe UI", sans-serif';
-        ctx.fillText('FALAR [E]', bx, by + 2);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, bx, by - 3.5);
+        ctx.textBaseline = 'alphabetic';
       } else {
         // Ponto de exclamação dourado flutuando
         const bounce = Math.sin(time + npc.x) * 2;

@@ -214,44 +214,56 @@ const SpaceShop = {
       const isOwned = player && player.inventory && player.inventory.includes(item.id);
       const isEquipped = item.type === 'skin' && player && player.active_skin === item.skinId;
 
-      // Card fundo
-      ctx.fillStyle = isSel ? 'rgba(0, 180, 216, 0.3)' : 'rgba(255, 255, 255, 0.05)';
+      // Card fundo — seleção bem viva (brilhante) para as crianças
+      if (isSel) {
+        const glow = 0.75 + 0.25 * Math.sin(Date.now() / 200);
+        ctx.fillStyle = `rgba(0, 180, 216, ${0.35 * glow + 0.25})`;
+      } else if (isOwned) {
+        ctx.fillStyle = 'rgba(82, 183, 136, 0.18)';
+      } else {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+      }
       ctx.fillRect(cardX, iy, cardW, itemH);
 
-      ctx.strokeStyle = isSel ? '#ffd700' : (isOwned ? '#52b788' : 'rgba(255, 255, 255, 0.2)');
-      ctx.lineWidth = isSel ? 2.5 : 1;
+      ctx.strokeStyle = isSel ? '#ffd700' : (isOwned ? '#52b788' : 'rgba(255, 255, 255, 0.25)');
+      ctx.lineWidth = isSel ? 3 : (isOwned ? 2 : 1);
       ctx.strokeRect(cardX, iy, cardW, itemH);
 
-      // Ícone
-      ctx.font = '28px "Segoe UI", sans-serif';
+      // Ícone — grande e brilhante quando selecionado
+      ctx.font = isSel ? '36px "Segoe UI", sans-serif' : '28px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(item.icon, cardX + 35, iy + 45);
+      if (isSel) {
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 18;
+      }
+      ctx.fillText(item.icon, cardX + (isSel ? 38 : 35), iy + (isSel ? 47 : 45));
+      ctx.shadowBlur = 0;
 
       // Nome do item
       ctx.textAlign = 'left';
-      ctx.fillStyle = isSel ? '#ffd700' : '#ffffff';
-      ctx.font = 'bold 17px "Segoe UI", sans-serif';
+      ctx.fillStyle = isSel ? '#ffd700' : (isOwned ? '#7ee2b8' : '#ffffff');
+      ctx.font = 'bold 18px "Segoe UI", sans-serif';
       ctx.fillText((isSel ? '▸ ' : '') + item.name, cardX + 70, iy + 28);
 
       // Descrição simples e legível (8-12 anos)
-      ctx.fillStyle = '#adb5bd';
-      ctx.font = '14px "Segoe UI", sans-serif';
+      ctx.fillStyle = isSel ? '#e0f2fe' : '#adb5bd';
+      ctx.font = '15px "Segoe UI", sans-serif';
       ctx.fillText(item.desc, cardX + 70, iy + 52, cardW - 240);
 
       // Preço ou Status
       ctx.textAlign = 'right';
       if (isEquipped) {
         ctx.fillStyle = '#00f5d4';
-        ctx.font = 'bold 15px "Segoe UI", sans-serif';
+        ctx.font = 'bold 16px "Segoe UI", sans-serif';
         ctx.fillText('✓ EQUIPADO', cardX + cardW - 20, iy + 42);
       } else if (isOwned) {
-        ctx.fillStyle = '#52b788';
-        ctx.font = 'bold 15px "Segoe UI", sans-serif';
+        ctx.fillStyle = isSel ? '#52ff9d' : '#52b788';
+        ctx.font = 'bold 16px "Segoe UI", sans-serif';
         ctx.fillText(item.type === 'skin' ? 'USAR [ENTER]' : '✓ ADQUIRIDO', cardX + cardW - 20, iy + 42);
       } else {
         const canAfford = coins >= item.price;
         ctx.fillStyle = canAfford ? '#ffd700' : '#e63946';
-        ctx.font = 'bold 16px "Segoe UI", sans-serif';
+        ctx.font = 'bold 17px "Segoe UI", sans-serif';
         ctx.fillText(`🪙 ${item.price} coins`, cardX + cardW - 20, iy + 42);
       }
     }

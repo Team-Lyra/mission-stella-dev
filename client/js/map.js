@@ -64,7 +64,6 @@ const GameMap = {
     workshop: { x: 3.5 * 48, y: 3.5 * 48, w: 2 * 48, h: 2 * 48, label: '🔬 Bancada de Engenharia' },
     ranking: { x: 8 * 48, y: 1.5 * 48, w: 3 * 48, h: 2 * 48, label: '🏆 Telão de Ranking' },
     shop: { x: 12.5 * 48, y: 3.5 * 48, w: 2 * 48, h: 2 * 48, label: '🛍️ Lojinha Espacial' },
-    missionOps: { x: 8 * 48, y: 5.5 * 48, w: 2 * 48, h: 1.5 * 48, label: '🗺️ Painel de Operações' },
     exit: { x: 8 * 48, y: 10.5 * 48, w: 3 * 48, h: 1.5 * 48, label: '🚪 Sair para o Vale' }
   },
 
@@ -443,20 +442,27 @@ const GameMap = {
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
     ctx.fillText('🚪 ENTRADA [Pressione E ou Entre]', doorX, doorY - 22 + pulse);
 
-    // Placa Rio Taquari
+    // Placa Rio Taquari — vertical, cabendo DENTRO da faixa do rio
     const rioX = 17 * s - cameraX;
     const rioY = 9 * s - cameraY;
+    ctx.save();
+    ctx.translate(rioX, rioY);
+    ctx.rotate(-Math.PI / 2);
     ctx.fillStyle = 'rgba(0, 50, 100, 0.85)';
-    ctx.fillRect(rioX - 60, rioY - 14, 120, 24);
+    ctx.fillRect(-66, -13, 132, 26);
+    ctx.strokeStyle = '#90e0ef';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(-66, -13, 132, 26);
     ctx.fillStyle = '#90e0ef';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('🌊 Rio Taquari', rioX, rioY + 2);
+    ctx.fillText('🌊 Rio Taquari', 0, 4);
+    ctx.restore();
 
     // Placa Lavoura de Estrela
     const lavX = 22 * s - cameraX;
     const lavY = 2 * s - cameraY;
     ctx.fillStyle = 'rgba(40, 25, 10, 0.85)';
-    ctx.fillRect(lavX - 70, lavY - 14, 140, 24);
+    ctx.fillRect(lavX - 85, lavY - 14, 170, 24);
     ctx.fillStyle = '#e9d8a6';
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
     ctx.fillText('🌾 Lavouras de Estrela', lavX, lavY + 2);
@@ -469,66 +475,49 @@ const GameMap = {
     ctx.save();
     ctx.textAlign = 'center';
 
+    // Pulso chamativo para as dicas de tecla [E] (crianças)
+    const pulse = 0.6 + 0.4 * Math.sin(Date.now() / 300);
+    const drawStationLabel = (x, y, label, bg, border) => {
+      ctx.fillStyle = bg;
+      ctx.fillRect(x - 105, y - 16, 210, 26);
+      ctx.strokeStyle = border;
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(x - 105, y - 16, 210, 26);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12px "Segoe UI", sans-serif';
+      ctx.fillText(label, x - 12, y + 2);
+      // Badge [E] pulsante
+      ctx.fillStyle = `rgba(255, 215, 0, ${pulse})`;
+      ctx.fillRect(x + 72, y - 11, 30, 18);
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x + 72, y - 11, 30, 18);
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 12px "Segoe UI", sans-serif';
+      ctx.fillText('E', x + 87, y + 2);
+    };
+
     // Rótulo da Bancada de Montagem
     const wX = 4.5 * s - cameraX;
     const wY = 2.5 * s - cameraY;
-    ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
-    ctx.fillRect(wX - 85, wY - 16, 170, 26);
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(wX - 85, wY - 16, 170, 26);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('🔬 BANCADA DE PROJETOS', wX, wY + 2);
+    drawStationLabel(wX, wY, '🔬 BANCADA DE PROJETOS', 'rgba(2, 132, 199, 0.9)', '#ffd700');
 
-    // Rótulo do Telão de Ranking
+    // Rótulo do Telão de Ranking (escrito ABAIXO do telão, não escondido pelo HUD)
     const rX = 9.5 * s - cameraX;
-    const rY = 0.8 * s - cameraY;
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-    ctx.fillRect(rX - 95, rY - 16, 190, 26);
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(rX - 95, rY - 16, 190, 26);
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('🏆 TELÃO DE RANKING DA NASA', rX, rY + 2);
+    const rY = 3.9 * s - cameraY;
+    drawStationLabel(rX, rY, '🏆 TELÃO DE RANKING', 'rgba(15, 23, 42, 0.95)', '#38bdf8');
 
     // Rótulo da Lojinha Espacial
     const sX = 14.5 * s - cameraX;
     const sY = 2.5 * s - cameraY;
-    ctx.fillStyle = 'rgba(124, 58, 237, 0.9)';
-    ctx.fillRect(sX - 85, sY - 16, 170, 26);
-    ctx.strokeStyle = '#c084fc';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(sX - 85, sY - 16, 170, 26);
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('🛍️ LOJINHA ESPACIAL', sX, sY + 2);
+    drawStationLabel(sX, sY, '🛍️ LOJINHA ESPACIAL', 'rgba(124, 58, 237, 0.9)', '#c084fc');
 
     // Rótulo da Porta de Saída
     const eX = 9.5 * s - cameraX;
     const eY = 12 * s - cameraY;
-    ctx.fillStyle = 'rgba(225, 29, 72, 0.9)';
-    ctx.fillRect(eX - 80, eY - 14, 160, 24);
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(eX - 80, eY - 14, 160, 24);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('🚪 SAÍDA (VALE DO TAQUARI)', eX, eY + 2);
+    drawStationLabel(eX, eY, '🚪 SAÍDA (VALE DO TAQUARI)', 'rgba(225, 29, 72, 0.9)', '#ffd700');
 
-    // Rótulo do Painel de Operações (Terminal Central)
-    const opX = 9 * s - cameraX;
-    const opY = 5.5 * s - cameraY;
-    const opPulse = Math.sin(Date.now() / 300) * 0.3 + 0.7;
-    ctx.fillStyle = `rgba(0, 180, 216, ${opPulse * 0.9})`;
-    ctx.fillRect(opX - 100, opY - 16, 200, 26);
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(opX - 100, opY - 16, 200, 26);
-    ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('🗺️ PAINEL DE OPERAÇÕES [E]', opX, opY + 2);
+    // (Painel de Operações agora abre só falando com o Diretor na sala de controle)
 
     ctx.restore();
   }

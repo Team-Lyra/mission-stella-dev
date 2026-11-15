@@ -50,22 +50,61 @@ const NasaAudio = {
     setTimeout(() => this.playTone(554.37, 0.1, 'sine', 0.1), 90);
     setTimeout(() => this.playTone(659.25, 0.22, 'sine', 0.14), 180);
   },
+  // Rugido de decolagem: explosão inicial + ruído filtrado + motor grave
   igniteRumble() {
     try {
       this.init();
       if (!this.ctx) return;
       if (this.ctx.state === 'suspended') this.ctx.resume();
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(85, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(26, this.ctx.currentTime + 3.2);
-      gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 3.2);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 3.2);
+      const ctx = this.ctx;
+      const t0 = ctx.currentTime;
+      const dur = 3.6;
+
+      // 1) Ruído branco com envelope de tremor (fogos de artifício / exaustão)
+      const bufferSize = Math.floor(ctx.sampleRate * dur);
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const t = i / bufferSize;
+        const tremor = 0.72 + 0.28 * Math.sin(t * 55) + 0.12 * Math.sin(t * 130);
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, 1.45) * tremor;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      const lowpass = ctx.createBiquadFilter();
+      lowpass.type = 'lowpass';
+      lowpass.frequency.setValueAtTime(260, t0);
+      lowpass.frequency.exponentialRampToValueAtTime(1400, t0 + 0.28); // entra no ignitor
+      lowpass.frequency.exponentialRampToValueAtTime(110, t0 + dur);   // decai aos poucos
+      lowpass.Q.setValueAtTime(9, t0);
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.0001, t0);
+      noiseGain.gain.exponentialRampToValueAtTime(0.55, t0 + 0.06); // BUM de ignição
+      noiseGain.gain.setValueAtTime(0.45, t0 + 0.45);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      noise.connect(lowpass);
+      lowpass.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noise.start(t0);
+      noise.stop(t0 + dur);
+
+      // 2) Motor grave que sobe no ignitar e desce ao esvair
+      const osc = ctx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(34, t0);
+      osc.frequency.exponentialRampToValueAtTime(150, t0 + 0.55); // sobe no ignitar
+      osc.frequency.exponentialRampToValueAtTime(42, t0 + dur - 0.2);
+      const oscGain = ctx.createGain();
+      oscGain.gain.setValueAtTime(0.0001, t0);
+      oscGain.gain.exponentialRampToValueAtTime(0.3, t0 + 0.1);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur);
+
+      // 3) Estalo agudo do ignitor (clique de acender)
+      this.playTone(90, 0.09, 'square', 0.22);
     } catch (e) {}
   }
 };
@@ -650,16 +689,16 @@ const LaunchMinigame = {
 
     if (this.problemType === 'agricultura') {
       title = '🌿 NASA LANDSAT-9 • SCANNER NDVI DE LAVOURAS (POINT & CLICK)';
-      subtitle = 'Missão: Dona Iracema (Estrela) • Clique nos talhões para achar os 3 focos de praga';
+      subtitle = 'Missão: Dona Marta (Estrela) • Clique nos talhões para achar os 3 focos de praga';
     } else if (this.problemType === 'comunicacao') {
       title = '📡 NASA SCaN & TDRS • CONSOLE DE DIGITAÇÃO DE TELEMETRIA';
-      subtitle = 'Missão: Profª Mariana (Pouso Novo) • Digite os comandos de uplink pelo teclado e dê Enter';
+      subtitle = 'Missão: Profª Clara (Pouso Novo) • Digite os comandos de uplink pelo teclado e dê Enter';
     } else if (this.problemType === 'deslizamentos') {
       title = '⛰️ NASA NISAR • RADAR SAR DE PENETRAÇÃO (TIMING NO MOMENTO EXATO)';
-      subtitle = 'Missão: Capitão Rodrigo (Lajeado) • Aperte [ESPAÇO] na FAIXA VERDE para atravessar a chuva';
+      subtitle = 'Missão: Capitão Farias (Lajeado) • Aperte [ESPAÇO] na FAIXA VERDE para atravessar a chuva';
     } else {
       title = '🔥 NASA FIRMS • FILTRO RADIOMÉTRICO TERMAL (ARRASTAR COM O MOUSE)';
-      subtitle = 'Missão: Cacique Karaí (Rio Taquari) • Arraste a Lente Térmica sobre o rio para achar o fogo';
+      subtitle = 'Missão: Seu Nilo (Rio Taquari) • Arraste a Lente Térmica sobre o rio para achar o fogo';
     }
 
     ctx.textAlign = 'left';

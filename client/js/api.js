@@ -81,11 +81,15 @@ const API = {
     return this.currentPlayer;
   },
 
-  /** Marca status da missão (SUCCESS ou FAILED) — Bloqueio: 1 tentativa */
+  /** Marca status da missão (SUCCESS, FAILED ou null p/ limpar) */
   setMissionStatus(missionId, status) {
     if (!this.currentPlayer) return;
     if (!this.currentPlayer.completed_missions) this.currentPlayer.completed_missions = {};
-    this.currentPlayer.completed_missions[missionId] = status;
+    if (status === null || status === undefined) {
+      delete this.currentPlayer.completed_missions[missionId];
+    } else {
+      this.currentPlayer.completed_missions[missionId] = status;
+    }
     localStorage.setItem('missaoTaquari_completed_missions', JSON.stringify(this.currentPlayer.completed_missions));
   },
 
@@ -218,8 +222,8 @@ const API = {
         title: "Operação Solo Fértil",
         problem_type: "agricultura",
         difficulty: 1,
-        npc_name: "Dona Iracema",
-        npc_dialog: "Olá, jovem líder! Sou a Dona Iracema, agricultora aqui em Estrela. Uma praga misteriosa está atacando as plantações de milho e soja! Se a gente conseguisse analisar a lavoura do espaço com satélites, podíamos agir antes de perder tudo. Você pode nos ajudar a construir um satélite de monitoramento?",
+        npc_name: "Dona Marta",
+        npc_dialog: "Olá, jovem líder! Sou a Dona Marta, agricultora aqui em Estrela. Uma praga misteriosa está atacando as plantações de milho e soja! Se a gente conseguisse analisar a lavoura do espaço com satélites, podíamos agir antes de perder tudo. Você pode nos ajudar a construir um satélite de monitoramento?",
         solution_text: "Excelente! Satélite multiespectral em órbita gerando mapas NDVI que detectam estresse vegetal antes dos danos visíveis.",
         impact_text: "Com os dados do satélite, 78% das plantações do Vale do Taquari foram salvas e o uso de agrotóxicos foi reduzido em 40%!",
         nasa_tips: "🛰️ DICA NASA: Câmeras multiespectrais capturam luz no infravermelho próximo (NIR). Plantas com fotossíntese saudável refletem muito mais infravermelho!"
@@ -229,8 +233,8 @@ const API = {
         title: "Operação Sentinela das Encostas",
         problem_type: "deslizamentos",
         difficulty: 2,
-        npc_name: "Capitão Rodrigo",
-        npc_dialog: "Comandante! Sou o Capitão Rodrigo da Defesa Civil de Lajeado. Após chuvas fortes, as encostas do vale correm perigo de deslizamento. Precisamos de radar de satélite para vigiar a movimentação do terreno mesmo através das nuvens!",
+        npc_name: "Capitão Farias",
+        npc_dialog: "Comandante! Sou o Capitão Farias da Defesa Civil de Lajeado. Após chuvas fortes, as encostas do vale correm perigo de deslizamento. Precisamos de radar de satélite para vigiar a movimentação do terreno mesmo através das nuvens!",
         solution_text: "Satélite com radar SAR em órbita baixa LEO monitorando milímetros de deformação no solo com interferometria.",
         impact_text: "Sistema de alerta precoce protegeu 50.000 moradores e evitou desastres nas rodovias do Vale do Taquari!",
         nasa_tips: "🛰️ DICA NASA: O radar SAR (Synthetic Aperture Radar) emite pulsos de micro-ondas que atravessam nuvens, fumaça e operam tanto de dia quanto à noite!"
@@ -240,8 +244,8 @@ const API = {
         title: "Operação Conexão Taquari",
         problem_type: "comunicacao",
         difficulty: 3,
-        npc_name: "Professora Mariana",
-        npc_dialog: "Olá, líder espacial! Sou a Professora Mariana da Escola de Pouso Novo. Nossos alunos e produtores rurais estão completamente sem sinal de internet e telefone. Pode criar um satélite de retransmissão de dados para nossa região?",
+        npc_name: "Professora Clara",
+        npc_dialog: "Olá, líder espacial! Sou a Professora Clara da Escola de Pouso Novo. Nossos alunos e produtores rurais estão completamente sem sinal de internet e telefone. Pode criar um satélite de retransmissão de dados para nossa região?",
         solution_text: "Satélite de retransmissão banda Ku com antenas direcionais e painéis solares autônomos em órbita.",
         impact_text: "47 comunidades rurais isoladas conectadas! Alunos agora têm aulas online e produtores monitoram o mercado em tempo real.",
         nasa_tips: "🛰️ DICA NASA: A NASA usa redes como a TDRS e a Deep Space Network para manter comunicações de alta velocidade contínuas pelo espaço!"
@@ -251,8 +255,8 @@ const API = {
         title: "Operação Guardião das Águas e Matas",
         problem_type: "florestal",
         difficulty: 3,
-        npc_name: "Cacique Karaí",
-        npc_dialog: "Saudações, líder! Sou o Cacique Karaí. As matas ciliares do Rio Taquari protegem nossas águas, mas desmatadores e queimadas estão destruindo a floresta. Ajude-nos com um satélite para monitorar e vigiar as matas!",
+        npc_name: "Seu Nilo",
+        npc_dialog: "Saudações, líder! Sou o Seu Nilo. As matas ciliares do Rio Taquari protegem nossas águas, mas desmatadores e queimadas estão destruindo a floresta. Ajude-nos com um satélite para monitorar e vigiar as matas!",
         solution_text: "Sistema óptico de alta definição e sensores termais infravermelhos integrados a alertas em tempo real.",
         impact_text: "Desmatamento ilegal reduzido em 62%! 45 focos de calor controlados e 1.200 hectares de mata atlântica preservados.",
         nasa_tips: "🛰️ DICA NASA: O sistema FIRMS da NASA monitora queimadas no planeta inteiro em tempo quase real usando satélites MODIS e VIIRS!"

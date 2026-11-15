@@ -57,6 +57,21 @@ const UI = {
     NasaAudio.typeKey();
   },
 
+  /** Clique no diálogo: botão clicado vira a seleção (e confirma); demais cliques só avançam */
+  handleDialogClick(mx, my) {
+    if (!this.dialog.active) return null;
+    if (this.dialog.finished && this.dialog.options && this.dialog.optionButtons) {
+      for (let i = 0; i < this.dialog.optionButtons.length; i++) {
+        const b = this.dialog.optionButtons[i];
+        if (mx >= b.x && mx <= b.x + b.w && my >= b.y && my <= b.y + b.h) {
+          this.dialog.selectedOption = i;
+          return this.advanceDialog();
+        }
+      }
+    }
+    return this.advanceDialog();
+  },
+
   advanceDialog() {
     if (!this.dialog.active) return null;
 
@@ -129,8 +144,15 @@ const UI = {
 
     ctx.save();
     const boxW = Math.min(760, w - 40);
-    const boxH = 185;
     const boxX = (w - boxW) / 2;
+
+    // Altura DINÂMICA: a caixa cresce para o texto nunca invadir os botões
+    // (mede pelo texto COMPLETO, não pelo efeito de digitação, para não tremer)
+    const textW = boxW - 120;
+    ctx.font = '17px "Segoe UI", sans-serif';
+    const textLines = this.countDialogLines(ctx, this.dialog.text, textW);
+    const optionsH = this.dialog.options ? 66 : 30; // espaço reservado aos botões
+    const boxH = Math.min(Math.max(185, 48 + textLines * 24 + optionsH + 14), h - 40);
     const boxY = h - boxH - 25;
 
     // Fundo do diálogo com borda dourada
@@ -176,25 +198,60 @@ const UI = {
     ctx.font = '17px "Segoe UI", sans-serif';
     this.wrapText(ctx, this.dialog.displayText, boxX + 95, boxY + 48, boxW - 120, 24);
 
-    // Opções de escolha se houver
+    // Opções de escolha — botões dimensionados pelo tamanho do texto (nunca corta a escrita)
     if (this.dialog.options && this.dialog.finished) {
-      const optY = boxY + boxH - 48;
-      const optW = 200;
-      for (let i = 0; i < this.dialog.options.length; i++) {
-        const ox = boxX + 95 + i * (optW + 15);
+      const btnH = 36;
+      const optY = boxY + boxH - optionsH + 6; // dentro da zona reservada aos botões
+      const innerX = boxX + 95;
+      const avail = boxW - 120;
+      const GAP = 12;
+      const n = this.dialog.options.length;
+
+      // Mede o maior rótulo (com a setinha "▸ ") e ajusta a fonte até caber na caixa
+      let fontPx = 16;
+      const measure = () => {
+        ctx.font = `bold ${fontPx}px "Segoe UI", sans-serif`;
+        return Math.max(...this.dialog.options.map(o => ctx.measureText('▸ ' + o).width));
+      };
+      let optW = Math.ceil(measure()) + 44;
+      while (optW * n + GAP * (n - 1) > avail && fontPx > 11) {
+        fontPx -= 1;
+        optW = Math.ceil(measure()) + 44;
+      }
+
+      this.dialog.optionButtons = [];
+      for (let i = 0; i < n; i++) {
+        const ox = innerX + i * (optW + GAP);
         const isSelected = i === this.dialog.selectedOption;
+        this.dialog.optionButtons.push({ x: ox, y: optY, w: optW, h: btnH });
+
+        // Texto garantidamente menor que o botão (corta com reticências se preciso)
+        ctx.font = `bold ${fontPx}px "Segoe UI", sans-serif`;
+        let label = this.dialog.options[i];
+        const maxTextW = optW - 36;
+        if (ctx.measureText(label).width > maxTextW) {
+          while (label.length > 1 && ctx.measureText(label + '…').width > maxTextW) {
+            label = label.slice(0, -1);
+          }
+          label = label + '…';
+        }
 
         ctx.fillStyle = isSelected ? 'rgba(0, 180, 216, 0.4)' : 'rgba(255, 255, 255, 0.08)';
-        ctx.fillRect(ox, optY - 8, optW, 36);
+        ctx.fillRect(ox, optY, optW, btnH);
         ctx.strokeStyle = isSelected ? '#ffd700' : 'rgba(255, 255, 255, 0.2)';
         ctx.lineWidth = isSelected ? 2 : 1;
-        ctx.strokeRect(ox, optY - 8, optW, 36);
+        ctx.strokeRect(ox, optY, optW, btnH);
 
+        // Escrita verticalmente centrada no botão (textBaseline middle)
         ctx.fillStyle = isSelected ? '#ffd700' : '#ffffff';
-        ctx.font = isSelected ? 'bold 16px "Segoe UI", sans-serif' : '15px "Segoe UI", sans-serif';
+        ctx.font = isSelected ? `bold ${fontPx}px "Segoe UI", sans-serif` : `${Math.max(fontPx - 1, 12)}px "Segoe UI", sans-serif`;
         ctx.textAlign = 'center';
-        ctx.fillText((isSelected ? '▸ ' : '') + this.dialog.options[i], ox + optW / 2, optY + 16);
+        ctx.textBaseline = 'middle';
+        ctx.fillText((isSelected ? '▸ ' : '') + label, ox + optW / 2, optY + btnH / 2 + 1);
+        ctx.textBaseline = 'top';
       }
+    } else {
+      this.dialog.optionButtons = null;
     }
 
     // Indicador de "Pressione ENTER / ESPAÇO"
@@ -209,6 +266,24 @@ const UI = {
     }
 
     ctx.restore();
+  },
+
+  /** Conta quantas linhas o texto ocupa com quebra (para altura dinâmica da caixa) */
+  countDialogLines(ctx, text, maxW) {
+    if (!text) return 1;
+    const words = String(text).split(' ');
+    let lines = 1;
+    let line = '';
+    for (const word of words) {
+      const test = line + word + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        lines++;
+        line = word + ' ';
+      } else {
+        line = test;
+      }
+    }
+    return lines;
   },
 
   wrapText(ctx, text, x, y, maxW, lineH) {

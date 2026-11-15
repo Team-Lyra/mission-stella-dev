@@ -67,7 +67,12 @@
         }
       },
       "created_at": "2026-11-14T17:25:53.304Z",
-      "updated_at": "2026-11-14T17:45:53.325Z"
+      "updated_at": "2026-11-15T13:54:33.073Z",
+      "coins": 250,
+      "inventory": [
+        "skin_default",
+        "battery_graphene"
+      ]
     },
     {
       "id": 4,
@@ -176,6 +181,484 @@
         "gold_antenna"
       ],
       "active_skin": "neon"
+    },
+    {
+      "id": 5,
+      "name": "Líder Espacial",
+      "score": 4700,
+      "xp": 1800,
+      "level": 4,
+      "coins": 550,
+      "inventory": [
+        "skin_default",
+        "skin_neon",
+        "pet_bit",
+        "skin_gold"
+      ],
+      "active_skin": "gold",
+      "current_mission": 5,
+      "satellite_config": {
+        "name": "STELA-1 (Guardiã do Vale)",
+        "crew": {
+          "id": "auto",
+          "name": "Sonda Robótica Automática",
+          "icon": "🛰️",
+          "desc": "100% autônoma, leve e rápida",
+          "bonus": "+15 Eficiência de Voo"
+        },
+        "sensor": {
+          "id": "thermal_ir",
+          "name": "Sensor Térmico Infravermelho",
+          "bestFor": "florestal",
+          "rel": 60,
+          "mass": 12,
+          "icon": "🔥",
+          "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+        },
+        "battery": {
+          "id": "bat_rtg",
+          "name": "Gerador Térmico Nuclear (RTG)",
+          "energy": 65,
+          "mass": 18,
+          "icon": "⚡",
+          "desc": "Potência máxima e imune a noites escuras."
+        },
+        "cpu": {
+          "id": "cpu_nasa",
+          "name": "Computador de Voo Blindado NASA",
+          "rel": 55,
+          "mass": 7,
+          "icon": "💻",
+          "desc": "Resistente a tempestades solares e radiação."
+        },
+        "comms": {
+          "id": "comm_ku",
+          "name": "Transponder Banda Ku de Alta Velocidade",
+          "rel": 55,
+          "mass": 6,
+          "icon": "📡",
+          "desc": "Transmite imagens e mapas em alta definição."
+        },
+        "stats": {
+          "energy": 100,
+          "mass": 68,
+          "reliability": 62,
+          "successRate": 83,
+          "isBestSensor": true,
+          "bat": {
+            "id": "bat_rtg",
+            "name": "Gerador Térmico Nuclear (RTG)",
+            "energy": 65,
+            "mass": 18,
+            "icon": "⚡",
+            "desc": "Potência máxima e imune a noites escuras."
+          },
+          "cpu": {
+            "id": "cpu_nasa",
+            "name": "Computador de Voo Blindado NASA",
+            "rel": 55,
+            "mass": 7,
+            "icon": "💻",
+            "desc": "Resistente a tempestades solares e radiação."
+          },
+          "comm": {
+            "id": "comm_ku",
+            "name": "Transponder Banda Ku de Alta Velocidade",
+            "rel": 55,
+            "mass": 6,
+            "icon": "📡",
+            "desc": "Transmite imagens e mapas em alta definição."
+          },
+          "sens": {
+            "id": "thermal_ir",
+            "name": "Sensor Térmico Infravermelho",
+            "bestFor": "florestal",
+            "rel": 60,
+            "mass": 12,
+            "icon": "🔥",
+            "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+          },
+          "crew": {
+            "id": "auto",
+            "name": "Sonda Robótica Automática",
+            "icon": "🛰️",
+            "desc": "100% autônoma, leve e rápida",
+            "bonus": "+15 Eficiência de Voo"
+          }
+        }
+      },
+      "created_at": "2026-11-15T12:58:02.906Z",
+      "updated_at": "2026-11-15T13:18:57.024Z"
+    },
+    {
+      "id": 6,
+      "name": "Líder Espacial",
+      "score": 0,
+      "xp": 0,
+      "level": 1,
+      "coins": 500,
+      "inventory": [
+        "skin_default"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 1,
+      "satellite_config": {},
+      "created_at": "2026-11-15T13:34:37.790Z",
+      "updated_at": "2026-11-15T13:34:37.790Z"
+    },
+    {
+      "id": 7,
+      "name": "Líder Espacial",
+      "score": 0,
+      "xp": 0,
+      "level": 1,
+      "coins": 250,
+      "inventory": [
+        "skin_default",
+        "battery_graphene"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 1,
+      "satellite_config": {},
+      "created_at": "2026-11-15T13:36:42.142Z",
+      "updated_at": "2026-11-15T13:37:35.138Z"
+    },
+    {
+      "id": 8,
+      "name": "Líder Espacial",
+      "score": 4700,
+      "xp": 2250,
+      "level": 4,
+      "coins": 1750,
+      "inventory": [
+        "skin_default",
+        "battery_graphene"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 4,
+      "satellite_config": {
+        "name": "STELA-1 (Guardiã do Vale)",
+        "crew": {
+          "id": "auto",
+          "name": "Sonda Robótica Automática",
+          "icon": "🛰️",
+          "desc": "100% autônoma, leve e rápida",
+          "bonus": "+15 Eficiência de Voo"
+        },
+        "sensor": {
+          "id": "comms_ku",
+          "name": "Transponder Rural Banda Ku",
+          "bestFor": "comunicacao",
+          "rel": 60,
+          "mass": 10,
+          "icon": "📶",
+          "desc": "Retransmite internet e sinal telefônico para áreas rurais!"
+        },
+        "battery": {
+          "id": "bat_solar",
+          "name": "Bateria Solar NASA",
+          "energy": 35,
+          "mass": 8,
+          "icon": "☀️",
+          "desc": "Recarrega com a luz do Sol no espaço."
+        },
+        "cpu": {
+          "id": "cpu_basic",
+          "name": "Processador SCaN Básico",
+          "rel": 35,
+          "mass": 4,
+          "icon": "📟",
+          "desc": "Processador estável e de baixo consumo."
+        },
+        "comms": {
+          "id": "comm_dipole",
+          "name": "Antena Dipolo Simples",
+          "rel": 30,
+          "mass": 3,
+          "icon": "📻",
+          "desc": "Comunicação de rádio padrão confiável."
+        },
+        "stats": {
+          "energy": 100,
+          "mass": 50,
+          "reliability": 47,
+          "successRate": 76,
+          "isBestSensor": true,
+          "bat": {
+            "id": "bat_solar",
+            "name": "Bateria Solar NASA",
+            "energy": 35,
+            "mass": 8,
+            "icon": "☀️",
+            "desc": "Recarrega com a luz do Sol no espaço."
+          },
+          "cpu": {
+            "id": "cpu_basic",
+            "name": "Processador SCaN Básico",
+            "rel": 35,
+            "mass": 4,
+            "icon": "📟",
+            "desc": "Processador estável e de baixo consumo."
+          },
+          "comm": {
+            "id": "comm_dipole",
+            "name": "Antena Dipolo Simples",
+            "rel": 30,
+            "mass": 3,
+            "icon": "📻",
+            "desc": "Comunicação de rádio padrão confiável."
+          },
+          "sens": {
+            "id": "comms_ku",
+            "name": "Transponder Rural Banda Ku",
+            "bestFor": "comunicacao",
+            "rel": 60,
+            "mass": 10,
+            "icon": "📶",
+            "desc": "Retransmite internet e sinal telefônico para áreas rurais!"
+          },
+          "crew": {
+            "id": "auto",
+            "name": "Sonda Robótica Automática",
+            "icon": "🛰️",
+            "desc": "100% autônoma, leve e rápida",
+            "bonus": "+15 Eficiência de Voo"
+          }
+        }
+      },
+      "created_at": "2026-11-15T14:08:21.124Z",
+      "updated_at": "2026-11-15T14:40:04.170Z"
+    },
+    {
+      "id": 9,
+      "name": "Líder Espacial",
+      "score": 4700,
+      "xp": 1800,
+      "level": 4,
+      "coins": 350,
+      "inventory": [
+        "skin_default",
+        "pet_bit",
+        "skin_neon",
+        "quantum_cpu",
+        "gold_antenna"
+      ],
+      "active_skin": "neon",
+      "current_mission": 5,
+      "satellite_config": {
+        "name": "Eco-Taquari Orbital",
+        "crew": {
+          "id": "auto",
+          "name": "Sonda Robótica Automática",
+          "icon": "🛰️",
+          "desc": "100% autônoma, leve e rápida",
+          "bonus": "+15 Eficiência de Voo"
+        },
+        "sensor": {
+          "id": "thermal_ir",
+          "name": "Sensor Térmico Infravermelho",
+          "bestFor": "florestal",
+          "rel": 60,
+          "mass": 12,
+          "icon": "🔥",
+          "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+        },
+        "battery": {
+          "id": "bat_solar",
+          "name": "Bateria Solar NASA",
+          "energy": 35,
+          "mass": 8,
+          "icon": "☀️",
+          "desc": "Recarrega com a luz do Sol no espaço."
+        },
+        "cpu": {
+          "id": "cpu_basic",
+          "name": "Processador SCaN Básico",
+          "rel": 35,
+          "mass": 4,
+          "icon": "📟",
+          "desc": "Processador estável e de baixo consumo."
+        },
+        "comms": {
+          "id": "comm_ku",
+          "name": "Transponder Banda Ku de Alta Velocidade",
+          "rel": 55,
+          "mass": 6,
+          "icon": "📡",
+          "desc": "Transmite imagens e mapas em alta definição."
+        },
+        "stats": {
+          "energy": 85,
+          "mass": 55,
+          "reliability": 90,
+          "successRate": 90,
+          "isBestSensor": true,
+          "bat": {
+            "id": "bat_solar",
+            "name": "Bateria Solar NASA",
+            "energy": 35,
+            "mass": 8,
+            "icon": "☀️",
+            "desc": "Recarrega com a luz do Sol no espaço."
+          },
+          "cpu": {
+            "id": "cpu_basic",
+            "name": "Processador SCaN Básico",
+            "rel": 35,
+            "mass": 4,
+            "icon": "📟",
+            "desc": "Processador estável e de baixo consumo."
+          },
+          "comm": {
+            "id": "comm_ku",
+            "name": "Transponder Banda Ku de Alta Velocidade",
+            "rel": 55,
+            "mass": 6,
+            "icon": "📡",
+            "desc": "Transmite imagens e mapas em alta definição."
+          },
+          "sens": {
+            "id": "thermal_ir",
+            "name": "Sensor Térmico Infravermelho",
+            "bestFor": "florestal",
+            "rel": 60,
+            "mass": 12,
+            "icon": "🔥",
+            "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+          },
+          "crew": {
+            "id": "auto",
+            "name": "Sonda Robótica Automática",
+            "icon": "🛰️",
+            "desc": "100% autônoma, leve e rápida",
+            "bonus": "+15 Eficiência de Voo"
+          }
+        }
+      },
+      "created_at": "2026-11-15T14:48:57.757Z",
+      "updated_at": "2026-11-15T14:55:07.880Z"
+    },
+    {
+      "id": 10,
+      "name": "Líder Espacial",
+      "score": 950,
+      "xp": 450,
+      "level": 1,
+      "coins": 400,
+      "inventory": [
+        "skin_default",
+        "pet_bit"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 3,
+      "satellite_config": {
+        "name": "STELA-1 (Guardiã do Vale)",
+        "crew": {
+          "id": "auto",
+          "name": "Sonda Robótica Automática",
+          "icon": "🛰️",
+          "desc": "100% autônoma, leve e rápida",
+          "bonus": "+15 Eficiência de Voo"
+        },
+        "sensor": {
+          "id": "thermal_ir",
+          "name": "Sensor Térmico Infravermelho",
+          "bestFor": "florestal",
+          "rel": 60,
+          "mass": 12,
+          "icon": "🔥",
+          "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+        },
+        "battery": {
+          "id": "bat_lithium",
+          "name": "Bateria Íon-Lítio Turbo",
+          "energy": 50,
+          "mass": 12,
+          "icon": "🔋",
+          "desc": "Alta densidade de energia para missões longas."
+        },
+        "cpu": {
+          "id": "cpu_quantum",
+          "name": "IA Quântica de Telemetria",
+          "rel": 70,
+          "mass": 10,
+          "icon": "🧠",
+          "desc": "Calcula trajetórias e dados em milissegundos."
+        },
+        "comms": {
+          "id": "comm_dipole",
+          "name": "Antena Dipolo Simples",
+          "rel": 30,
+          "mass": 3,
+          "icon": "📻",
+          "desc": "Comunicação de rádio padrão confiável."
+        },
+        "stats": {
+          "energy": 90,
+          "mass": 62,
+          "reliability": 58,
+          "successRate": 65,
+          "isBestSensor": false,
+          "bat": {
+            "id": "bat_lithium",
+            "name": "Bateria Íon-Lítio Turbo",
+            "energy": 50,
+            "mass": 12,
+            "icon": "🔋",
+            "desc": "Alta densidade de energia para missões longas."
+          },
+          "cpu": {
+            "id": "cpu_quantum",
+            "name": "IA Quântica de Telemetria",
+            "rel": 70,
+            "mass": 10,
+            "icon": "🧠",
+            "desc": "Calcula trajetórias e dados em milissegundos."
+          },
+          "comm": {
+            "id": "comm_dipole",
+            "name": "Antena Dipolo Simples",
+            "rel": 30,
+            "mass": 3,
+            "icon": "📻",
+            "desc": "Comunicação de rádio padrão confiável."
+          },
+          "sens": {
+            "id": "thermal_ir",
+            "name": "Sensor Térmico Infravermelho",
+            "bestFor": "florestal",
+            "rel": 60,
+            "mass": 12,
+            "icon": "🔥",
+            "desc": "Enxerga calor à noite para evitar queimadas no Rio Taquari!"
+          },
+          "crew": {
+            "id": "auto",
+            "name": "Sonda Robótica Automática",
+            "icon": "🛰️",
+            "desc": "100% autônoma, leve e rápida",
+            "bonus": "+15 Eficiência de Voo"
+          }
+        }
+      },
+      "created_at": "2026-11-15T14:56:04.447Z",
+      "updated_at": "2026-11-15T15:01:22.682Z"
+    },
+    {
+      "id": 11,
+      "name": "Líder Espacial",
+      "score": 0,
+      "xp": 0,
+      "level": 1,
+      "coins": 500,
+      "inventory": [
+        "skin_default"
+      ],
+      "active_skin": "skin_default",
+      "current_mission": 1,
+      "satellite_config": {},
+      "created_at": "2026-11-15T15:02:52.107Z",
+      "updated_at": "2026-11-15T15:02:52.107Z"
     }
   ],
   "missions": [
@@ -185,8 +668,8 @@
       "description": "As lavouras do Vale do Taquari estão sofrendo com uma praga desconhecida que avança rapidamente. Sua missão é configurar um satélite com sensores multiespectrais para monitorar as lavouras e salvar a produção.",
       "problem_type": "agricultura",
       "difficulty": 1,
-      "npc_name": "Dona Iracema",
-      "npc_dialog": "Olá, jovem líder espacial! Sou a Dona Iracema, agricultora aqui em Estrela. Uma praga misteriosa está atacando nossas plantações de milho e soja! Se a gente conseguisse ver as lavouras do alto pelo espaço com satélites, podíamos agir antes. Você pode nos ajudar a construir e lançar um satélite de monitoramento?",
+      "npc_name": "Dona Marta",
+      "npc_dialog": "Olá, jovem líder espacial! Sou a Dona Marta, agricultora aqui em Estrela. Uma praga misteriosa está atacando nossas plantações de milho e soja! Se a gente conseguisse ver as lavouras do alto pelo espaço com satélites, podíamos agir antes. Você pode nos ajudar a construir e lançar um satélite de monitoramento?",
       "solution_text": "Excelente! Ao configurar o satélite com sensores multiespectrais no infravermelho próximo (NIR), calculamos o índice NDVI da vegetação antes dos sintomas ficarem visíveis a olho nu.",
       "impact_text": "Com o satélite em órbita, os agricultores de Estrela e do Vale do Taquari reduziram o uso de defensivos em 40% e salvaram mais de 78% da safra de milho e soja! Mais de 200 famílias foram beneficiadas.",
       "nasa_tips": "🛰️ DICA NASA: O programa Landsat da NASA monitora lavouras e florestas desde 1972! Sensores multiespectrais revelam a saúde da clorofila refletindo ondas infravermelhas."
@@ -197,8 +680,8 @@
       "description": "Após chuvas torrenciais no Vale do Taquari, as encostas de rodovias e morros correm sério risco de deslizamento. Use radar de satélite para mapear o relevo e criar alertas precoces.",
       "problem_type": "deslizamentos",
       "difficulty": 2,
-      "npc_name": "Capitão Rodrigo",
-      "npc_dialog": "Comandante! Sou o Capitão Rodrigo da Defesa Civil de Lajeado. Após os fortes temporais no Vale, encostas inteiras ameaçam desabar. Precisamos de dados de radar de satélite para medir a movimentação do solo e umidade em tempo real antes que ocorra uma tragédia!",
+      "npc_name": "Capitão Farias",
+      "npc_dialog": "Comandante! Sou o Capitão Farias da Defesa Civil de Lajeado. Após os fortes temporais no Vale, encostas inteiras ameaçam desabar. Precisamos de dados de radar de satélite para medir a movimentação do solo e umidade em tempo real antes que ocorra uma tragédia!",
       "solution_text": "Missão cumprida! Com tecnologia SAR (Radar de Abertura Sintética), o satélite enxerga através das nuvens e mede alterações milimétricas no relevo do solo.",
       "impact_text": "Mais de 50.000 moradores de Lajeado e região agora estão protegidos por alertas automáticos. Um deslizamento na serra foi detectado com 48h de antecedência, permitindo evacuação segura!",
       "nasa_tips": "🛰️ DICA NASA: O satélite GPM da NASA mede chuva global a cada 3 horas, e radares SAR conseguem mapear milímetros de deformação no solo dia e noite!"
@@ -209,8 +692,8 @@
       "description": "Escolas rurais e produtores isolados de Pouso Novo não possuem sinal de rádio ou internet. Projete um satélite de comunicação para conectar comunidades distantes.",
       "problem_type": "comunicacao",
       "difficulty": 3,
-      "npc_name": "Professora Mariana",
-      "npc_dialog": "Oi, líder espacial! Sou a Professora Mariana da Escola Municipal de Pouso Novo. Nossos alunos no interior não têm conexão com o mundo e os postos de saúde ficam incomunicáveis. Será que podemos lançar um satélite de retransmissão para conectar nossa comunidade?",
+      "npc_name": "Professora Clara",
+      "npc_dialog": "Oi, líder espacial! Sou a Professora Clara da Escola Municipal de Pouso Novo. Nossos alunos no interior não têm conexão com o mundo e os postos de saúde ficam incomunicáveis. Será que podemos lançar um satélite de retransmissão para conectar nossa comunidade?",
       "solution_text": "Brilhante! Satélite de órbita baixa LEO configurado com antenas de banda Ku e transponders de alto ganho com alimentação solar.",
       "impact_text": "A rede espacial conectou 47 comunidades rurais isoladas no Vale do Taquari! Escolas agora têm teleaulas e postos médicos atendem por telemedicina.",
       "nasa_tips": "🛰️ DICA NASA: A Deep Space Network (DSN) da NASA conecta naves espaciais a bilhões de quilômetros da Terra com antenas parabólicas gigantes de alta frequência!"
@@ -221,8 +704,8 @@
       "description": "A preservação das matas ciliares ao longo do Rio Taquari é vital para evitar assoreamento e proteger a fauna nativa. Monitore focos de desmatamento e queimadas.",
       "problem_type": "florestal",
       "difficulty": 3,
-      "npc_name": "Cacique Karaí",
-      "npc_dialog": "Saudações, guardião da ciência! Sou o Cacique Karaí. O Rio Taquari precisa das suas matas ciliares em pé para respirar. Tratores e queimadas destroem a beira do rio na calada da noite. Precisamos de um olhar do espaço que vigie nossas matas 24 horas por dia!",
+      "npc_name": "Seu Nilo",
+      "npc_dialog": "Saudações, guardião da ciência! Sou o Seu Nilo. O Rio Taquari precisa das suas matas ciliares em pé para respirar. Tratores e queimadas destroem a beira do rio na calada da noite. Precisamos de um olhar do espaço que vigie nossas matas 24 horas por dia!",
       "solution_text": "Combinamos imagens ópticas de alta resolução com sensores infravermelhos termais para alertas automáticos de desmatamento e calor.",
       "impact_text": "O desmatamento ilegal caiu 62% nas margens do Rio Taquari! 45 focos de incêndio foram combatidos a tempo e 1.200 hectares de mata atlântica foram protegidos.",
       "nasa_tips": "🛰️ DICA NASA: O sistema FIRMS da NASA usa sensores MODIS e VIIRS para detectar focos de calor e queimadas no mundo todo em tempo real!"
@@ -275,6 +758,24 @@
       "completed_at": "2026-11-14T17:32:55.295Z"
     },
     {
+      "id": 35,
+      "player_id": 5,
+      "player_name": "Líder Espacial",
+      "mission_id": 4,
+      "mission_title": "Guardiões da Mata: Monitoramento das Matas Ciliares",
+      "score": 4700,
+      "completed_at": "2026-11-15T13:18:57.024Z"
+    },
+    {
+      "id": 40,
+      "player_id": 8,
+      "player_name": "Líder Espacial",
+      "mission_id": 3,
+      "mission_title": "Conexão Taquari: Internet para Produtores Rurais",
+      "score": 4700,
+      "completed_at": "2026-11-15T14:40:04.170Z"
+    },
+    {
       "id": 29,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -320,6 +821,24 @@
       "completed_at": "2026-11-14T16:15:45.549Z"
     },
     {
+      "id": 34,
+      "player_id": 5,
+      "player_name": "Líder Espacial",
+      "mission_id": 3,
+      "mission_title": "Conexão Taquari: Internet para Produtores Rurais",
+      "score": 3450,
+      "completed_at": "2026-11-15T13:17:11.605Z"
+    },
+    {
+      "id": 39,
+      "player_id": 8,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 3450,
+      "completed_at": "2026-11-15T14:39:16.415Z"
+    },
+    {
       "id": 28,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -363,6 +882,33 @@
       "mission_title": "Safra em Perigo: Monitoramento Agrícola",
       "score": 2200,
       "completed_at": "2026-11-14T20:36:26.075Z"
+    },
+    {
+      "id": 31,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 2200,
+      "completed_at": "2026-11-14T21:27:23.839Z"
+    },
+    {
+      "id": 33,
+      "player_id": 5,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 2200,
+      "completed_at": "2026-11-15T13:16:28.346Z"
+    },
+    {
+      "id": 38,
+      "player_id": 8,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 2200,
+      "completed_at": "2026-11-15T14:38:40.531Z"
     },
     {
       "id": 16,
@@ -428,6 +974,24 @@
       "completed_at": "2026-11-14T20:33:31.797Z"
     },
     {
+      "id": 36,
+      "player_id": 8,
+      "player_name": "Líder Espacial",
+      "mission_id": 1,
+      "mission_title": "Safra em Perigo: Monitoramento Agrícola",
+      "score": 1250,
+      "completed_at": "2026-11-15T14:35:43.480Z"
+    },
+    {
+      "id": 37,
+      "player_id": 8,
+      "player_name": "Líder Espacial",
+      "mission_id": 4,
+      "mission_title": "Guardiões da Mata: Monitoramento das Matas Ciliares",
+      "score": 1250,
+      "completed_at": "2026-11-15T14:38:04.934Z"
+    },
+    {
       "id": 21,
       "player_id": 4,
       "player_name": "Líder Espacial",
@@ -435,6 +999,24 @@
       "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
       "score": 1200,
       "completed_at": "2026-11-14T18:21:45.500Z"
+    },
+    {
+      "id": 30,
+      "player_id": 4,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 950,
+      "completed_at": "2026-11-14T21:26:39.958Z"
+    },
+    {
+      "id": 32,
+      "player_id": 5,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 950,
+      "completed_at": "2026-11-15T13:14:41.935Z"
     },
     {
       "id": 15,
@@ -491,22 +1073,49 @@
       "completed_at": "2026-11-14T17:54:21.698Z"
     },
     {
-      "id": 30,
-      "player_id": 4,
+      "id": 41,
+      "player_id": 9,
       "player_name": "Líder Espacial",
       "mission_id": 2,
       "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
       "score": 950,
-      "completed_at": "2026-11-14T21:26:39.958Z"
+      "completed_at": "2026-11-15T14:49:28.539Z"
     },
     {
-      "id": 31,
-      "player_id": 4,
+      "id": 42,
+      "player_id": 9,
       "player_name": "Líder Espacial",
       "mission_id": 1,
       "mission_title": "Safra em Perigo: Monitoramento Agrícola",
       "score": 2200,
-      "completed_at": "2026-11-14T21:27:23.839Z"
+      "completed_at": "2026-11-15T14:49:55.440Z"
+    },
+    {
+      "id": 43,
+      "player_id": 9,
+      "player_name": "Líder Espacial",
+      "mission_id": 3,
+      "mission_title": "Conexão Taquari: Internet para Produtores Rurais",
+      "score": 3450,
+      "completed_at": "2026-11-15T14:53:45.480Z"
+    },
+    {
+      "id": 44,
+      "player_id": 9,
+      "player_name": "Líder Espacial",
+      "mission_id": 4,
+      "mission_title": "Guardiões da Mata: Monitoramento das Matas Ciliares",
+      "score": 4700,
+      "completed_at": "2026-11-15T14:55:07.880Z"
+    },
+    {
+      "id": 45,
+      "player_id": 10,
+      "player_name": "Líder Espacial",
+      "mission_id": 2,
+      "mission_title": "Alerta Vermelho: Prevenção de Deslizamentos",
+      "score": 950,
+      "completed_at": "2026-11-15T15:01:22.682Z"
     }
   ]
 }

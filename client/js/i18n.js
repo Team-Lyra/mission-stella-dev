@@ -104,29 +104,29 @@ const I18n = {
       // Nomes Oficiais das Missões
       'm1_title': 'Operação Solo Fértil',
       'm1_desc': 'Detectar pragas no milho e soja com sensores NIR antes que a safra de Estrela seja perdida.',
-      'm1_npc': 'Dona Iracema',
+      'm1_npc': 'Dona Marta',
       'm1_role': 'Agricultora em Estrela',
       'm1_dialog': 'Olá, {name}! As lavouras de {city} e região estão com uma praga invisível a olho nu. Precisamos de imagens espaciais da NASA para salvar a colheita!',
       'm1_diff': '🟢 Dificuldade: Iniciante',
 
       'm2_title': 'Operação Sentinela das Encostas',
       'm2_desc': 'Mapear deformações no solo de Lajeado através das nuvens com radar SAR para evitar deslizamentos.',
-      'm2_npc': 'Capitão Rodrigo',
+      'm2_npc': 'Capitão Farias',
       'm2_role': 'Defesa Civil de Lajeado',
       'm2_dialog': 'Comandante {name}! Temporais ameaçam as encostas de rodovias. Precisamos de radar de satélite para alertar as famílias antes que o solo ceda!',
       'm2_diff': '🟡 Dificuldade: Moderada',
 
       'm3_title': 'Operação Conexão Taquari',
       'm3_desc': 'Levar internet de alta velocidade e telemedicina para escolas rurais e postos de saúde de Pouso Novo.',
-      'm3_npc': 'Professora Mariana',
+      'm3_npc': 'Professora Clara',
       'm3_role': 'Escola de Pouso Novo',
       'm3_dialog': 'Oi, {name}! Nossas crianças em Pouso Novo não têm sinal de internet. Vamos lançar um satélite de telecomunicações para conectar nossas escolas?',
       'm3_diff': '🟠 Dificuldade: Avançada',
 
       'm4_title': 'Operação Guardião das Águas e Matas',
       'm4_desc': 'Vigiar as matas ciliares do Rio Taquari dia e noite com sensores térmicos contra queimadas clandestinas.',
-      'm4_npc': 'Cacique Karaí',
-      'm4_role': 'Guardião da Mata Ciliar',
+      'm4_npc': 'Seu Nilo',
+      'm4_role': 'Guardião do Rio Taquari',
       'm4_dialog': 'Saudações, {name}! O Rio Taquari precisa de suas matas em pé. Precisamos de olhos térmicos no espaço que enxerguem o fogo no escuro da noite!',
       'm4_diff': '🔴 Dificuldade: Especialista',
 
@@ -179,7 +179,7 @@ const I18n = {
       'credits_dev_4': '• Júlia Agosti',
       'credits_nasa': 'Projeto desenvolvido para o NASA Space Apps Challenge',
       'credits_tester': 'Agradecimento especial à nossa primeira tester: Lulu 💖',
-      'credits_sources': 'Fontes Científicas: Meteomatics Weather API & NASA Worldview',
+      'credits_sources': 'Clima em tempo real: Meteomatics Weather API • Fontes: NASA Worldview',
       'endgame_dev_status': 'Missão STELA — Em desenvolvimento 🚀\nObrigado por jogar e cuidar do nosso planeta!'
     },
 
@@ -255,29 +255,29 @@ const I18n = {
       // Official Mission Names
       'm1_title': 'Operation Fertile Ground',
       'm1_desc': 'Detect crop pests in corn and soy using NIR sensors before harvest is lost.',
-      'm1_npc': 'Dona Iracema',
+      'm1_npc': 'Dona Marta',
       'm1_role': 'Estrela Farmer',
       'm1_dialog': 'Hello, {name}! Crops in {city} and region have an invisible pest. We need NASA satellite imagery to save the harvest!',
       'm1_diff': '🟢 Difficulty: Beginner',
 
       'm2_title': 'Operation Slope Sentinel',
       'm2_desc': 'Map ground deformations through storm clouds using SAR radar to prevent landslides.',
-      'm2_npc': 'Captain Rodrigo',
+      'm2_npc': 'Captain Farias',
       'm2_role': 'Civil Defense Commander',
       'm2_dialog': 'Commander {name}! Storms threaten roadside slopes. We need satellite radar to warn families before disasters happen!',
       'm2_diff': '🟡 Difficulty: Moderate',
 
       'm3_title': 'Operation Taquari Link',
       'm3_desc': 'Bring high-speed internet and telemedicine to rural schools in Pouso Novo.',
-      'm3_npc': 'Teacher Mariana',
+      'm3_npc': 'Teacher Clara',
       'm3_role': 'Pouso Novo School Teacher',
       'm3_dialog': 'Hi, {name}! Our kids in Pouso Novo have no web access. Let us launch a comms satellite to connect our schools!',
       'm3_diff': '🟠 Difficulty: Advanced',
 
       'm4_title': 'Operation Waters & Forests Guardian',
       'm4_desc': 'Watch riparian forests on the Taquari River day and night using thermal sensors.',
-      'm4_npc': 'Chief Karaí',
-      'm4_role': 'Forest Guardian',
+      'm4_npc': 'Mr. Nilo',
+      'm4_role': 'Taquari River Guardian',
       'm4_dialog': 'Greetings, {name}! The Taquari River needs its trees alive. We need space thermal eyes to spot illegal fires at night!',
       'm4_diff': '🔴 Difficulty: Expert',
 
@@ -330,7 +330,7 @@ const I18n = {
       'credits_dev_4': '• Júlia Agosti',
       'credits_nasa': 'Project developed for the NASA Space Apps Challenge',
       'credits_tester': 'Special thanks to our first tester: Lulu 💖',
-      'credits_sources': 'Scientific Data: Meteomatics Weather API & NASA Worldview',
+      'credits_sources': 'Real-time weather: Meteomatics Weather API • Sources: NASA Worldview',
       'endgame_dev_status': 'Mission STELA — Under development 🚀\nThank you for playing and protecting our planet!'
     }
   }

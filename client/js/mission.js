@@ -69,6 +69,24 @@ const MissionManager = {
     this.satelliteConfig = null;
   },
 
+  /** Primeira missão com status FAILED (o Diretor é quem libera o refazer) */
+  getFailedMission() {
+    return this.missions.find(m => API.getMissionStatus(m.id) === 'FAILED') || null;
+  },
+
+  /** Libera o refazer: limpa o status FAILED e zera a tentativa (peças, pontos, fases) */
+  unlockFailedMission(mission) {
+    if (!mission) return;
+    API.setMissionStatus(mission.id, null);
+    this.missionScore = 0;
+    this.missionFailed = false;
+    this.phase = 'EXPLORE';
+    this.satelliteConfig = null;
+    this.currentMission = null;
+    this.currentMissionIndex = -1;
+    NasaAudio.lockSuccess();
+  },
+
   // PASSO 1: Abre a Cutscene do Problema Local
   startMissionIntro(mission) {
     this.cutsceneActive = true;
@@ -239,8 +257,8 @@ const MissionManager = {
     ctx.lineWidth = 3;
     ctx.strokeRect(boxX, boxY, boxW, boxH);
 
-    // Mascote Lyra apresentando
-    Lyra.render(ctx, boxX + 65, boxY + 65, 38, 'excited', 'Lyra ⭐');
+    // Mascote Lyra apresentando (sem rótulo para não sobrepor o texto)
+    Lyra.render(ctx, boxX + 65, boxY + 65, 38, 'excited', '');
 
     // Título da Cutscene
     ctx.textAlign = 'left';
@@ -370,8 +388,8 @@ const MissionManager = {
     ctx.strokeRect(25, -16, 50, 32);
     ctx.restore();
 
-    // Lyra flutuando em traje espacial explicando
-    Lyra.render(ctx, 110, 110, 42, 'excited', 'Lyra no Espaço');
+    // Lyra flutuando em traje espacial explicando (sem rótulo para não sobrepor o balão)
+    Lyra.render(ctx, 110, 110, 42, 'excited', '');
 
     // Balão de fala da Lyra
     const bubbleW = Math.min(620, w - 240);
@@ -429,93 +447,90 @@ const MissionManager = {
     const m = this.getCurrent();
     if (!m) return;
 
-    const boxW = Math.min(780, w - 60);
+    const boxW = Math.min(820, w - 60);
     const boxX = w / 2 - boxW / 2;
 
     // Título Principal
     ctx.textAlign = 'center';
     ctx.fillStyle = '#00f5d4';
-    ctx.font = 'bold 28px "Segoe UI", sans-serif';
-    ctx.fillText('🎉 PASSO 6: MISSÃO CUMPRIDA COM SUCESSO!', w / 2, 45);
+    ctx.font = 'bold 30px "Segoe UI", sans-serif';
+    ctx.fillText('🎉 MISSÃO CUMPRIDA COM SUCESSO!', w / 2, 45);
 
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText(m.title, w / 2, 74);
+    ctx.font = 'bold 20px "Segoe UI", sans-serif';
+    ctx.fillText(m.title, w / 2, 76);
 
-    // 1. Bloco de Impacto no Vale do Taquari
-    ctx.fillStyle = 'rgba(34, 197, 94, 0.15)';
-    ctx.fillRect(boxX, 95, boxW, 85);
-    ctx.strokeStyle = '#22c55e';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(boxX, 95, boxW, 85);
-
+    // Layout dinâmico: caixas se ajustam ao texto (cabe sempre)
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#22c55e';
-    ctx.font = 'bold 15px "Segoe UI", sans-serif';
-    ctx.fillText('🌍 Impacto Real no Vale do Taquari:', boxX + 18, 120);
+    const innerW = boxW - 40;
+    let y = 95;
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '14px "Segoe UI", sans-serif';
-    this.wrapText(ctx, m.impact_text, boxX + 18, 142, boxW - 36, 20);
+    const drawBlock = (header, headerColor, body, bodyColor, bodyFont, lineH) => {
+      ctx.font = bodyFont;
+      const lines = this.countWrapLines(ctx, body, innerW);
+      const blockH = 34 + lines * lineH + 16;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.fillRect(boxX, y, boxW, blockH);
+      ctx.strokeStyle = headerColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(boxX, y, boxW, blockH);
 
-    // 2. Bloco Feedback das Peças Escolhidas (Requisito Explícito)
-    ctx.fillStyle = 'rgba(0, 180, 216, 0.15)';
-    ctx.fillRect(boxX, 192, boxW, 85);
-    ctx.strokeStyle = '#00b4d8';
-    ctx.strokeRect(boxX, 192, boxW, 85);
+      ctx.fillStyle = headerColor;
+      ctx.font = 'bold 17px "Segoe UI", sans-serif';
+      ctx.fillText(header, boxX + 20, y + 26);
 
-    ctx.fillStyle = '#00f5d4';
-    ctx.font = 'bold 15px "Segoe UI", sans-serif';
-    ctx.fillText('🛠️ Feedback das Suas Escolhas de Engenharia:', boxX + 18, 217);
+      ctx.fillStyle = bodyColor;
+      ctx.font = bodyFont;
+      this.wrapText(ctx, body, boxX + 20, y + 52, innerW, lineH);
+      y += blockH + 12;
+    };
 
-    ctx.fillStyle = '#e0e0ff';
-    ctx.font = '14px "Segoe UI", sans-serif';
-    this.wrapText(ctx, this.choiceFeedback, boxX + 18, 240, boxW - 36, 19);
+    // 1. Impacto no Vale do Taquari
+    drawBlock('🌍 Impacto Real no Vale do Taquari:', '#22c55e',
+      m.impact_text, '#ffffff', '16px "Segoe UI", sans-serif', 22);
 
-    // 3. Bloco Recompensas (Space Coins + XP + Level Up)
+    // 2. Feedback das peças escolhidas
+    if (this.choiceFeedback) {
+      drawBlock('🛠️ Feedback das Suas Escolhas de Engenharia:', '#00f5d4',
+        this.choiceFeedback, '#e0e0ff', '16px "Segoe UI", sans-serif', 22);
+    }
+
+    // 3. Recompensas (Space Coins + XP + Level Up)
     ctx.fillStyle = 'rgba(255, 215, 0, 0.12)';
-    ctx.fillRect(boxX, 288, boxW, 95);
+    const rewH = this.leveledUp ? 100 : 78;
+    ctx.fillRect(boxX, y, boxW, rewH);
     ctx.strokeStyle = '#ffd700';
-    ctx.strokeRect(boxX, 288, boxW, 95);
+    ctx.strokeRect(boxX, y, boxW, rewH);
 
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText('🏆 RECOMPENSAS DA AGÊNCIA ESPACIAL:', boxX + 18, 314);
+    ctx.font = 'bold 17px "Segoe UI", sans-serif';
+    ctx.fillText('🏆 RECOMPENSAS DA AGÊNCIA ESPACIAL:', boxX + 20, y + 26);
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 17px "Segoe UI", sans-serif';
-    ctx.fillText(`⭐ +${this.xpGained} XP Ganho  •  🪙 +${this.coinsGained} Space Coins Liberadas!`, boxX + 18, 342);
+    ctx.font = 'bold 18px "Segoe UI", sans-serif';
+    ctx.fillText(`⭐ +${this.xpGained} XP  •  🪙 +${this.coinsGained} Space Coins!`, boxX + 20, y + 52);
 
     if (this.leveledUp) {
       ctx.fillStyle = '#22c55e';
-      ctx.font = 'bold 15px "Segoe UI", sans-serif';
-      ctx.fillText(`🎉 SUBIU DE NÍVEL! Novo Cargo: ${this.newRankTitle}`, boxX + 18, 368);
+      ctx.font = 'bold 16px "Segoe UI", sans-serif';
+      ctx.fillText(`🎉 SUBIU DE NÍVEL! Novo Cargo: ${this.newRankTitle}`, boxX + 20, y + 78);
     } else {
       const curLvl = API.currentPlayer ? API.currentPlayer.level : 1;
       ctx.fillStyle = '#adb5bd';
-      ctx.font = '14px "Segoe UI", sans-serif';
-      ctx.fillText(`Cargo Atual: ${Lyra.getRankTitle(curLvl)}`, boxX + 18, 368);
+      ctx.font = '15px "Segoe UI", sans-serif';
+      ctx.fillText(`Cargo Atual: ${Lyra.getRankTitle(curLvl)}`, boxX + 20, y + 74);
     }
+    y += rewH + 12;
 
-    // 4. Bloco Dica NASA
-    ctx.fillStyle = 'rgba(124, 58, 237, 0.12)';
-    ctx.fillRect(boxX, 395, boxW, 70);
-    ctx.strokeStyle = '#c084fc';
-    ctx.strokeRect(boxX, 395, boxW, 70);
-
-    ctx.fillStyle = '#c084fc';
-    ctx.font = 'bold 13px "Segoe UI", sans-serif';
-    ctx.fillText('🛰️ O Que Aprendemos com a NASA:', boxX + 18, 417);
-
-    ctx.fillStyle = '#f8f9fa';
-    ctx.font = '12px "Segoe UI", sans-serif';
-    this.wrapText(ctx, m.nasa_tips, boxX + 18, 437, boxW - 36, 17);
+    // 4. Dica NASA
+    drawBlock('🛰️ O Que Aprendemos com a NASA:', '#c084fc',
+      m.nasa_tips, '#f8f9fa', '15px "Segoe UI", sans-serif', 20);
 
     // Botão Avançar
     const btnW = 380;
     const btnH = 50;
     const bx = w / 2 - btnW / 2;
-    const by = Math.max(480, h - 75);
+    const by = Math.min(Math.max(y + 5, h - 75), h - btnH - 10);
 
     ctx.fillStyle = '#e63946';
     ctx.beginPath();
@@ -542,52 +557,54 @@ const MissionManager = {
     ctx.fillRect(0, 0, w, h);
     UI.renderStars(ctx, w, h);
 
-    // Lyra celebrando no topo
-    Lyra.render(ctx, w / 2, 65, 42, 'excited', 'Missão Cumprida!');
-
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 28px "Segoe UI", sans-serif';
-    ctx.fillText('🎉 PARABÉNS, COMANDANTE DO VALE DO TAQUARI! 🎉', w / 2, 135);
+    ctx.font = 'bold 34px "Segoe UI", sans-serif';
+    ctx.fillText('🎉 PARABÉNS, COMANDANTE! 🎉', w / 2, 100);
 
     ctx.fillStyle = '#90e0ef';
-    ctx.font = '16px "Segoe UI", sans-serif';
-    ctx.fillText('Você transformou a tecnologia espacial em soluções reais para nosso planeta!', w / 2, 165);
+    ctx.font = 'bold 20px "Segoe UI", sans-serif';
+    ctx.fillText('Você usou o espaço para ajudar o nosso planeta!', w / 2, 138);
 
-    const boxW = Math.min(740, w - 80);
+    const boxW = Math.min(760, w - 80);
     const boxX = w / 2 - boxW / 2;
 
     // Painel de Fontes Reais de Dados (Requisito Explícito)
+    const panelY = 170;
+    const panelH = 250;
     ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-    ctx.fillRect(boxX, 195, boxW, 230);
+    ctx.fillRect(boxX, panelY, boxW, panelH);
     ctx.strokeStyle = '#00b4d8';
     ctx.lineWidth = 2.5;
-    ctx.strokeRect(boxX, 195, boxW, 230);
+    ctx.strokeRect(boxX, panelY, boxW, panelH);
 
     ctx.textAlign = 'left';
     ctx.fillStyle = '#00f5d4';
-    ctx.font = 'bold 18px "Segoe UI", sans-serif';
-    ctx.fillText('🌐 FONTES DE DADOS REAIS UTILIZADAS NA SIMULAÇÃO:', boxX + 25, 230);
+    ctx.font = 'bold 20px "Segoe UI", sans-serif';
+    ctx.fillText('🌐 DADOS REAIS UTILIZADOS NO JOGO:', boxX + 25, panelY + 35);
 
     // Link 1: Meteomatics API
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText('1. Meteomatics Weather & Climate API:', boxX + 25, 268);
+    ctx.font = 'bold 17px "Segoe UI", sans-serif';
+    ctx.fillText('1. Meteomatics Weather & Climate API (clima em tempo real):', boxX + 25, panelY + 72);
     ctx.fillStyle = '#38bdf8';
-    ctx.font = '14px monospace';
-    ctx.fillText('https://www.meteomatics.com/en/api/getting-started/', boxX + 45, 292);
+    ctx.font = '15px monospace';
+    ctx.fillText('https://www.meteomatics.com/en/api/getting-started/', boxX + 45, panelY + 96);
 
     // Link 2: NASA Worldview
     ctx.fillStyle = '#ffd700';
-    ctx.font = 'bold 16px "Segoe UI", sans-serif';
-    ctx.fillText('2. NASA Worldview (Camadas MODIS, FIRMS e Alertas Climáticos):', boxX + 25, 335);
+    ctx.font = 'bold 17px "Segoe UI", sans-serif';
+    ctx.fillText('2. NASA Worldview (Camadas MODIS, FIRMS e Alertas Climáticos):', boxX + 25, panelY + 128);
     ctx.fillStyle = '#38bdf8';
-    ctx.font = '14px monospace';
-    ctx.fillText('https://worldview.earthdata.nasa.gov/', boxX + 45, 359);
+    ctx.font = '15px monospace';
+    ctx.fillText('https://worldview.earthdata.nasa.gov/', boxX + 45, panelY + 152);
 
     ctx.fillStyle = '#adb5bd';
-    ctx.font = '13px "Segoe UI", sans-serif';
-    ctx.fillText('Dados de satélites reais utilizados para monitoramento agrícola, prevenção de cheias e preservação.', boxX + 25, 400);
+    ctx.font = '15px "Segoe UI", sans-serif';
+    this.wrapText(ctx, 'Missões inspiradas em dados NASA.', boxX + 25, panelY + 185, boxW - 50, 20);
+
+    // Lyra comemorando ABAIXO do quadro de dados
+    Lyra.render(ctx, w / 2, panelY + panelH + 55, 45, 'excited', '');
 
     // Botão Voltar ao Menu
     const btnW = 280;
@@ -631,10 +648,10 @@ const MissionManager = {
 
     ctx.fillStyle = '#fca5a5';
     ctx.font = '18px "Segoe UI", sans-serif';
-    ctx.fillText('Falha técnica em órbita — a probabilidade era alta demais!', w / 2, 108);
+    ctx.fillText('💥 O lançamento não deu certo desta vez!', w / 2, 108);
 
-    // Lyra triste
-    Lyra.render(ctx, w / 2, 170, 42, 'sad', 'Lyra ⭐');
+    // Lyra triste (sem rótulo para não sobrepor o texto)
+    Lyra.render(ctx, w / 2, 170, 42, 'sad', '');
 
     const boxW = Math.min(640, w - 80);
     const boxX = w / 2 - boxW / 2;
@@ -654,22 +671,28 @@ const MissionManager = {
     const sr = stats.successRate || 0;
     ctx.fillStyle = '#fca5a5';
     ctx.font = '15px "Segoe UI", sans-serif';
-    ctx.fillText(`Sua nave tinha apenas ${sr}% de Chance de Sucesso.`, boxX + 20, 270);
-    ctx.fillText('Para missões abaixo de 60%, o risco de falha é muito alto!', boxX + 20, 296);
+    ctx.fillText(`Sua nave tinha ${sr}% de Chance de Sucesso.`, boxX + 20, 270);
+    ctx.fillText('Naves com menos de 75% de chance podem falhar! Melhore as peças! 🔧', boxX + 20, 296);
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 14px "Segoe UI", sans-serif';
-    ctx.fillText('💡 Dica: Na próxima vez, melhore as peças (bateria RTG, CPU Quântica, sensor correto)!', boxX + 20, 322);
+    ctx.fillText('💡 Dica: Melhore as peças e refaça com confiança!', boxX + 20, 322);
 
-    // Regra: 1 tentativa — missão bloqueada
-    ctx.fillStyle = 'rgba(100,100,100,0.3)';
-    ctx.fillRect(boxX, 348, boxW, 50);
-    ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
-    ctx.strokeRect(boxX, 348, boxW, 50);
-    ctx.fillStyle = '#9ca3af';
-    ctx.font = '14px "Segoe UI", sans-serif';
+    // Caminho para refazer: falar com o DIRETOR no Centro Espacial
+    const hintW = Math.min(520, boxW - 40);
+    const hintH = 66;
+    const hx = w / 2 - hintW / 2;
+    const hy = 350;
+    const pulse = 0.75 + 0.25 * Math.sin(Date.now() / 300);
+    ctx.fillStyle = `rgba(0, 180, 216, ${0.25 + 0.2 * pulse})`;
+    ctx.fillRect(hx, hy, hintW, hintH);
+    ctx.strokeStyle = '#00b4d8';
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(hx, hy, hintW, hintH);
+    ctx.fillStyle = '#e0f2fe';
+    ctx.font = 'bold 17px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🔒 Esta operação está encerrada. Cada missão permite apenas 1 tentativa.', w / 2, 368);
-    ctx.fillText('Vá ao Centro Espacial > Painel de Operações para ver o status de todas as missões.', w / 2, 390);
+    ctx.fillText('🗺️ Fale com o DIRETOR no Centro Espacial', w / 2, hy + 27);
+    ctx.fillText('para refazer a missão! 💪', w / 2, hy + 50);
 
     // Botão voltar
     const btnW = 340; const btnH = 52;
@@ -686,9 +709,26 @@ const MissionManager = {
     ctx.restore();
   },
 
-  wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-    if (!text) return;
+  /** Conta quantas linhas um texto ocupa ao ser quebrado (para caixas dinâmicas) */
+  countWrapLines(ctx, text, maxWidth) {
+    if (!text) return 1;
     const words = text.split(' ');
+    let lines = 1;
+    let line = '';
+    for (const word of words) {
+      const testLine = line + word + ' ';
+      if (ctx.measureText(testLine).width > maxWidth && line) {
+        lines++;
+        line = word + ' ';
+      } else {
+        line = testLine;
+      }
+    }
+    return lines;
+  },
+
+  wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    if (!text) return;    const words = text.split(' ');
     let line = '';
     let curY = y;
 
